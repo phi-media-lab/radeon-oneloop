@@ -306,10 +306,11 @@ def main() -> None:
                 f"Both models: 10,000 updates, batch 16, seed 20260803",
                 f"Wall time: baseline {base['elapsed_seconds']/60:.1f} min · phase-aware {phase['elapsed_seconds']/60:.1f} min",
                 f"Terminal logged loss: {base['terminal_loss']:.4f} · {phase['terminal_loss']:.4f}",
+                f"Mean GPU use: {base['gpu_samples']['gpu_utilization_mean_percent']:.1f}% · {phase['gpu_samples']['gpu_utilization_mean_percent']:.1f}%",
             ],
             "metric": "Final-step checkpoint predeclared",
             "image_path": figures / "formal_training_loss.png",
-            "narration": f"Both models start randomly with the same seed, batch size sixteen, ACT architecture, optimizer, data, and ten thousand updates. Baseline training took {base['elapsed_seconds']/60:.1f} minutes with terminal logged loss {base['terminal_loss']:.4f}; phase-aware training took {phase['elapsed_seconds']/60:.1f} minutes with loss {phase['terminal_loss']:.4f}. The final-step rule was declared in advance. Intermediate checkpoints were never searched, and both complete hashes appear next.",
+            "narration": f"Both models start randomly with the same seed, batch size sixteen, ACT architecture, optimizer, data, and ten thousand updates. Baseline training took {base['elapsed_seconds']/60:.1f} minutes with terminal logged loss {base['terminal_loss']:.4f}; phase-aware training took {phase['elapsed_seconds']/60:.1f} minutes with loss {phase['terminal_loss']:.4f}. External sampling recorded {base['gpu_samples']['gpu_utilization_mean_percent']:.1f} and {phase['gpu_samples']['gpu_utilization_mean_percent']:.1f} percent mean GPU use. The final-step rule was declared in advance, and both hashes appear next.",
         },
         {
             "kicker": "Immutable model artifacts",
