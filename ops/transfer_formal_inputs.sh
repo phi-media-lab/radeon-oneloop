@@ -13,7 +13,7 @@ esac
 
 dest_root=/root/radeon-oneloop-data/sources
 bc_src=/home/amd/.cache/huggingface/lerobot/fbsh96/so101-sock-ball-handover-v1
-hil_src=/mnt/models_alehe/phi-fbsh/so101_handover_hil_rl/datasets/fbsh96/so101_handover_hil_rlready_batch1_batch2_20260506
+hil_src=/home/amd/.cache/huggingface/lerobot/fbsh96/so101_handover_hil_rlready_batch1_batch2_20260506
 
 ssh "$destination" "mkdir -p '$dest_root'"
 if ! ssh "$destination" "test -f '$dest_root/bc_seed/meta/info.json'"; then
@@ -21,10 +21,13 @@ if ! ssh "$destination" "test -f '$dest_root/bc_seed/meta/info.json'"; then
     | ssh "$destination" "mkdir -p '$dest_root/bc_seed' && tar -C '$dest_root/bc_seed' -xf -"
 fi
 if ! ssh "$destination" "test -f '$dest_root/hil_batch1_batch2/meta/info.json'"; then
-  ssh -o RemoteCommand=none -o RequestTTY=no phi-amd-work \
-    "tar -C '$hil_src' -cf - data meta videos makermods_hil" \
+  ssh amd "tar -C '$hil_src' -cf - data meta videos makermods_hil" \
     | ssh "$destination" "mkdir -p '$dest_root/hil_batch1_batch2' && tar -C '$dest_root/hil_batch1_batch2' -xf -"
 fi
 
-ssh "$destination" "set -e; test -f '$dest_root/bc_seed/data/chunk-000/file-000.parquet'; test -f '$dest_root/hil_batch1_batch2/data/chunk-000/file-000.parquet'; du -sh '$dest_root/bc_seed' '$dest_root/hil_batch1_batch2'"
-
+ssh "$destination" "set -e; \
+  printf '%s  %s\n' 2e7db73c99f95bb7ff403f1f2ba630750dbc1bb07d4b52e2b300704bd220999b '$dest_root/bc_seed/meta/info.json' | sha256sum -c -; \
+  printf '%s  %s\n' a15975d734013f3c45e9ec8869573ac09d52a8f6ae9e47b68ebd0bf28380a64f '$dest_root/bc_seed/data/chunk-000/file-000.parquet' | sha256sum -c -; \
+  printf '%s  %s\n' e198927b1fc7f0d7566e5a4b622872ba3f2a0bafa58010f5d900441e6debcb3d '$dest_root/hil_batch1_batch2/meta/info.json' | sha256sum -c -; \
+  printf '%s  %s\n' dafbbf6db47685ed433b7e2f4383191f7498b3ae037289f6c0fc7e77e1f0f88b '$dest_root/hil_batch1_batch2/data/chunk-000/file-000.parquet' | sha256sum -c -; \
+  du -sh '$dest_root/bc_seed' '$dest_root/hil_batch1_batch2'"
