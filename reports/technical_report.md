@@ -403,10 +403,15 @@ LeRobot and SO-101 assets remain credited to their respective authors.
 
 ## References
 
-1. AMD-DEV-CONTEST, *Radeon Hackathon 2026-07 official repository*.
-2. Genesis Authors, *Genesis: A Universal and Generative Physics Engine for
-   Robotics and Beyond*, Genesis 1.3.1 documentation and source.
-3. Zhao et al., *Learning Fine-Grained Bimanual Manipulation with Low-Cost
-   Hardware*, ACT / ALOHA.
-4. Hugging Face, *LeRobot*.
-5. AMD, *ROCm 7.2.1 Radeon documentation and PyTorch wheels*.
+1. AMD-DEV-CONTEST,
+   [Radeon Hackathon 2026-07 official repository](https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07).
+2. Genesis Authors,
+   [Genesis source and documentation](https://github.com/Genesis-Embodied-AI/genesis-world),
+   version 1.3.1.
+3. Zhao et al.,
+   [Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705),
+   ACT / ALOHA.
+4. Hugging Face, [LeRobot](https://github.com/huggingface/lerobot).
+5. AMD,
+   [ROCm Radeon documentation](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/)
+   and official PyTorch wheels.
