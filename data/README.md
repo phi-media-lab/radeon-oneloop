@@ -27,6 +27,13 @@ oneloop-merge-data \
   --output /root/radeon-oneloop-data/formal_handover_v1
 ```
 
+The production entry point runs the merge and phase-target generation as one
+audited transaction and refuses to overwrite an existing output:
+
+```bash
+bash ops/build_formal_dataset.sh
+```
+
 The builder verifies the two camera keys, 480x640 RGB shape, 30 Hz control
 rate, action/state order, source counts, tasks, videos, and manifest coverage.
 It emits a full file hash ledger and a unified episode manifest.
