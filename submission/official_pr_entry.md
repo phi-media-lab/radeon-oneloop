@@ -39,6 +39,8 @@ API, or historical MI300X checkpoint participates in the formal lineage.
   E-stop contracts.
 - Explicit negative-result reporting: training diagnostics are not presented
   as task success, and an uncalibrated Gaussian branch was excluded.
+- Upstream AMD support report:
+  https://github.com/Genesis-Embodied-AI/genesis-world/issues/3163
 
 ## Links
 

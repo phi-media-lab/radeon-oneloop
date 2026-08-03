@@ -217,6 +217,15 @@ Gaussian rendering is not an ACT observation or a competition result.
 Multi-GPU training, MI300X checkpoints, Radeon 890M/NPU performance, Genesis
 Nyx, and remote inference APIs are also outside the formal profile.
 
+## Upstream AMD support contribution
+
+The formal bring-up exposed that Genesis' checked-in AMD Docker path still
+targets an older ROCm/PyTorch/Genesis tuple. We filed
+[Genesis issue #3163](https://github.com/Genesis-Embodied-AI/genesis-world/issues/3163)
+with the verified ROCm 7.2.1 / Genesis 1.3.1 `gfx1100` evidence, the exact
+version gap, and a proposed image smoke test. The issue explicitly distinguishes
+our native-host verification from an unperformed Docker build.
+
 ## Repository map
 
 ```text

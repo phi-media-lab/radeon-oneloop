@@ -380,7 +380,20 @@ The root README gives clean-clone commands and makes the access-controlled data
 boundary explicit. Project code is Apache-2.0; dependency and asset status is
 listed in `THIRD_PARTY_NOTICES.md`.
 
-## 11. Team contribution
+## 11. Upstream community contribution
+
+During the competition we filed
+[Genesis issue #3163](https://github.com/Genesis-Embodied-AI/genesis-world/issues/3163)
+to improve the project's AMD support path. The checked-in
+`docker/Dockerfile.amdgpu` still describes a ROCm 6.4.1 / PyTorch 2.6 /
+Genesis 0.2.1-era target, while Radeon OneLoop provides public native-host
+evidence for ROCm 7.2.1, AMD PyTorch 2.9.1 and Genesis 1.3.1 on `gfx1100`.
+The report proposes an explicit supported tuple, pinned compatibility-sensitive
+packages and a `gs.amdgpu` scene smoke. It also states that we did not build the
+current Dockerfile, avoiding an unverified container claim. A code PR is
+offered once maintainers select the intended base-image tag.
+
+## 12. Team contribution
 
 Phi Media Lab developed the real SO-101 collection and HIL workflow, reviewed
 the intervention episodes, implemented the phase-aware ACT extension, built
