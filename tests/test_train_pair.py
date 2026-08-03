@@ -1,7 +1,14 @@
 import copy
+import os
+import tempfile
 import unittest
+from pathlib import Path
 
-from radeon_oneloop.train_command import TrainingConfigError, assert_fair_pair
+from radeon_oneloop.train_command import (
+    TrainingConfigError,
+    absolute_executable_path,
+    assert_fair_pair,
+)
 
 
 def config(phase: bool):
@@ -28,6 +35,19 @@ class TrainPairTests(unittest.TestCase):
         phase["training"]["steps"] = 11
         with self.assertRaises(TrainingConfigError):
             assert_fair_pair(baseline, phase)
+
+    def test_python_path_keeps_virtualenv_symlink(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            system_python = root / "system-python"
+            system_python.touch()
+            venv_python = root / "venv-python"
+            venv_python.symlink_to(system_python)
+
+            actual = absolute_executable_path(venv_python)
+
+            self.assertEqual(actual, Path(os.path.abspath(venv_python)))
+            self.assertNotEqual(actual, system_python)
 
 if __name__ == "__main__":
     unittest.main()

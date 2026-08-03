@@ -18,6 +18,11 @@ class TrainingConfigError(ValueError):
     pass
 
 
+def absolute_executable_path(path: Path) -> Path:
+    """Make an executable path absolute without dereferencing venv symlinks."""
+    return Path(os.path.abspath(os.fspath(path)))
+
+
 def load_config(path: Path) -> dict[str, Any]:
     try:
         import yaml
@@ -130,7 +135,7 @@ def main() -> None:
         assert_fair_pair(config, paired)
     command = build_command(
         config,
-        python=args.python.resolve(),
+        python=absolute_executable_path(args.python),
         dataset_root=args.dataset_root.resolve(),
         output_dir=args.output_dir.resolve(),
     )
