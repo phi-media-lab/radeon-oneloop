@@ -241,10 +241,19 @@ def build(*, sources: list[Source], output: Path, overwrite: bool = False) -> di
 
     validated = [(source, *validate_source(source)) for source in sources]
     base_info = json.loads(json.dumps(validated[0][1]))
-    task_hashes = {sha256(source.root / TASKS_FILE) for source, *_ in validated}
-    if len(task_hashes) != 1:
-        raise ValueError("source task tables are not byte-identical")
+    task_tables = [pd.read_parquet(source.root / TASKS_FILE) for source in sources]
+    for source, tasks in zip(sources, task_tables, strict=True):
+        if list(tasks.columns) != ["task_index"] or tasks["task_index"].tolist() != [0]:
+            raise ValueError(f"{source.name}: expected exactly one task_index=0")
+    task_labels = {
+        source.name: [str(value) for value in tasks.index]
+        for source, tasks in zip(sources, task_tables, strict=True)
+    }
     (output / "meta").mkdir(parents=True, exist_ok=True)
+    # Both sources describe the same physical handover under task_index=0 but
+    # use different English/Chinese labels. Frames reference only the integer,
+    # so the BC task table becomes the canonical label while both originals
+    # remain recorded in the provenance report.
     shutil.copy2(sources[0].root / TASKS_FILE, output / TASKS_FILE)
 
     data_parts = []
@@ -277,6 +286,8 @@ def build(*, sources: list[Source], output: Path, overwrite: bool = False) -> di
                 "frames": int(info["total_frames"]),
                 "info_sha256": sha256(source.root / INFO_FILE),
                 "data_sha256": sha256(source.root / DATA_FILE),
+                "tasks_sha256": sha256(source.root / TASKS_FILE),
+                "task_labels": task_labels[source.name],
                 "manifest_sha256": sha256(source.manifest) if source.manifest else None,
             }
         )
@@ -326,6 +337,7 @@ def build(*, sources: list[Source], output: Path, overwrite: bool = False) -> di
         "fps": FPS,
         "action_names": list(ACTION_NAMES),
         "camera_keys": list(CAMERA_KEYS),
+        "canonical_task_source": sources[0].name,
         "intervention_frames": int(combined_data[INTERVENTION_KEY].sum()),
         "sources": source_reports,
         "artifacts": {

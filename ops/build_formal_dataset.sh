@@ -15,8 +15,10 @@ mkdir -p "$run_dir"
 exec > >(tee "$run_dir/stdout.log") 2> >(tee "$run_dir/stderr.log" >&2)
 trap 'code=$?; if [[ $code -ne 0 ]]; then touch "$run_dir/FAILED"; fi' EXIT
 
-if [[ -e $output ]]; then
-  printf 'refusing to overwrite existing dataset: %s\n' "$output" >&2
+if [[ -d $output && -z $(find "$output" -mindepth 1 -print -quit) ]]; then
+  rmdir "$output"
+elif [[ -e $output ]]; then
+  printf 'refusing to overwrite non-empty dataset: %s\n' "$output" >&2
   exit 73
 fi
 export PYTHONPATH="$project_root/src:$project_root${PYTHONPATH:+:$PYTHONPATH}"
