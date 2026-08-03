@@ -1,5 +1,10 @@
 # Gaussian workspace workstream
 
+> Competition status: **deferred / non-formal**. The code path is retained as
+> a reproducible experiment, but no calibrated static SO-101 workspace capture
+> passed the input gate. It must not be shown in the main architecture or
+> result tables for this submission.
+
 Build a static, calibrated Gaussian representation of the real handover
 workspace using VkSplat/Vulkan RADV. The competition deliverable is a visual
 twin and synchronized trajectory replay, not a policy observation, collision

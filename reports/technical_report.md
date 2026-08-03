@@ -19,7 +19,13 @@ TBD after formal evaluation.
 
 ## 6. CPU-edge safety runtime
 
-## 7. Calibrated Gaussian workspace twin
+## 7. Deferred Gaussian workspace experiment
+
+The repository includes a hash-pinned VkSplat/Vulkan RADV runner and a capture
+contract. It is excluded from the competition architecture and result tables
+because no calibrated, static multi-view capture of the SO-101 workspace was
+available at scope freeze. Corgi, synthetic, and dynamic robot-video assets
+were explicitly rejected as substitutes.
 
 ## 8. Experiments and results
 

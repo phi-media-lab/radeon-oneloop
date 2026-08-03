@@ -9,6 +9,7 @@ accelerator:
 backends:
   simulation: genesis_amdgpu
   policy: pytorch_rocm
+deferred_backends:
   gaussian: vksplat_vulkan_radv
 cpu_edge:
   accelerator_inference_allowed: false

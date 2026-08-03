@@ -5,8 +5,7 @@
 
 ## Project
 
-Radeon OneLoop: Phase-Aware HIL Bimanual Handover with a Calibrated Gaussian
-Workspace Twin.
+Radeon OneLoop: Single-Radeon Phase-Aware HIL Bimanual Handover.
 
 ## Links
 
