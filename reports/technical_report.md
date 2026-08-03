@@ -395,10 +395,13 @@ offered once maintainers select the intended base-image tag.
 
 ## 12. Team contribution
 
-Phi Media Lab developed the real SO-101 collection and HIL workflow, reviewed
-the intervention episodes, implemented the phase-aware ACT extension, built
-the single-Radeon evidence path, integrated the Genesis environment, and
-authored the safety and evaluation tooling. Upstream Genesis, PyTorch, ROCm,
+**Baoshu Feng, Phi Media Lab** - project and experiment design; SO-101 data and
+HIL workflow integration; intervention-target methodology; Radeon/ROCm
+bring-up; Genesis environment; formal training and evaluation; CPU-edge safety;
+evidence, report, and submission engineering.
+
+The underlying robot collection and reviewed HIL artifacts were produced in
+Phi Media Lab's prior real-robot workflow. Upstream Genesis, PyTorch, ROCm,
 LeRobot and SO-101 assets remain credited to their respective authors.
 
 ## References

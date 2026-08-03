@@ -4,6 +4,10 @@
 
 **Radeon OneLoop: Single-Radeon Phase-Aware HIL Bimanual Handover**
 
+**Team:** Phi Media Lab
+
+**Team member:** Baoshu Feng
+
 Radeon OneLoop is a complete embodied-learning pipeline for a real dual-SO-101
 handover. One arm grasps and presents an object, the second receives it, and
 the system places it in a target zone. We study a phase-aware ACT objective
