@@ -59,3 +59,14 @@ remote checkout and rejects formal identity mismatches. For example:
   /root/radeon-oneloop-data/assets/so101 --output \
   /root/radeon-oneloop-runs/genesis-shadow --steps 1000
 ```
+
+Evaluation jobs bind their input model in the manifest as well as in the exact
+command. Supply the deterministic checkpoint-tree digest when dispatching:
+
+```bash
+ONELOOP_PARENT_CHECKPOINT=64_HEX_SHA256 \
+  ./ops/dispatch.sh radeon-c act_eval configs/act_baseline.yaml true DATASET_SHA256 -- \
+  /root/radeon-oneloop-env/rocm721-py312/bin/python -m evaluation.policy_latency \
+  --checkpoint /absolute/checkpoint/pretrained_model \
+  --dataset-root /root/radeon-oneloop-data/formal_handover_v1
+```

@@ -352,6 +352,11 @@ def main() -> None:
                 "No held-out data means no generalization or new task-success claim",
             ],
             "metric": "Failed and superseded runs remain visible",
+            "mono_lines": [
+                "$ ./ops/dispatch.sh radeon-c act_train configs/act_phase_aware.yaml ...",
+                "INFO Loaded 178465 ACT-AWR weights: min=0.041529 mean=1 max=3.322282",
+                "INFO Checkpoint policy after step 10000 · End of training",
+            ],
             "narration": "Every formal GPU job acquires an exclusive lock and records the Radeon UID, exact source commit, configuration hash, dataset hash, seed, command, environment, hardware, one-second ROCm samples, raw logs, metrics, and terminal marker. Final checkpoint trees receive deterministic hashes. Failed and superseded runs stay visible. The formal dataset has no held-out split, and the Genesis scene is not calibrated for sim-to-real selection, so this entry makes no generalization claim and no new physical success claim. That boundary is a result, not fine print.",
         },
         {

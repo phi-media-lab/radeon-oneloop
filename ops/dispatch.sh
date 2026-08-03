@@ -22,6 +22,13 @@ remote_command="$(quote "$remote_repo/ops/run_job.sh") $(quote "$role") $(quote 
 for argument in "$@"; do
   remote_command+=" $(quote "$argument")"
 done
+if [[ -n ${ONELOOP_PARENT_CHECKPOINT:-} ]]; then
+  [[ $ONELOOP_PARENT_CHECKPOINT =~ ^[0-9a-f]{64}$ ]] || {
+    printf '%s\n' 'ONELOOP_PARENT_CHECKPOINT must be a lowercase SHA-256 digest' >&2
+    exit 64
+  }
+  remote_command="ONELOOP_PARENT_CHECKPOINT=$(quote "$ONELOOP_PARENT_CHECKPOINT") $remote_command"
+fi
 if [[ $formal == true ]]; then
   remote_command="ONELOOP_FORMAL_HOST=radeon-c $remote_command"
 else
