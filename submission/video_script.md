@@ -1,8 +1,8 @@
 # Radeon OneLoop demo video
 
-Final generated duration target: **3:40–4:00**. Spoken language and all
-on-screen text: English. Private dataset video is not used; the only motion is
-the registered formal Genesis dual-camera sweep.
+Final generated duration: **3:45.49**. Spoken language and all on-screen text:
+English. Private dataset video is not used; the only motion is the registered
+formal Genesis dual-camera sweep.
 
 ## Shot list and narration
 
