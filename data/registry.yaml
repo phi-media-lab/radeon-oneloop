@@ -36,7 +36,7 @@ formal_dataset:
   split: train_only_real_data
   derived_hash: ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf
   phase_targets_sha256: b34f5559db6d697890a08b6a7e49b52f3a916537c3328aea72c8470bb90bec57
-  builder_commit: e4c38a0526b2fcae205780f6346f8f821e209a53
+  builder_commit: b00eb5917dd7ad57622796ee69488427ff9a2b4c
   intervention_frames: 15906
   redistribution: false
 phase_vocabulary:
