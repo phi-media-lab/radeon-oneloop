@@ -1,6 +1,15 @@
 # gfx1100 hardware smoke — 2026-08-03
 
-> Status: pre-install evidence. No training or environment workload was started.
+> Historical pre-install snapshot. Gate A subsequently **passed** on
+> `radeon-c`: the public evidence is in
+> `artifacts/formal/preflight/rocm721` and
+> `artifacts/formal/preflight/lerobot`. It records AMD PyTorch 2.9.1 on ROCm
+> 7.2.1, a finite GPU matrix multiplication, Genesis 1.3.1 initialized with
+> `gs.amdgpu`, one visible `gfx1100`, and Vulkan RADV enumeration. The table
+> below is retained to show the state before installation, not current status.
+>
+> No training or environment workload had been started at the time of this
+> snapshot.
 > The reusable command is `ops/remote_hardware_smoke.sh`.
 
 ## Summary

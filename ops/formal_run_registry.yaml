@@ -1,4 +1,42 @@
 schema_version: 1
 formal_host: radeon-c
 formal_gpu: GPU0
-runs: []
+formal_gpu_uid: 0x153f7d55778ab659
+gfx_target: gfx1100
+environment:
+  status: passed
+  rocm: 7.2.1
+  torch: 2.9.1+rocm7.2.1.gitff65f5bc
+  genesis: 1.3.1
+  lerobot_source_commit: d3bee432ab26bab857b232cebefdc57327060ea8
+  evidence:
+    - artifacts/formal/preflight/rocm721
+    - artifacts/formal/preflight/lerobot
+formal_dataset:
+  id: radeon_oneloop_formal_handover_v1
+  status: built_and_hash_verified
+  episodes: 124
+  frames: 178465
+  dataset_sha256: ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf
+  phase_targets_sha256: b34f5559db6d697890a08b6a7e49b52f3a916537c3328aea72c8470bb90bec57
+  evidence: artifacts/formal/dataset
+runs:
+  - id: 20260803T155536Z_genesis_formal_b00eb59_20260803
+    role: genesis_formal
+    status: done
+    host: radeon-c
+    gpu_uid: 0x153f7d55778ab659
+    git_commit: b00eb5917dd7ad57622796ee69488427ff9a2b4c
+    config_sha256: cf56fb57f768678d757592e8479734d2e3de6aac3e50258a623fb45a9e2aec48
+    dataset_sha256: null
+    seed: 20260803
+    checkpoint_sha256: null
+    evidence: artifacts/formal/genesis
+    accepted_claims:
+      - genesis_amdgpu_scene_build_and_1000_steps
+      - two_480x640_rgb_observations_and_12_value_state
+      - non_render_step_p50_4.0235_ms
+      - non_render_step_p95_4.5829_ms
+      - non_render_step_p99_5.2171_ms
+    excluded_claims:
+      - task_success
