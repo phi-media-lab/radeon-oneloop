@@ -96,7 +96,6 @@ fi
   'pandas>=2.2,<3' \
   'pyarrow>=17,<24' \
   'PyYAML>=6.0.2,<7' \
-  'rerun-sdk>=0.24,<0.27' \
   'termcolor>=2.4,<4' \
   'wandb>=0.24,<0.25'
 
