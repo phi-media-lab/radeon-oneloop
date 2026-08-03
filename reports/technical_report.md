@@ -195,21 +195,23 @@ rigid object and two cameras, and exposes the same state and image keys as the
 real dataset. It includes reset, position control, deterministic stepping,
 attached-camera motion and an explicit placement predicate.
 
-The formal smoke ran 1,000 steps on `gs.amdgpu`, exercised both arms, rendered
-the front and attached hand camera, and validated finite 12-value state. Scene
-build took 144.49 s, dominated by one-time Genesis compilation. Non-render
-step latency was:
+The camera-corrected formal smoke ran 1,000 steps on `gs.amdgpu`, exercised
+both arms, rendered the front and attached hand camera, and validated finite
+12-value state. Scene build took 33.84 s. The recorded all-step latency,
+including the capture steps, was:
 
 | Statistic | Time |
 |---|---:|
-| Median | 4.02 ms |
-| p95 | 4.58 ms |
-| p99 | 5.22 ms |
+| Median | 4.27 ms |
+| p95 | 5.02 ms |
+| p99 | 7.02 ms |
 
-The all-step mean is not used as the steady-state result because it includes
-two explicit high-resolution renders. The scripted motion is a build/control
-test and does not execute a learned handover; `task_success=false` is recorded
-in the formal metrics.
+![Corrected formal Genesis front camera (left) and attached hand camera (right).](../artifacts/formal/genesis_camera_corrected/camera_pair.png)
+
+The scripted motion is a build/control/camera test and does not execute a
+learned handover; `task_success=false` is recorded in the formal metrics. The
+earlier formal scene run remains public but its hand-camera image is excluded
+from visual claims after the relative camera transform was corrected.
 
 ## 5. Policy method
 

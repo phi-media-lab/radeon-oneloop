@@ -82,6 +82,8 @@ def main() -> None:
     targets = pd.read_parquet(targets_path, columns=["index", "segment_role"])
     roles = sorted(str(value) for value in targets["segment_role"].unique())
     result_roles: dict[str, Any] = {}
+    aggregate_chunk_l1: list[float] = []
+    aggregate_first_action_l1: list[float] = []
     with torch.inference_mode():
         for role in roles:
             population = [int(value) for value in targets.loc[targets["segment_role"] == role, "index"]]
@@ -107,6 +109,8 @@ def main() -> None:
                 first = absolute_error[:, 0, :].mean(dim=1)
                 chunk_l1.extend(float(value) for value in per_sample.cpu())
                 first_action_l1.extend(float(value) for value in first.cpu())
+            aggregate_chunk_l1.extend(chunk_l1)
+            aggregate_first_action_l1.extend(first_action_l1)
             result_roles[role] = {
                 "population_frames": len(population),
                 "sampled_frames": len(indices),
@@ -123,6 +127,10 @@ def main() -> None:
         "dataset_root": str(dataset_root),
         "targets_path": str(targets_path),
         "samples_per_role_limit": args.samples_per_role,
+        "aggregate_equal_role_stratified_samples": {
+            "normalized_chunk_l1": scalar_summary(aggregate_chunk_l1),
+            "normalized_first_action_l1": scalar_summary(aggregate_first_action_l1),
+        },
         "roles": result_roles,
         "hardware": hardware,
         "task_success": None,

@@ -89,7 +89,8 @@ Completed platform evidence already establishes:
 - ROCm 7.2.1, HIP 7.2, AMD PyTorch 2.9.1 and Genesis 1.3.1;
 - one ROCm-visible `gfx1100` Radeon with 51,522,830,336 bytes of VRAM;
 - a 1,000-step dual-arm Genesis run with two 480×640 RGB observations; and
-- median / p95 / p99 non-render simulation steps of 4.02 / 4.58 / 5.22 ms.
+- median / p95 / p99 all-step simulation latency of 4.27 / 5.02 / 7.02 ms
+  in the camera-corrected formal run.
 
 PyTorch intentionally exposes ROCm tensors through its CUDA-compatible Python
 API, so logs may print `cuda:0` or configs may say `device: cuda`. In this
@@ -103,6 +104,10 @@ diagnostic uses deterministic training-set frames and is not a validation
 metric. The inherited 37/45 reviewed real-robot result is reported separately
 as pre-competition evidence and never attributed to the new formal
 checkpoints.
+
+The inspected formal camera pair is published at
+[`artifacts/formal/genesis_camera_corrected/camera_pair.png`](artifacts/formal/genesis_camera_corrected/camera_pair.png),
+alongside its run manifest, raw timing metrics, GPU samples and hashes.
 
 ## Reproduce
 

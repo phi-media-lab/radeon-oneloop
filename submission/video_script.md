@@ -38,9 +38,10 @@ the deterministic joint sweep beside the run manifest.
 
 **Narration:** “A hash-verified SO-101 model gives us a reproducible dual-arm
 environment with the same 12-value state and two 480 by 640 image keys as the
-real pipeline. The 1,000-step formal run records a 4.02 millisecond median and
-5.22 millisecond p99 non-render physics step. This is an environment and
-interface test, not a simulated handover claim.”
+real pipeline. The camera-corrected 1,000-step formal run records a 4.27
+millisecond median and 7.02 millisecond p99 across recorded steps, including
+capture steps. This is an environment and interface test, not a simulated
+handover claim.”
 
 ### 1:25–2:05 — Phase-aware HIL
 
