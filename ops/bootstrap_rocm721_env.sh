@@ -70,31 +70,47 @@ pip_host='pypi.tuna.tsinghua.edu.cn'
 download_artifact() {
   local output_name=$1
   local source_url=$2
-  if [[ ! -s "$wheel_root/$output_name" ]]; then
-    curl -fL --retry 5 --retry-delay 2 -o "$wheel_root/$output_name.part" "$source_url"
-    mv "$wheel_root/$output_name.part" "$wheel_root/$output_name"
+  local expected_sha256=$3
+  local output="$wheel_root/$output_name"
+  if [[ -s "$output" ]] \
+    && printf '%s  %s\n' "$expected_sha256" "$output" | sha256sum -c - >/dev/null; then
+    return
   fi
+  rm -f "$output" "$output.part"
+  curl -fL --retry 5 --retry-delay 2 -o "$output.part" "$source_url"
+  printf '%s  %s\n' "$expected_sha256" "$output.part" | sha256sum -c -
+  mv "$output.part" "$output"
 }
 
 download_artifact \
   torch-2.9.1+rocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl \
-  'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torch-2.9.1%2Brocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl'
+  'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torch-2.9.1%2Brocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl' \
+  fb45ace0a27e9f0d0e3c4c6efd8932162743f8376f2aa4752a4d31ef5a1bd3d7
 download_artifact \
   torchvision-0.24.0+rocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl \
-  'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torchvision-0.24.0%2Brocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl'
+  'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torchvision-0.24.0%2Brocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl' \
+  d5fca8cda173235a3b7434baeebe04c3ebffec3c6fc191e79aa8aa300633f2c9
 download_artifact \
   torchaudio-2.9.0+rocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl \
-  'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torchaudio-2.9.0%2Brocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl'
+  'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torchaudio-2.9.0%2Brocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl' \
+  023d1ce5d847b2a0fbebacf52d35b4c7a233ca07b3dbd0f1cbde84362cbcf33d
 download_artifact \
   triton-3.5.1+rocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl \
-  'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/triton-3.5.1%2Brocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl'
+  'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/triton-3.5.1%2Brocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl' \
+  07787af1d28c273852f897bfeaa7bca29f2fa4a13ca0f28f535832b240ce7016
 
 download_artifact \
-  genesis-world-v1.3.1.tar.gz \
-  'https://codeload.github.com/Genesis-Embodied-AI/genesis-world/tar.gz/refs/tags/v1.3.1'
-printf '%s  %s\n' \
-  bd09210ce33b223ee452170bdb33a13d9a30ed91f0f45de87def989111f581d1 \
-  "$wheel_root/genesis-world-v1.3.1.tar.gz" | sha256sum -c -
+  genesis_world-1.3.1-py3-none-any.whl \
+  'https://pypi.tuna.tsinghua.edu.cn/packages/1a/7c/052b166d8140a2ba67c6acffa5818ddc1cc87d632007486337097546a96c/genesis_world-1.3.1-py3-none-any.whl' \
+  8cbc9c0d7985092b3b19749039b32b399ffd07f512e6ce050ce6b714271bb895
+
+sha256sum \
+  "$wheel_root/torch-2.9.1+rocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl" \
+  "$wheel_root/torchvision-0.24.0+rocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl" \
+  "$wheel_root/torchaudio-2.9.0+rocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl" \
+  "$wheel_root/triton-3.5.1+rocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl" \
+  "$wheel_root/genesis_world-1.3.1-py3-none-any.whl" \
+  | tee "$run_dir/bootstrap_artifacts.sha256"
 
 "$pip_bin" install -c "$run_dir/constraints.txt" \
   -i "$pip_index" --trusted-host "$pip_host" \
@@ -137,7 +153,7 @@ printf '%s  %s\n' \
   'tifffile==2024.12.12'
 
 "$pip_bin" install -c "$run_dir/constraints.txt" --no-deps --no-build-isolation \
-  "$wheel_root/genesis-world-v1.3.1.tar.gz"
+  "$wheel_root/genesis_world-1.3.1-py3-none-any.whl"
 
 if "$pip_bin" list --format=freeze | grep -Eq '^(nvidia-|gs-madrona==)'; then
   printf '%s\n' 'prohibited NVIDIA/Madrona dependency detected in Radeon environment' >&2
