@@ -245,6 +245,18 @@ predeclared the final checkpoint at step 10,000 as the only candidate for each
 method. Checkpoints saved every 1,000 steps remain debugging artifacts and are
 not searched after observing loss.
 
+### 5.4 Key technical contributions
+
+- a deterministic frame-level intervention objective that plugs into ACT
+  without changing its architecture or duplicating training samples;
+- a matched real/sim observation and action contract for two SO-101 arms,
+  including a moving hand-camera transform verified on `gs.amdgpu`;
+- a fail-closed single-Radeon job protocol that makes hardware identity,
+  source, data, configuration and final model content independently auditable;
+  and
+- a CPU-edge chunk protocol whose timeout, sequence, range and delta checks
+  latch E-stop before unsafe values reach robot I/O.
+
 ## 6. CPU-edge safety
 
 The dependency-free safety controller uses monotonically increasing sequence
@@ -365,9 +377,12 @@ policy.
 - The task is constrained to one object family and workspace.
 - The CPU-edge safety kernel has unit tests but no safety certification.
 
-## 10. Reproducibility
+## 10. Reproducibility and final deliverables
 
-The public repository contains:
+The final output forms are this English PDF technical report, the dedicated
+Apache-2.0 source repository and detailed root README, a public 3-5 minute
+H.264/AAC workflow video, machine-readable formal evidence, and the official
+competition pull request. The public repository contains:
 
 - exact environment and dependency bootstraps with wheel/source hashes;
 - immutable data merger, phase-target builder and public source/derived hashes;
