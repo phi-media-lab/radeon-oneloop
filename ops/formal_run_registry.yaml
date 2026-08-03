@@ -1,7 +1,7 @@
 schema_version: 1
 formal_host: radeon-c
 formal_gpu: GPU0
-formal_gpu_uid: 0x153f7d55778ab659
+formal_gpu_uid: "0x153f7d55778ab659"
 gfx_target: gfx1100
 environment:
   status: passed
@@ -25,7 +25,7 @@ runs:
     role: genesis_formal
     status: done
     host: radeon-c
-    gpu_uid: 0x153f7d55778ab659
+    gpu_uid: "0x153f7d55778ab659"
     git_commit: b00eb5917dd7ad57622796ee69488427ff9a2b4c
     config_sha256: cf56fb57f768678d757592e8479734d2e3de6aac3e50258a623fb45a9e2aec48
     dataset_sha256: null
