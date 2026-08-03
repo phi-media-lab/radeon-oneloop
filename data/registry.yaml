@@ -34,7 +34,10 @@ formal_dataset:
   episodes: 124
   frames: 178465
   split: train_only_real_data
-  derived_hash: pending_gate_c_build
+  derived_hash: ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf
+  phase_targets_sha256: b34f5559db6d697890a08b6a7e49b52f3a916537c3328aea72c8470bb90bec57
+  builder_commit: e4c38a0526b2fcae205780f6346f8f821e209a53
+  intervention_frames: 15906
   redistribution: false
 phase_vocabulary:
   - approach_and_grasp
@@ -42,4 +45,4 @@ phase_vocabulary:
   - handover
   - receive_and_transfer
   - place_and_release
-status: source_frozen_pending_derived_hash
+status: shadow_built_and_hashed_pending_formal_copy
