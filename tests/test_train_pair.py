@@ -68,5 +68,14 @@ class TrainPairTests(unittest.TestCase):
 
         self.assertIn("--policy.push_to_hub=false", command)
 
+    def test_formal_pair_predeclares_only_the_final_checkpoint(self):
+        for path in (Path("configs/act_baseline.yaml"), Path("configs/act_phase_aware.yaml")):
+            text = path.read_text(encoding="utf-8")
+            self.assertIn(
+                "checkpoint_selection_rule: fixed_training_budget_final_step",
+                text,
+            )
+            self.assertIn("candidate_steps: [10000]", text)
+
 if __name__ == "__main__":
     unittest.main()

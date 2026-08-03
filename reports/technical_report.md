@@ -29,6 +29,12 @@ were explicitly rejected as substitutes.
 
 ## 8. Experiments and results
 
+The formal dataset is train-only; no independent validation or simulation
+success split exists in this release. Both paired runs therefore use the
+predeclared final checkpoint at step 10,000. Intermediate checkpoints are
+retained for debugging but are not searched or selected after observing their
+training losses.
+
 ## 9. Limitations and negative results
 
 ## 10. Reproducibility

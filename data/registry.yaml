@@ -45,4 +45,4 @@ phase_vocabulary:
   - handover
   - receive_and_transfer
   - place_and_release
-status: shadow_built_and_hashed_pending_formal_copy
+status: formal_built_and_hash_verified_on_radeon_c

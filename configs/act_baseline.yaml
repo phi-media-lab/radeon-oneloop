@@ -22,8 +22,8 @@ method:
   phase_aware: false
 reproducibility:
   seed: 20260803
-  checkpoint_selection_rule: fixed_validation_seeds
-  candidate_steps: [2000, 5000, 10000]
+  checkpoint_selection_rule: fixed_training_budget_final_step
+  candidate_steps: [10000]
 lineage:
   parent_checkpoint: null
 status: frozen_preflight
