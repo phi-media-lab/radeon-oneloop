@@ -18,7 +18,11 @@ forbidden_formal_sources:
   - amd
   - phi-amd-work
 fail_closed:
-  reject_cuda: true
+  reject_nvidia_cuda_runtime: true
   reject_software_renderer: true
   reject_device_count_mismatch: true
-  require_rocm_vulkan_identity_match: true
+conditional_gates:
+  gaussian_vulkan:
+    enabled: false
+    reason: deferred_no_calibrated_so101_workspace_capture
+    require_rocm_vulkan_identity_match_before_enable: true
