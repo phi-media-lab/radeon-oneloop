@@ -11,6 +11,7 @@ __pycache__/
 venv/
 dist/
 build/
+tmp/
 *.egg-info/
 
 # Local data and generated artifacts are referenced by manifests, not committed.
