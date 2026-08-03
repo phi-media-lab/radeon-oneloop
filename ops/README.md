@@ -19,3 +19,17 @@ DONE or FAILED
 
 Only the main integration thread may add a run to
 `formal_run_registry.yaml`. Failed runs remain preserved.
+
+## Environment preflight
+
+Run the pinned ROCm 7.2.1 / Python 3.12 environment bootstrap on the shadow
+host first:
+
+```bash
+ssh radeon-f 'bash -s' < ops/bootstrap_rocm721_env.sh
+```
+
+The script installs the official AMD PyTorch 2.9.1 wheel set in an isolated
+venv, pins Genesis v1.3.1, verifies one visible gfx1100 device with a GPU
+matmul, initializes Genesis with `gs.amdgpu`, and records Vulkan enumeration.
+Only reproduce it on `radeon-c` after the shadow run passes.
