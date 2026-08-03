@@ -40,4 +40,6 @@ if git grep -nE '(gho_|github_pat_|AKIA[0-9A-Z]{16}|BEGIN (RSA |OPENSSH )?PRIVAT
 fi
 
 git diff --check
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+bash -n ops/*.sh
 printf '%s\n' 'scaffold validation passed'

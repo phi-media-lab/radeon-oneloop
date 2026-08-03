@@ -33,3 +33,18 @@ The script installs the official AMD PyTorch 2.9.1 wheel set in an isolated
 venv, pins Genesis v1.3.1, verifies one visible gfx1100 device with a GPU
 matmul, initializes Genesis with `gs.amdgpu`, and records Vulkan enumeration.
 Only reproduce it on `radeon-c` after the shadow run passes.
+
+After committing an exact source revision, deploy it without a GitHub token and
+install the pinned public LeRobot dependency:
+
+```bash
+./ops/deploy_bundle.sh radeon-f
+ssh radeon-f 'bash /root/radeon-oneloop/current/ops/bootstrap_lerobot_env.sh'
+```
+
+Transfer the two access-controlled source datasets through the local SSH
+control plane and verify their expected metadata:
+
+```bash
+./ops/transfer_formal_inputs.sh radeon-f
+```

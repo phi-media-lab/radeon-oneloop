@@ -1,9 +1,45 @@
 schema_version: 1
-datasets: []
+datasets:
+  - id: bc_seed_handover_v1
+    repo_id: fbsh96/so101-sock-ball-handover-v1
+    source_kind: real_human_demonstration
+    episodes: 84
+    frames: 116550
+    fps: 30
+    info_sha256: 2e7db73c99f95bb7ff403f1f2ba630750dbc1bb07d4b52e2b300704bd220999b
+    data_parquet_sha256: a15975d734013f3c45e9ec8869573ac09d52a8f6ae9e47b68ebd0bf28380a64f
+    formal_use: train
+    redistribution: false
+    provenance: team_collected_so101_teleoperation
+  - id: hil_rlready_batch1_batch2
+    repo_id: fbsh96/so101_handover_hil_rlready_batch1_batch2_20260506
+    source_kind: real_policy_rollout_with_human_intervention
+    episodes: 40
+    frames: 61915
+    fps: 30
+    successes: 24
+    failures: 16
+    info_sha256: e198927b1fc7f0d7566e5a4b622872ba3f2a0bafa58010f5d900441e6debcb3d
+    data_parquet_sha256: dafbbf6db47685ed433b7e2f4383191f7498b3ae037289f6c0fc7e77e1f0f88b
+    episode_manifest_sha256: 17fbf9625ec31da4368f974a480ff60695215b8ec7dd16261568547df98dff66
+    formal_use: train
+    redistribution: false
+    provenance: team_collected_hil_batches_reviewed_2026_05_06
+formal_dataset:
+  id: radeon_oneloop_formal_handover_v1
+  repo_id: phi-media-lab/radeon-oneloop-formal-handover-v1
+  composition:
+    bc_seed_handover_v1: 84
+    hil_rlready_batch1_batch2: 40
+  episodes: 124
+  frames: 178465
+  split: train_only_real_data
+  derived_hash: pending_gate_c_build
+  redistribution: false
 phase_vocabulary:
   - approach_and_grasp
   - lift_and_align
   - handover
   - receive_and_transfer
   - place_and_release
-status: scaffold
+status: source_frozen_pending_derived_hash

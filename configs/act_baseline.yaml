@@ -2,10 +2,28 @@ schema_version: 1
 experiment: act_baseline
 formal_profile: formal_radeon_only
 dataset_registry: data/registry.yaml
+dataset:
+  repo_id: phi-media-lab/radeon-oneloop-formal-handover-v1
+  video_backend: pyav
+policy:
+  family: ACT
+  device: cuda
+  architecture: lerobot_act_default
+optimizer:
+  source: lerobot_act_default
+training:
+  batch_size: 16
+  steps: 10000
+  num_workers: 4
+  log_freq: 50
+  save_freq: 1000
 method:
   policy_family: ACT
   phase_aware: false
 reproducibility:
   seed: 20260803
   checkpoint_selection_rule: fixed_validation_seeds
-status: scaffold
+  candidate_steps: [2000, 5000, 10000]
+lineage:
+  parent_checkpoint: null
+status: frozen_preflight

@@ -91,7 +91,7 @@ download_wheel \
   "$wheel_root/triton-3.5.1+rocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl"
 
 "$pip_bin" install -c "$run_dir/constraints.txt" \
-  'https://github.com/Genesis-Embodied-AI/genesis-world/archive/refs/tags/v1.3.1.tar.gz'
+  'https://codeload.github.com/Genesis-Embodied-AI/genesis-world/tar.gz/refs/tags/v1.3.1'
 
 export TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1
 "$python_bin" - <<'PY' | tee "$run_dir/torch_smoke.json"

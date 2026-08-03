@@ -33,9 +33,13 @@ multi-GPU training are explicitly out of scope.
 
 ## Repository status
 
-This is the initial project scaffold. It defines the execution contracts,
-formal-run registry, data schema, and workstream boundaries. It does **not** yet
-claim a completed training run, task-success result, or Gaussian benchmark.
+The reproducibility core is implemented: pinned ROCm/Genesis/LeRobot
+bootstraps, immutable SSH deployment, single-Radeon assertions, a verified
+124-episode dataset builder, phase-aware target generation, fair ACT command
+generation, a dual SO-101 Genesis scene, and CPU-edge safety contracts. Remote
+smokes and formal training are tracked as evidence gates; this README does
+**not** claim a task-success result or Gaussian benchmark until their formal
+registry entries exist.
 
 ## Formal evidence rule
 
@@ -59,14 +63,14 @@ reports/       Technical report sources
 submission/    Official PR entry and demo-video plan
 ```
 
-## Bootstrap validation
+## Local validation
 
 ```bash
 ./ops/validate_scaffold.sh
 ```
 
-Hardware, environment, training, and evaluation commands will be added only
-after they pass the corresponding project gate.
+See the workstream READMEs for the exact remote environment, dataset, Genesis,
+and ACT commands.
 
 ## License
 

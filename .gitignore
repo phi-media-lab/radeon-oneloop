@@ -32,3 +32,6 @@ checkpoints/
 *.key
 auth.json
 secrets/
+
+# Downloaded, hash-verified simulation assets.
+sim/genesis_so101/assets/
