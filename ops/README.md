@@ -48,3 +48,14 @@ control plane and verify their expected metadata:
 ```bash
 ./ops/transfer_formal_inputs.sh radeon-f
 ```
+
+All GPU commands run through `run_job.sh`; `dispatch.sh` supplies the immutable
+remote checkout and rejects formal identity mismatches. For example:
+
+```bash
+./ops/dispatch.sh radeon-f genesis_smoke configs/genesis_minimal.yaml false null -- \
+  /root/radeon-oneloop-env/rocm721-py312/bin/python -m \
+  sim.genesis_so101.scripted_smoke --asset-root \
+  /root/radeon-oneloop-data/assets/so101 --output \
+  /root/radeon-oneloop-runs/genesis-shadow --steps 1000
+```
