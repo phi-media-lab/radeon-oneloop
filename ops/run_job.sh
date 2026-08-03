@@ -20,6 +20,7 @@ shift
 repo_root=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
 commit=$(git -C "$repo_root" rev-parse HEAD)
 cd "$repo_root"
+export PYTHONPATH="$repo_root/src:$repo_root${PYTHONPATH:+:$PYTHONPATH}"
 config_hash=$(sha256sum "$config" | awk '{print $1}')
 seed=${ONELOOP_SEED:-20260803}
 run_root=${ONELOOP_RUN_ROOT:-/root/radeon-oneloop-runs/jobs}

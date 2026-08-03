@@ -95,6 +95,7 @@ fi
   'packaging>=24.2,<26' \
   'pandas>=2.2,<3' \
   'pyarrow>=17,<24' \
+  'pyserial==3.5' \
   'PyYAML>=6.0.2,<7' \
   'termcolor>=2.4,<4' \
   'wandb>=0.24,<0.25'
