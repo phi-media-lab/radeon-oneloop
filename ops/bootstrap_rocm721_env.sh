@@ -145,8 +145,9 @@ if "$pip_bin" list --format=freeze | grep -Eq '^(nvidia-|gs-madrona==)'; then
 fi
 
 export TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1
-"$python_bin" - <<'PY' | tee "$run_dir/torch_smoke.json"
+"$python_bin" - "$run_dir/torch_smoke.json" <<'PY'
 import json
+import sys
 import torch
 
 assert torch.version.hip is not None, torch.__version__
@@ -157,27 +158,32 @@ b = torch.randn((1024, 1024), device="cuda")
 c = a @ b
 torch.cuda.synchronize()
 assert torch.isfinite(c).all().item()
-print(json.dumps({
+payload = {
     "torch": torch.__version__,
     "hip": torch.version.hip,
     "device_count": torch.cuda.device_count(),
     "device_0": torch.cuda.get_device_name(0),
     "matmul_shape": list(c.shape),
     "matmul_finite": True,
-}, sort_keys=True))
+}
+open(sys.argv[1], "w").write(json.dumps(payload, sort_keys=True) + "\n")
+print(json.dumps(payload, sort_keys=True))
 PY
 
-"$python_bin" - <<'PY' | tee "$run_dir/genesis_smoke.json"
+"$python_bin" - "$run_dir/genesis_smoke.json" <<'PY'
 import json
+import sys
 import genesis as gs
 
 gs.init(backend=gs.amdgpu, seed=20260803)
 assert gs.backend == gs.amdgpu
-print(json.dumps({
+payload = {
     "genesis": getattr(gs, "__version__", "unknown"),
     "backend": str(gs.backend),
     "device": str(gs.device),
-}, sort_keys=True))
+}
+open(sys.argv[1], "w").write(json.dumps(payload, sort_keys=True) + "\n")
+print(json.dumps(payload, sort_keys=True))
 PY
 
 xdg_runtime="$run_dir/xdg-runtime"
@@ -185,6 +191,8 @@ mkdir -p "$xdg_runtime"
 chmod 700 "$xdg_runtime"
 XDG_RUNTIME_DIR="$xdg_runtime" vulkaninfo --summary | tee "$run_dir/vulkaninfo_summary.txt"
 
+"$python_bin" -m json.tool "$run_dir/torch_smoke.json" >/dev/null
+"$python_bin" -m json.tool "$run_dir/genesis_smoke.json" >/dev/null
 "$pip_bin" freeze | sort > "$run_dir/pip_freeze.txt"
 /opt/rocm/bin/rocminfo > "$run_dir/rocminfo.txt"
 rocm-smi --showproductname --showuniqueid --showmeminfo vram > "$run_dir/rocm_smi.txt"
