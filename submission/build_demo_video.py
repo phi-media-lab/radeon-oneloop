@@ -251,7 +251,7 @@ def main() -> None:
                 "Environment, training, inference, and evidence in one auditable loop",
             ],
             "metric": "ONE RADEON · ONE ROBOT LOOP",
-            "narration": "Welcome to Radeon OneLoop, Phi Media Lab's Track Three entry. Our target is a contact-rich bimanual handover: one low-cost arm picks and presents a soft object, the second arm receives it, and the system places it into a target zone. The contribution is a complete and auditable path from a reproducible environment, through intervention-aware training, to real-time policy execution on one AMD Radeon.",
+            "narration": "Radeon OneLoop is Phi Media Lab's Track Three entry for a contact-rich bimanual handover. One low-cost arm presents a soft object, the second receives it, and the system places it into a target zone. We provide an auditable path from environment, through intervention-aware training, to real-time execution on one AMD Radeon.",
         },
         {
             "kicker": "The physical-AI task",
@@ -262,7 +262,7 @@ def main() -> None:
                 "Prior 37 of 45 reviewed runs prove the inherited loop, not the new checkpoints",
             ],
             "metric": "30 Hz control contract",
-            "narration": "The physical setup uses two SO-101 arms and two RGB cameras. Every observation carries both images plus twelve joint and gripper values. Every action commands both arms in a frozen twelve-value order at thirty hertz. Timing matters: the receiving arm must establish support before the giving arm releases. A prior reviewed batch completed thirty-seven of forty-five handovers. We show that number only as historical evidence that the inherited physical loop exists; it is not attributed to either new formal checkpoint.",
+            "narration": "The setup uses two SO-101 arms and two RGB cameras. Observations carry both images plus twelve joint and gripper values, and actions command both arms at thirty hertz. The receiver must establish support before release. A prior reviewed batch completed thirty-seven of forty-five handovers; that is historical evidence for the inherited loop, never a result of the new checkpoints.",
         },
         {
             "kicker": "Competition boundary",
@@ -273,7 +273,7 @@ def main() -> None:
                 "CPU handles decoding, cameras, robot I/O, watchdog, limits, and E-stop",
             ],
             "metric": "51.52 GB visible VRAM · 1 GPU",
-            "narration": "The formal accelerator boundary is strict. Exactly one gfx eleven-hundred Radeon is exposed, with ROCm seven point two point one and AMD PyTorch two point nine point one. Genesis uses its AMD backend. Both ACT variants train from random initialization on this device, and real-observation policy chunks execute on it too. The CPU performs decoding, camera and robot input-output, validation, watchdog, limits, and emergency stop. It is never a second inference path. Other AMD machines were useful for inventory and preflight, but their checkpoints and performance are excluded.",
+            "narration": "Exactly one gfx eleven-hundred Radeon is exposed, with ROCm seven point two point one and AMD PyTorch two point nine point one. Genesis, both from-scratch ACT training jobs, and real-observation policy chunks use this device. The CPU performs decoding, robot input-output, validation, watchdog, limits, and emergency stop, never fallback inference. Results from our other AMD machines are excluded.",
         },
         {
             "kicker": "Reproducible environment",
@@ -285,7 +285,7 @@ def main() -> None:
             ],
             "metric": f"p50 {genesis['step_ms']['p50']:.2f} ms · p99 {genesis['step_ms']['p99']:.2f} ms",
             "image_path": evidence / "genesis_camera_corrected/camera_pair.png",
-            "narration": f"Our minimal Genesis environment downloads and verifies the official SO-101 model and meshes, then builds two arms, a work table, an object, and two cameras. Its observation keys match the real pipeline. The corrected formal run completed one thousand steps on the Radeon, produced two four-eighty by six-forty views and a finite twelve-value state. Median recorded step time was {genesis['step_ms']['p50']:.2f} milliseconds and p ninety-nine was {genesis['step_ms']['p99']:.2f} milliseconds, including capture steps. The scripted sweep validates build, control, and camera contracts. It does not claim a learned simulated handover.",
+            "narration": f"The Genesis environment verifies the official SO-101 assets, then builds two arms, a table, an object, and two cameras with the real pipeline's keys. The corrected formal run completed one thousand Radeon steps with two four-eighty by six-forty views and finite state. Median step time was {genesis['step_ms']['p50']:.2f} milliseconds and p ninety-nine was {genesis['step_ms']['p99']:.2f}, including capture steps. This validates interfaces, not a learned handover.",
         },
         {
             "kicker": "Reviewed intervention data",
@@ -297,7 +297,7 @@ def main() -> None:
             ],
             "metric": f"{correction['frames']:,} corrections → {100 * correction['gradient_mass_ratio']:.2f}% gradient mass",
             "image_path": figures / "phase_weighting.png",
-            "narration": f"The immutable real dataset contains one hundred twenty-four episodes and one hundred seventy-eight thousand four hundred sixty-five frames. Human corrections occupy only {100 * correction['frames'] / 178465:.2f} percent of the frames, but they are concentrated around difficult recovery and transfer decisions. Phase-aware ACT gives correction frames weight four, failed autonomous prefixes weight point zero five, and successful policy or demonstration frames weight one. Positive weights normalize to mean one. This allocates {100 * correction['gradient_mass_ratio']:.2f} percent of gradient mass to corrections without duplicating data. Architecture, optimizer, observations, batch size, seed, and budget remain identical.",
+            "narration": f"The immutable real dataset has one hundred twenty-four episodes and one hundred seventy-eight thousand four hundred sixty-five frames. Corrections are only {100 * correction['frames'] / 178465:.2f} percent of frames but concentrate around difficult transitions. We assign them weight four, failed prefixes point zero five, and other frames one. Normalization gives corrections {100 * correction['gradient_mass_ratio']:.2f} percent of gradient mass without duplicating data. Every other training setting stays identical.",
         },
         {
             "kicker": "Controlled experiment",
@@ -309,7 +309,7 @@ def main() -> None:
             ],
             "metric": "Final-step checkpoint predeclared",
             "image_path": figures / "formal_training_loss.png",
-            "narration": f"The formal pair is deliberately boring in the ways that make a comparison credible. Both models start from random initialization, use the same seed, batch size sixteen, default LeRobot ACT architecture, optimizer, data, and ten thousand update budget. Baseline training took {base['elapsed_seconds']/60:.1f} minutes with terminal logged loss {base['terminal_loss']:.4f}. Phase-aware training took {phase['elapsed_seconds']/60:.1f} minutes with terminal logged loss {phase['terminal_loss']:.4f}. The final-step checkpoint rule was declared before either result. Intermediate checkpoints were never searched after observing loss, and both complete hashes are recorded and shown next.",
+            "narration": f"Both models start randomly with the same seed, batch size sixteen, ACT architecture, optimizer, data, and ten thousand updates. Baseline training took {base['elapsed_seconds']/60:.1f} minutes with terminal logged loss {base['terminal_loss']:.4f}; phase-aware training took {phase['elapsed_seconds']/60:.1f} minutes with loss {phase['terminal_loss']:.4f}. The final-step rule was declared in advance. Intermediate checkpoints were never searched, and both complete hashes appear next.",
         },
         {
             "kicker": "Immutable model artifacts",
@@ -320,7 +320,7 @@ def main() -> None:
             ],
             "metric": "SHA-256 over the complete artifact tree",
             "mono_lines": [f"baseline  {base_hash}", f"phase     {phase_hash}"],
-            "narration": "These are the complete content hashes of the two predeclared final checkpoints. Each ledger covers the model weights, policy configuration, training configuration, preprocessor, postprocessor, and their tensor state. Files are sorted by relative path before the tree digest is computed, so an independent reviewer can reproduce the identifier without trusting a model filename or upload service. The report links each digest back to its exact training job and Radeon device record.",
+            "narration": "These are the complete content hashes of the two final checkpoints. Each ledger covers weights, configurations, processors, and tensor state. Files are sorted by relative path before the digest, so reviewers can reproduce each identifier without trusting a filename or upload service. The report links both hashes to their training jobs and Radeon record.",
         },
         {
             "kicker": "Real-time policy path",
@@ -332,7 +332,7 @@ def main() -> None:
             ],
             "metric": "200 synchronized calls after warm-up",
             "image_path": figures / "formal_inference_latency.png",
-            "narration": f"For runtime measurement, one real dataset observation drives full one-hundred-action chunk generation. After warm-up, two hundred synchronized calls give median latency {base_latency['chunk_generation']['p50_ms']:.2f} milliseconds for baseline and {phase_latency['chunk_generation']['p50_ms']:.2f} milliseconds for phase-aware ACT. Queued actions dispatch without regenerating a chunk. On sampled correction frames, normalized chunk L one is {base_correction_l1:.4f} versus {phase_correction_l1:.4f}; the equal-role stratified values are {base_l1:.4f} and {phase_l1:.4f}. These use training frames and are diagnostics only, never task-success estimates.",
+            "narration": f"A real observation drives one-hundred-action chunk generation. After warm-up, two hundred synchronized calls give median latency {base_latency['chunk_generation']['p50_ms']:.2f} milliseconds for baseline and {phase_latency['chunk_generation']['p50_ms']:.2f} for phase-aware ACT. Queued actions avoid regeneration. On correction frames, normalized chunk L one is {base_correction_l1:.4f} versus {phase_correction_l1:.4f}; equal-role values are {base_l1:.4f} and {phase_l1:.4f}. These training-frame diagnostics are not task success.",
         },
         {
             "kicker": "Fail-closed deployment",
@@ -343,7 +343,7 @@ def main() -> None:
                 "Any violation latches E-stop; software cannot silently re-arm",
             ],
             "metric": "CPU safety edge · no fallback inference",
-            "narration": "Before an action chunk can reach robot input-output, a dependency-free safety kernel validates monotonic sequence identifiers, exact observation correspondence, freshness, shape, finite values, joint and gripper limits, and maximum per-step motion. A stale, reordered, mismatched, or unsafe packet latches emergency stop. Recovery requires a new controller after physical reset, so software cannot silently re-arm. These checks supplement, rather than replace, manufacturer limits, workspace clearance, and an operator with access to the physical stop.",
+            "narration": "Before robot input-output, the safety kernel validates sequence identifiers, observation correspondence, freshness, shape, finite values, joint limits, and maximum per-step motion. A stale, reordered, mismatched, or unsafe packet latches emergency stop. Recovery requires a new controller after physical reset, so software cannot silently re-arm. Manufacturer limits and a human physical-stop operator remain required.",
         },
         {
             "kicker": "Evidence, not storytelling",
@@ -359,7 +359,7 @@ def main() -> None:
                 "INFO Loaded 178465 ACT-AWR weights: min=0.041529 mean=1 max=3.322282",
                 "INFO Checkpoint policy after step 10000 · End of training",
             ],
-            "narration": "Every formal GPU job acquires an exclusive lock and records the Radeon UID, exact source commit, configuration hash, dataset hash, seed, command, environment, hardware, one-second ROCm samples, raw logs, metrics, and terminal marker. Final checkpoint trees receive deterministic hashes. Failed and superseded runs stay visible. The formal dataset has no held-out split, and the Genesis scene is not calibrated for sim-to-real selection, so this entry makes no generalization claim and no new physical success claim. That boundary is a result, not fine print.",
+            "narration": "Every formal GPU job takes an exclusive lock and records the Radeon UID, source, configuration, data, seed, command, environment, ROCm samples, raw logs, metrics, and terminal marker. Failed and superseded runs stay visible. With no held-out split and no calibrated sim-to-real benchmark, we make no generalization or new physical-success claim. That boundary is a result, not fine print.",
         },
         {
             "kicker": "Reproduce the loop",
@@ -370,7 +370,7 @@ def main() -> None:
                 "github.com/phi-media-lab/radeon-oneloop · Apache-2.0",
             ],
             "metric": "./ops/validate_scaffold.sh",
-            "narration": "The public repository contains hash-pinned AMD environment setup, verified Genesis assets, the immutable data builder, frozen experiment pair, raw formal evidence, inference diagnostics, the CPU-edge safety kernel, and an English technical report. Raw team robot video remains access-controlled, but its schema and registered source and derived hashes are public. Radeon OneLoop demonstrates how one Radeon can carry a physical-AI project from environment, through learning, to real-time deployment, while keeping negative results and claim boundaries visible. Thank you.",
+            "narration": "The public repository contains pinned AMD setup, verified Genesis assets, the immutable data builder, frozen experiment pair, formal evidence, inference diagnostics, safety tests, and the English report. Raw robot video remains access-controlled, while its schema and hashes are public. Radeon OneLoop shows one Radeon carrying physical AI from environment, through learning, to real-time deployment, with honest claim boundaries. Thank you.",
         },
     ]
 
