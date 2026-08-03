@@ -8,15 +8,24 @@ from radeon_oneloop.train_command import (
     TrainingConfigError,
     absolute_executable_path,
     assert_fair_pair,
+    build_command,
 )
 
 
 def config(phase: bool):
     return {
+        "experiment": "test",
         "dataset": {"repo_id": "x", "video_backend": "pyav"},
         "policy": {"family": "ACT", "device": "cuda"},
         "optimizer": {"source": "default"},
-        "training": {"steps": 10, "output_dir": "ignored"},
+        "training": {
+            "batch_size": 2,
+            "steps": 10,
+            "num_workers": 0,
+            "log_freq": 1,
+            "save_freq": 5,
+            "output_dir": "ignored",
+        },
         "reproducibility": {"seed": 1},
         "method": {
             "phase_aware": phase,
@@ -48,6 +57,16 @@ class TrainPairTests(unittest.TestCase):
 
             self.assertEqual(actual, Path(os.path.abspath(venv_python)))
             self.assertNotEqual(actual, system_python)
+
+    def test_training_command_disables_unrequested_hub_push(self):
+        command = build_command(
+            config(False),
+            python=Path("/venv/bin/python"),
+            dataset_root=Path("/dataset"),
+            output_dir=Path("/output"),
+        )
+
+        self.assertIn("--policy.push_to_hub=false", command)
 
 if __name__ == "__main__":
     unittest.main()

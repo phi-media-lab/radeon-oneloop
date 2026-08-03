@@ -83,6 +83,7 @@ def build_command(config: dict[str, Any], *, python: Path, dataset_root: Path, o
         "lerobot.scripts.lerobot_train",
         "--policy.type=act",
         f"--policy.device={policy['device']}",
+        "--policy.push_to_hub=false",
         f"--dataset.repo_id={dataset['repo_id']}",
         f"--dataset.root={dataset_root}",
         f"--dataset.video_backend={dataset['video_backend']}",
