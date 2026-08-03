@@ -24,6 +24,17 @@ HOME_ACTION = (
 )
 
 
+def relative_transform(parent_world: Any, child_world: Any) -> np.ndarray:
+    """Return the child pose in parent coordinates for two world transforms."""
+    parent = np.asarray(parent_world, dtype=np.float64)
+    child = np.asarray(child_world, dtype=np.float64)
+    if parent.shape != (4, 4) or child.shape != (4, 4):
+        raise ValueError("parent and child transforms must both be 4x4")
+    if not np.isfinite(parent).all() or not np.isfinite(child).all():
+        raise ValueError("transforms must be finite")
+    return np.linalg.solve(parent, child)
+
+
 @dataclass
 class SceneHandles:
     gs: Any
@@ -144,12 +155,21 @@ def build(
         lookat=(0.0, 0.0, 0.48), fov=65, GUI=False,
     )
     scene.build()
-    hand_camera.attach(
-        left.get_link("gripper"), gu.trans_to_T(np.asarray((0.06, 0.0, 0.04)))
-    )
     handles = SceneHandles(
         gs, scene, left, right, object_entity, front_camera, hand_camera
     )
     task = SO101HandoverTask(handles)
     task.reset()
+    # Preserve the explicitly configured world-space camera view at the home
+    # pose, then follow the gripper with that full translation *and rotation*.
+    # A translation-only attachment silently replaces the look-at rotation
+    # with identity and can leave the hand camera staring into the table.
+    gripper = left.get_link("gripper")
+    link_T = gu.trans_quat_to_T(gripper.get_pos(), gripper.get_quat())
+    if hasattr(link_T, "detach"):
+        link_T = link_T.detach().cpu().numpy()
+    camera_T = hand_camera.get_transform()
+    if hasattr(camera_T, "detach"):
+        camera_T = camera_T.detach().cpu().numpy()
+    hand_camera.attach(gripper, relative_transform(link_T, camera_T))
     return task, handles
