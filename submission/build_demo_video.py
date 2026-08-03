@@ -142,24 +142,46 @@ def speech_segment(
     voice: str,
     rate: int,
     audio_path: Path,
+    motion_path: Path | None = None,
 ) -> None:
     command(["say", "-v", voice, "-r", str(rate), "-o", str(audio_path), narration])
-    command(
-        [
-            "ffmpeg",
-            "-y",
-            "-loglevel",
-            "error",
+    if motion_path is None:
+        video_inputs = ["-loop", "1", "-framerate", "30", "-i", str(slide_path)]
+        audio_input = ["-i", str(audio_path)]
+        filter_and_map = ["-vf", "format=yuv420p"]
+    else:
+        video_inputs = [
             "-loop",
             "1",
             "-framerate",
             "30",
             "-i",
             str(slide_path),
+            "-stream_loop",
+            "-1",
             "-i",
-            str(audio_path),
-            "-vf",
-            "format=yuv420p",
+            str(require(motion_path)),
+        ]
+        audio_input = ["-i", str(audio_path)]
+        filter_and_map = [
+            "-filter_complex",
+            "[0:v]format=yuv420p[base];"
+            "[1:v]scale=690:-2,format=yuv420p[motion];"
+            "[base][motion]overlay=1115:546:shortest=1[v]",
+            "-map",
+            "[v]",
+            "-map",
+            "2:a",
+        ]
+    command(
+        [
+            "ffmpeg",
+            "-y",
+            "-loglevel",
+            "error",
+            *video_inputs,
+            *audio_input,
+            *filter_and_map,
             "-c:v",
             "libx264",
             "-preset",
@@ -207,6 +229,11 @@ def main() -> None:
     )
     parser.add_argument("--voice", default="Samantha")
     parser.add_argument("--rate", type=int, default=260)
+    parser.add_argument(
+        "--genesis-video",
+        type=Path,
+        default=Path("output/video/genesis-dual-camera-formal.mp4"),
+    )
     args = parser.parse_args()
 
     for executable in ("say", "ffmpeg", "ffprobe"):
@@ -285,6 +312,7 @@ def main() -> None:
             ],
             "metric": f"p50 {genesis['step_ms']['p50']:.2f} ms · p99 {genesis['step_ms']['p99']:.2f} ms",
             "image_path": evidence / "genesis_camera_corrected/camera_pair.png",
+            "motion_path": args.genesis_video.resolve() if args.genesis_video.is_file() else None,
             "narration": f"The Genesis environment verifies the official SO-101 assets, then builds two arms, a table, an object, and two cameras with the real pipeline's keys. The corrected formal run completed one thousand Radeon steps with two four-eighty by six-forty views and finite state. Median step time was {genesis['step_ms']['p50']:.2f} milliseconds and p ninety-nine was {genesis['step_ms']['p99']:.2f}, including capture steps. This validates interfaces, not a learned handover.",
         },
         {
@@ -380,7 +408,14 @@ def main() -> None:
         slide_path = slides / f"{index:02d}.png"
         segment_path = segments / f"{index:02d}.mp4"
         audio_path = audio / f"{index:02d}.aiff"
-        slide(slide_path, **{key: value for key, value in spec.items() if key != "narration"})
+        slide(
+            slide_path,
+            **{
+                key: value
+                for key, value in spec.items()
+                if key not in {"narration", "motion_path"}
+            },
+        )
         speech_segment(
             slide_path,
             spec["narration"],
@@ -388,6 +423,7 @@ def main() -> None:
             voice=args.voice,
             rate=args.rate,
             audio_path=audio_path,
+            motion_path=spec.get("motion_path"),
         )
         segment_paths.append(segment_path)
 
