@@ -2,78 +2,233 @@
 
 **Single-Radeon Phase-Aware HIL Bimanual Handover**
 
-Radeon OneLoop is a Track 3 embodied-intelligence project for the AMD Radeon
-Hackathon 2026. The target task is a real SO-101 bimanual handover: one arm
-grasps and transfers an object, the second arm receives it, and the object is
-placed at the target.
+Radeon OneLoop is a Track 3 embodied-intelligence entry for the AMD Radeon
+Hackathon 2026. It turns an existing real SO-101 bimanual handover pipeline
+into an auditable, single-Radeon learning and deployment path: one arm picks
+and transfers an object, the other receives it, and the object is placed in a
+target zone.
 
-The formal profile uses exactly one AMD Radeon GPU (`radeon-c`, `gfx1100`) for:
+The project contribution is not a new robot foundation model. It is a compact
+way to learn from interventions without hiding the hardware or data lineage:
 
-- Genesis environment execution;
-- baseline and phase-aware ACT training;
-- real-time ACT inference.
+- a reproducible dual-SO-101 Genesis environment running through the AMD GPU
+  backend;
+- a fair ACT baseline versus phase-aware ACT experiment, both initialized
+  from scratch and trained on the same Radeon;
+- deterministic frame weights that amplify human corrections and suppress
+  failed autonomous prefixes; and
+- a CPU-edge safety contract with ACT chunk generation and dispatch measured
+  on the same Radeon.
 
-A CPU-only edge process handles cameras, robot I/O, timeouts, limits, watchdog,
-and emergency stop. Development may use other AMD machines, but their results
-are never mixed into the formal result lineage.
+## Single-Radeon boundary
 
-## Scope freeze
-
-The competition build contains three integrated deliverables:
-
-1. a reproducible minimal Genesis environment for the SO-101 handover;
-2. a fair baseline-versus-phase-aware ACT comparison; and
-3. a fail-closed CPU edge and measured Radeon ACT inference path for the real
-   bimanual robot.
-
-The repository retains a gated VkSplat experiment, but no calibrated SO-101
-workspace capture was available at scope freeze. Gaussian results are therefore
-not a competition deliverable or an ACT observation dependency in this release.
-Dynamic 4D Gaussian models, Genesis/GS real-time compositing, NPU inference,
-and multi-GPU training are explicitly out of scope.
-
-## Repository status
-
-The reproducibility core is implemented: pinned ROCm/Genesis/LeRobot
-bootstraps, immutable SSH deployment, single-Radeon assertions, a verified
-124-episode dataset builder, phase-aware target generation, fair ACT command
-generation, a dual SO-101 Genesis scene, and CPU-edge safety contracts. Remote
-smokes and formal training are tracked as evidence gates; this README does
-**not** claim a task-success result until its formal registry entries exist.
-
-## Formal evidence rule
-
-Only runs listed in [`ops/formal_run_registry.yaml`](ops/formal_run_registry.yaml)
-may populate the technical report. A formal entry must reference the `radeon-c`
-hardware identity, Git commit, configuration hash, dataset hash, checkpoint
-lineage, raw logs, and metrics.
-
-## Layout
+The formal profile assigns exactly one exposed `gfx1100` device on `radeon-c`
+to all accelerator work. Genesis and PyTorch use ROCm/HIP; the CPU only handles
+dataset decoding, cameras, robot I/O, timeouts, limits, watchdog, and emergency
+stop.
 
 ```text
-configs/       Frozen experiment profiles
-data/          Dataset contract and immutable registry
-sim/           Minimal Genesis SO-101 environment
-policy/        ACT training and inference
-gaussian/      Gated future VkSplat experiment (not a formal deliverable)
-runtime/       CPU-edge protocol and safety
-evaluation/    Simulation, real-robot, latency, and fidelity metrics
-ops/           Job manifests, formal registry, and validation
-reports/       Technical report sources
-submission/    Official PR entry and demo-video plan
+real demonstrations + reviewed HIL corrections
+                       |
+                       v
+             immutable 124-episode dataset
+                       |
+          +------------+-------------+
+          |                          |
+          v                          v
+  ACT baseline                  phase-aware ACT
+  weight = 1                    correction = 4
+                                failed prefix = 0.05
+          |                          |
+          +------------+-------------+
+                       |
+                       v
+        one gfx1100 Radeon: Genesis + training + inference
+                       |
+                       v
+        CPU edge: validation, watchdog, robot I/O, E-stop
 ```
 
-## Local validation
+Other AMD systems were used only for read-only prior-art inventory or shadow
+preflight. Their checkpoints and performance numbers are excluded from the
+formal lineage. The machine-readable enforcement lives in
+[`configs/formal_radeon_only.yaml`](configs/formal_radeon_only.yaml) and
+[`ops/run_job.sh`](ops/run_job.sh).
+
+## Frozen experiment
+
+The input is 124 team-collected real episodes: 84 human demonstrations and 40
+reviewed HIL rollouts, totaling 178,465 frames at 30 Hz. It is deliberately
+train-only; the repository therefore does not present reconstruction error or
+training loss as task success.
+
+Both ACT policies use the same default LeRobot architecture, optimizer,
+observations, actions, batch size 16, seed `20260803`, and 10,000 update steps.
+The only intended difference is the phase-aware loss weight. Positive weights
+are normalized to mean one:
+
+| Segment role | Frames | Raw weight | Gradient-mass share |
+|---|---:|---:|---:|
+| Human demonstration | 116,550 | 1.00 | 54.24% |
+| Successful policy | 34,101 | 1.00 | 15.87% |
+| Failed policy prefix | 11,908 | 0.05 | 0.28% |
+| Human correction | 15,906 | 4.00 | 29.61% |
+
+The checkpoint rule was predeclared before the formal pair: use step 10,000,
+with no post-hoc search over intermediate training loss.
+
+## What is measured
+
+The formal result table is populated only after a run is registered in
+[`ops/formal_run_registry.yaml`](ops/formal_run_registry.yaml). Each entry must
+bind the host, GPU UID, Git commit, config hash, dataset hash, seed, checkpoint
+hash, raw logs, and metrics.
+
+Completed platform evidence already establishes:
+
+- ROCm 7.2.1, HIP 7.2, AMD PyTorch 2.9.1 and Genesis 1.3.1;
+- one ROCm-visible `gfx1100` Radeon with 51,522,830,336 bytes of VRAM;
+- a 1,000-step dual-arm Genesis run with two 480×640 RGB observations; and
+- median / p95 / p99 non-render simulation steps of 4.02 / 4.58 / 5.22 ms.
+
+The scripted Genesis sweep is an environment, control, and observation test;
+it is not counted as a handover success. Likewise, the action-reconstruction
+diagnostic uses deterministic training-set frames and is not a validation
+metric. The inherited 37/45 reviewed real-robot result is reported separately
+as pre-competition evidence and never attributed to the new formal
+checkpoints.
+
+## Reproduce
+
+### 1. Validate the source tree
+
+Requires Python 3.12. No GPU or private dataset is needed for this step.
 
 ```bash
+git clone https://github.com/phi-media-lab/radeon-oneloop.git
+cd radeon-oneloop
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -e '.[test]'
 ./ops/validate_scaffold.sh
 ```
 
-See the workstream READMEs for the exact remote environment, dataset, Genesis,
-and ACT commands.
+### 2. Build the Radeon environment
 
-## License
+The tested host is Ubuntu 24.04 with `/opt/rocm-7.2.1`, Python 3.12 and exactly
+one visible `gfx1100` agent. The bootstrap downloads hash-pinned official AMD
+PyTorch wheels and the Genesis 1.3.1 wheel, rejects NVIDIA dependencies, runs a
+GPU matrix multiplication, initializes `gs.amdgpu`, and captures ROCm and
+Vulkan identity evidence.
 
-Project-authored code is licensed under Apache-2.0. Third-party code, models,
-datasets, and assets retain their own licenses; see
-[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+```bash
+sudo bash ops/bootstrap_rocm721_env.sh
+sudo bash ops/bootstrap_lerobot_env.sh
+```
+
+The LeRobot source dependency is pinned to
+`phi-media-lab/Evo-RL-Phi@d3bee432ab26bab857b232cebefdc57327060ea8` and
+verified by a deterministic source-tree hash before installation.
+
+### 3. Supply and verify data
+
+The raw videos are access-controlled and are not redistributed. Authorized
+reviewers can place the two registered source datasets under the paths shown
+in [`data/README.md`](data/README.md), then run:
+
+```bash
+ONELOOP_PYTHON=/root/radeon-oneloop-env/rocm721-py312/bin/python \
+  bash ops/build_formal_dataset.sh
+```
+
+The transaction refuses to overwrite an existing output, validates camera and
+12-DoF contracts, remaps video indices, generates the phase sidecar, and
+checks the resulting dataset hash
+`ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf`.
+
+### 4. Run Genesis and the paired ACT experiment
+
+Every GPU job acquires a single-device lock and emits a self-contained evidence
+directory (`manifest.json`, exact command, environment, hardware, metrics,
+one-second GPU samples, hashes, and a terminal marker). See
+[`ops/README.md`](ops/README.md) for remote dispatch examples.
+
+The policy commands can be inspected without launching training:
+
+```bash
+oneloop-train-command \
+  --config configs/act_baseline.yaml \
+  --paired-config configs/act_phase_aware.yaml \
+  --dataset-root /root/radeon-oneloop-data/formal_handover_v1 \
+  --output-dir /root/radeon-oneloop-runs/artifacts/act-baseline
+
+oneloop-train-command \
+  --config configs/act_phase_aware.yaml \
+  --paired-config configs/act_baseline.yaml \
+  --dataset-root /root/radeon-oneloop-data/formal_handover_v1 \
+  --output-dir /root/radeon-oneloop-runs/artifacts/act-phase-aware
+```
+
+Add `--execute` only after the hardware assertion passes. Formal runs also
+require `ONELOOP_FORMAL_HOST=radeon-c`; an unexpected hostname role, GPU count,
+GPU UID, or `gfx` target fails closed.
+
+### 5. Evaluate inference
+
+```bash
+python -m evaluation.policy_latency \
+  --checkpoint CHECKPOINT/pretrained_model \
+  --dataset-root /root/radeon-oneloop-data/formal_handover_v1 \
+  --warmup 20 --iterations 200
+
+python -m evaluation.action_reconstruction \
+  --checkpoint CHECKPOINT/pretrained_model \
+  --dataset-root /root/radeon-oneloop-data/formal_handover_v1 \
+  --samples-per-role 256
+```
+
+The latency benchmark separates full 100-action chunk generation from cheap
+queued-action dispatch, synchronizes the GPU around every sample, and records
+peak allocated VRAM. It uses a real dataset observation and never relabels
+latency as robot success.
+
+## Safety boundary
+
+[`src/radeon_oneloop/runtime_protocol.py`](src/radeon_oneloop/runtime_protocol.py)
+implements a small dependency-free safety kernel. It rejects stale
+observations, stale or reordered commands, mismatched sequence IDs, empty
+chunks, non-finite or out-of-range joints, and excessive per-step deltas. Any
+validation failure latches an E-stop; recovery requires a new controller after
+physical reset. This code does not replace manufacturer limits or an operator
+with access to the physical E-stop.
+
+## Deliberate scope cuts
+
+The repository retains a gated VkSplat experiment, but no calibrated static
+multi-view capture of this SO-101 workspace existed at scope freeze. Corgi,
+synthetic and dynamic robot-video assets were rejected as substitutes, so
+Gaussian rendering is not an ACT observation or a competition result.
+Multi-GPU training, MI300X checkpoints, Radeon 890M/NPU performance, Genesis
+Nyx, and remote inference APIs are also outside the formal profile.
+
+## Repository map
+
+```text
+configs/       Frozen single-Radeon and paired experiment profiles
+data/          Dataset contract and immutable registry (no raw data)
+sim/           Dual SO-101 Genesis scene and hash-pinned assets
+policy/        ACT training contract
+runtime/       CPU-edge protocol and safety boundary
+evaluation/    Latency and stratified reconstruction diagnostics
+ops/           Environment, immutable jobs, evidence and validation
+reports/       Technical report source and evidence interpretation
+submission/    Official PR text and 3–5 minute video plan
+gaussian/      Deferred VkSplat gate, excluded from formal results
+```
+
+## License and data
+
+Project-authored code is Apache-2.0. Third-party code, models, datasets, and
+assets retain their own licenses; see
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). No raw dataset, checkpoint,
+personal information, credential, or private SSH configuration is included.
