@@ -150,6 +150,57 @@ def latency_figure(baseline: dict[str, Any], phase: dict[str, Any], path: Path) 
     save(image, path)
 
 
+def reconstruction_figure(
+    baseline: dict[str, Any], phase: dict[str, Any], path: Path
+) -> None:
+    image, draw = canvas(
+        "Train-frame action reconstruction by segment role",
+        "Deterministic equal-role sampling; normalized chunk L1 is a diagnostic, not task success",
+    )
+    roles = [
+        ("bc_demonstration", "Demonstration"),
+        ("success_policy", "Successful policy"),
+        ("failed_policy_prefix", "Failed prefix"),
+        ("correction", "Human correction"),
+    ]
+    groups = [
+        (
+            label,
+            float(baseline["roles"][key]["normalized_chunk_l1"]["mean"]),
+            float(phase["roles"][key]["normalized_chunk_l1"]["mean"]),
+        )
+        for key, label in roles
+    ]
+    left, top, right, bottom = 150, 220, 1500, 760
+    maximum = max(value for _, base, phased in groups for value in (base, phased)) * 1.2
+    draw.rectangle((left, top, right, bottom), fill=PALE)
+    for index in range(6):
+        value = maximum * index / 5
+        y = bottom - (bottom - top) * index / 5
+        draw.line((left, y, right, y), fill=GRID, width=2)
+        draw.text((55, y - 10), f"{value:.3f}", fill=MUTED, font=font(17))
+    group_width = (right - left) / len(groups)
+    for group_index, (label, base, phased) in enumerate(groups):
+        center = left + group_width * (group_index + 0.5)
+        for offset, value, color in (
+            (-62, base, ACCENT),
+            (8, phased, NAVY),
+        ):
+            x0, x1 = center + offset, center + offset + 54
+            y0 = bottom - (bottom - top) * value / maximum
+            draw.rounded_rectangle((x0, y0, x1, bottom), radius=7, fill=color)
+            draw.text((x0 - 12, y0 - 28), f"{value:.3f}", fill=INK, font=font(15, bold=True))
+        label_font = font(17, bold=True)
+        label_width = draw.textlength(label, font=label_font)
+        draw.text((center - label_width / 2, bottom + 22), label, fill=INK, font=label_font)
+    draw.text((20, 235), "L1", fill=INK, font=font(20, bold=True))
+    draw.rectangle((1040, 164, 1070, 190), fill=ACCENT)
+    draw.text((1082, 165), "Baseline ACT", fill=INK, font=font(18, bold=True))
+    draw.rectangle((1260, 164, 1290, 190), fill=NAVY)
+    draw.text((1302, 165), "Phase-aware ACT", fill=INK, font=font(18, bold=True))
+    save(image, path)
+
+
 def weighting_figure(report: dict[str, Any], path: Path) -> None:
     image, draw = canvas(
         "Where phase-aware ACT spends its gradient",
@@ -193,9 +244,20 @@ def main() -> None:
     paired = json.loads((root / "paired_training_summary.json").read_text(encoding="utf-8"))
     baseline_latency = json.loads((root / "baseline_latency/metrics.json").read_text(encoding="utf-8"))
     phase_latency = json.loads((root / "phase_latency/metrics.json").read_text(encoding="utf-8"))
+    baseline_reconstruction = json.loads(
+        (root / "baseline_reconstruction/metrics.json").read_text(encoding="utf-8")
+    )
+    phase_reconstruction = json.loads(
+        (root / "phase_reconstruction/metrics.json").read_text(encoding="utf-8")
+    )
     targets = json.loads((root / "dataset/phase_targets_report.json").read_text(encoding="utf-8"))
     training_loss(paired, output / "formal_training_loss.png")
     latency_figure(baseline_latency, phase_latency, output / "formal_inference_latency.png")
+    reconstruction_figure(
+        baseline_reconstruction,
+        phase_reconstruction,
+        output / "formal_reconstruction.png",
+    )
     weighting_figure(targets, output / "phase_weighting.png")
     for path in sorted(output.glob("*.png")):
         print(path)

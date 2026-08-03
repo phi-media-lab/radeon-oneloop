@@ -1,0 +1,62 @@
+{
+  "schema_version": "radeon_oneloop.policy_latency.v1",
+  "checkpoint": "/root/radeon-oneloop-runs/artifacts/act-phase-formal-5146562/checkpoints/010000/pretrained_model",
+  "dataset_root": "/root/radeon-oneloop-data/formal_handover_v1",
+  "dataset_repo_id": "phi-media-lab/radeon-oneloop-formal-handover-v1",
+  "frame_index": 0,
+  "input_keys": [
+    "observation.images.front_cam",
+    "observation.images.hand_cam",
+    "observation.state"
+  ],
+  "input_shapes": {
+    "observation.images.front_cam": [
+      480,
+      640,
+      3
+    ],
+    "observation.images.hand_cam": [
+      480,
+      640,
+      3
+    ],
+    "observation.state": [
+      12
+    ]
+  },
+  "action_shape": [
+    1,
+    12
+  ],
+  "action_finite": true,
+  "action_chunk_horizon": 100,
+  "chunk_generation": {
+    "samples": 200,
+    "mean_ms": 24.669188475000002,
+    "p50_ms": 18.5508555,
+    "p95_ms": 45.726038799999984,
+    "p99_ms": 52.42333373999999,
+    "min_ms": 17.203407,
+    "max_ms": 56.555446
+  },
+  "queued_action_dispatch": {
+    "samples": 99,
+    "mean_ms": 4.899270838383838,
+    "p50_ms": 1.232953,
+    "p95_ms": 6.535985299999718,
+    "p99_ms": 79.4724931,
+    "min_ms": 1.214963,
+    "max_ms": 80.211418
+  },
+  "peak_vram_bytes": 396153856,
+  "hardware": {
+    "torch": "2.9.1+rocm7.2.1.gitff65f5bc",
+    "hip": "7.2.53211-e1a6bc5663",
+    "device_count": 1,
+    "device_name": "AMD Radeon Graphics",
+    "gcn_arch": "gfx1100",
+    "total_memory": 51522830336
+  },
+  "task_success": null,
+  "task_success_note": "Latency benchmark only; task success requires closed-loop rollout evidence."
+}

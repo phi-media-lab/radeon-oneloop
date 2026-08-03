@@ -37,7 +37,10 @@
     "git_commit": {"type": "string", "minLength": 7},
     "config_hash": {"type": "string", "minLength": 1},
     "dataset_hash": {"type": ["string", "null"]},
-    "parent_checkpoint": {"type": ["string", "null"]},
+    "parent_checkpoint": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
     "seed": {"type": "integer"},
     "gpu_uid": {"type": ["string", "null"]},
     "gfx_target": {"type": "string", "pattern": "^gfx[0-9a-z]+$"},

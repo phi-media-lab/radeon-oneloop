@@ -1,0 +1,1 @@
+/root/radeon-oneloop-env/rocm721-py312/bin/python -m evaluation.action_reconstruction --checkpoint /root/radeon-oneloop-runs/artifacts/act-phase-formal-5146562/checkpoints/010000/pretrained_model --dataset-root /root/radeon-oneloop-data/formal_handover_v1 --samples-per-role 256 --batch-size 16 --num-workers 4 

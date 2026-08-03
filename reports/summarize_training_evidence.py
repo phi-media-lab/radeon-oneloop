@@ -64,7 +64,14 @@ def summarize_run(path: Path) -> dict[str, Any]:
     manifest = json.loads((path / "manifest.json").read_text(encoding="utf-8"))
     metrics = json.loads((path / "metrics.json").read_text(encoding="utf-8"))
     hardware = json.loads((path / "hardware.json").read_text(encoding="utf-8"))
-    progress = parse_progress((path / "stdout.log").read_text(encoding="utf-8"))
+    # LeRobot's structured progress logger writes to stderr, while our command
+    # wrapper and result JSON write to stdout.  Read both so the public
+    # summarizer follows the evidence rather than relying on a stream choice.
+    training_log = "\n".join(
+        (path / name).read_text(encoding="utf-8")
+        for name in ("stdout.log", "stderr.log")
+    )
+    progress = parse_progress(training_log)
     gpu = parse_gpu_samples((path / "gpu_samples.tsv").read_text(encoding="utf-8"))
     configured_steps = int(metrics["configured_steps"])
     if progress[-1]["step"] != configured_steps:

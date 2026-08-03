@@ -35,6 +35,11 @@ API, or historical MI300X checkpoint participates in the formal lineage.
   reviewed intervention/correction frames.
 - Fair 10,000-step baseline-versus-phase-aware ACT experiment with a
   predeclared final-step checkpoint rule.
+- Correction-frame normalized chunk L1 improved 2.05% (0.11957 → 0.11712),
+  while the equal-role aggregate worsened 14.19%; the tradeoff is reported
+  explicitly and is not relabeled as task success.
+- Full 100-action chunk median latency is 18.11 ms / 18.55 ms, with 1.233 ms
+  queued-action median for both checkpoints.
 - Dual-SO-101 Genesis environment with two 480×640 cameras and measured
   single-Radeon execution.
 - Fail-closed evidence launcher binding every result to GPU UID, Git commit,
@@ -49,9 +54,9 @@ API, or historical MI300X checkpoint participates in the formal lineage.
 ## Links
 
 - Source and reproduction: https://github.com/phi-media-lab/radeon-oneloop
-- Technical report: https://github.com/phi-media-lab/radeon-oneloop/blob/main/reports/technical_report.pdf
+- Technical report: https://github.com/phi-media-lab/radeon-oneloop/blob/main/output/pdf/radeon-oneloop-technical-report.pdf
 - Formal evidence: https://github.com/phi-media-lab/radeon-oneloop/tree/main/artifacts/formal
-- Demo video: `PENDING_PUBLIC_VIDEO_URL`
+- Demo video: https://github.com/phi-media-lab/radeon-oneloop/releases/download/v1.0.0/radeon-oneloop-demo.mp4
 
 ## Reproduction entry point
 

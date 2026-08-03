@@ -64,11 +64,11 @@ chmod +x "$run_dir/command.sh"
 cp "$config" "$run_dir/config.yaml"
 
 started=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-"$python_bin" - "$run_dir/manifest.json" "$run_id" "${ONELOOP_FORMAL_HOST:-shadow}" "$formal" "$role" "$commit" "$config_hash" "$dataset_hash" "$seed" "$gpu_uid" "$run_dir" "$started" <<'PY'
+"$python_bin" - "$run_dir/manifest.json" "$run_id" "${ONELOOP_FORMAL_HOST:-shadow}" "$formal" "$role" "$commit" "$config_hash" "$dataset_hash" "$seed" "$gpu_uid" "$run_dir" "$started" "${ONELOOP_PARENT_CHECKPOINT:-}" <<'PY'
 import json, sys
 (
     path, job_id, host, formal, role, commit, config_hash, dataset_hash,
-    seed, gpu_uid, artifact_dir, started,
+    seed, gpu_uid, artifact_dir, started, parent_checkpoint,
 ) = sys.argv[1:]
 value = {
     "job_id": job_id,
@@ -78,7 +78,7 @@ value = {
     "git_commit": commit,
     "config_hash": config_hash,
     "dataset_hash": None if dataset_hash == "null" else dataset_hash,
-    "parent_checkpoint": None,
+    "parent_checkpoint": parent_checkpoint or None,
     "seed": int(seed),
     "gpu_uid": gpu_uid or None,
     "gfx_target": "gfx1100",

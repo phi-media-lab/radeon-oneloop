@@ -89,7 +89,8 @@ Completed platform evidence already establishes:
 - ROCm 7.2.1, HIP 7.2, AMD PyTorch 2.9.1 and Genesis 1.3.1;
 - one ROCm-visible `gfx1100` Radeon with 51,522,830,336 bytes of VRAM;
 - a 1,000-step dual-arm Genesis run with two 480×640 RGB observations; and
-- median / p95 / p99 non-render simulation steps of 4.02 / 4.58 / 5.22 ms.
+- median / p95 / p99 all-step simulation latency of 4.27 / 5.02 / 7.02 ms
+  in the camera-corrected formal run.
 
 PyTorch intentionally exposes ROCm tensors through its CUDA-compatible Python
 API, so logs may print `cuda:0` or configs may say `device: cuda`. In this
@@ -103,6 +104,35 @@ diagnostic uses deterministic training-set frames and is not a validation
 metric. The inherited 37/45 reviewed real-robot result is reported separately
 as pre-competition evidence and never attributed to the new formal
 checkpoints.
+
+The inspected formal camera pair is published at
+[`artifacts/formal/genesis_camera_corrected/camera_pair.png`](artifacts/formal/genesis_camera_corrected/camera_pair.png),
+alongside its run manifest, raw timing metrics, GPU samples and hashes.
+
+## Formal result snapshot
+
+| Metric | Baseline ACT | Phase-aware ACT |
+|---|---:|---:|
+| Training time, 10,000 updates | 87.75 min | 87.68 min |
+| Mean sampled GPU use | 98.59% | 98.45% |
+| Full 100-action chunk, p50 / p95 | 18.11 / 46.84 ms | 18.55 / 45.73 ms |
+| Queued action dispatch, p50 | 1.233 ms | 1.233 ms |
+| Equal-role train-frame chunk L1 | 0.09177 | 0.10479 |
+| Correction-frame chunk L1 | 0.11957 | **0.11712** |
+
+Phase-aware ACT reduced the correction-frame chunk diagnostic by 2.05%, its
+intended target, while worsening the equal-role aggregate by 14.19% and the
+three non-correction roles. Even on corrections, first-action L1 worsened from
+0.09009 to 0.09626. This is evidence of a targeted tradeoff, not a blanket
+improvement. All reconstruction values use training frames; neither model has
+a new task-success or generalization claim.
+
+The final checkpoints are content-addressed as
+`7c8f2089…29dc79` (baseline) and `3ae18054…2721d4` (phase-aware).
+The full digests, raw logs and metrics live under
+[`artifacts/formal`](artifacts/formal). The English technical report is
+[`output/pdf/radeon-oneloop-technical-report.pdf`](output/pdf/radeon-oneloop-technical-report.pdf),
+and the public demo is attached to release `v1.0.0`.
 
 ## Reproduce
 

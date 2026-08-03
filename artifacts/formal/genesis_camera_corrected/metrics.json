@@ -1,0 +1,41 @@
+{
+  "schema_version": "radeon_oneloop.genesis_smoke.v1",
+  "backend": "3",
+  "device": "cuda:0",
+  "torch_device": "AMD Radeon Graphics",
+  "gcn_arch": "gfx1100",
+  "steps": 1000,
+  "build_seconds": 33.843461018987,
+  "step_ms": {
+    "mean": 5.324543510563672,
+    "p50": 4.274288425222039,
+    "p95": 5.017153266817331,
+    "p99": 7.0204198081046325
+  },
+  "observation": {
+    "state_shape": [
+      12
+    ],
+    "camera_shapes": {
+      "observation.images.front_cam": [
+        480,
+        640,
+        3
+      ],
+      "observation.images.hand_cam": [
+        480,
+        640,
+        3
+      ]
+    }
+  },
+  "task_success": false,
+  "task_success_note": "Joint-sweep smoke validates the scene and contracts; it is not a handover evaluation.",
+  "video": {
+    "path": null,
+    "frames": 0,
+    "fps": null,
+    "metric_eligible": false,
+    "note": "Optional joint-sweep visualization; captured render steps are included in step timings."
+  }
+}

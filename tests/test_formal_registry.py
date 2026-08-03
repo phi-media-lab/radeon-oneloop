@@ -45,6 +45,11 @@ class FormalRegistryTests(unittest.TestCase):
                 self.assertEqual(run["git_commit"], manifest["git_commit"])
                 self.assertEqual(run["config_sha256"], manifest["config_hash"])
                 self.assertEqual(run["dataset_sha256"], manifest["dataset_hash"])
+                if "parent_checkpoint_sha256" in run:
+                    self.assertEqual(
+                        run["parent_checkpoint_sha256"],
+                        manifest["parent_checkpoint"],
+                    )
 
 
 if __name__ == "__main__":

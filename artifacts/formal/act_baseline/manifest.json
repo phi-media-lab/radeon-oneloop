@@ -1,0 +1,18 @@
+{
+  "job_id": "20260803T160720Z_act_train_5146562_20260803",
+  "host": "radeon-c",
+  "formal": true,
+  "role": "act_train",
+  "git_commit": "51465620ff59f670a2537bc47637ebe2d808dbe6",
+  "config_hash": "aad14a2fe7187bf045025c761fc658dc6ffde19cf699c6ad57bd8e0fc39bb674",
+  "dataset_hash": "ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf",
+  "parent_checkpoint": null,
+  "seed": 20260803,
+  "gpu_uid": "0x153f7d55778ab659",
+  "gfx_target": "gfx1100",
+  "status": "done",
+  "started_at": "2026-08-03T16:07:21Z",
+  "finished_at": "2026-08-03T17:35:08Z",
+  "artifact_dir": "/root/radeon-oneloop-runs/jobs/20260803T160720Z_act_train_5146562_20260803",
+  "notes": null
+}

@@ -8,8 +8,8 @@
 
 **Formal profile:** one AMD Radeon `gfx1100`, ROCm 7.2.1
 
-**Report status:** formal ACT results pending; completed claims below are backed
-by immutable run records.
+**Report status:** complete; every result below is backed by a registered,
+immutable single-Radeon run record.
 
 ## Abstract
 
@@ -33,6 +33,14 @@ train-only, so this report separates training-set diagnostics from task
 success. A reviewed 37/45 real-robot result is included only as historical
 evidence for the inherited closed-loop system, never as performance of the new
 formal checkpoints.
+
+Under the predeclared step-10,000 rule, phase-aware ACT reduced normalized
+chunk L1 on sampled correction frames from 0.11957 to 0.11712 (2.05%), while
+the equal-role aggregate worsened from 0.09177 to 0.10479 (14.19%). This mixed
+train-frame diagnostic is consistent with reallocating capacity toward
+corrections, but it is neither validation nor task-success evidence. Full
+100-action chunk median latency was 18.11 ms for baseline and 18.55 ms for
+phase-aware ACT on the same Radeon.
 
 ## 1. Problem and motivation
 
@@ -179,6 +187,8 @@ labeled as a failed policy prefix.
 | Failed policy prefix | 11,908 | 0.05 | 0.28% |
 | Human correction | 15,906 | 4.00 | 29.61% |
 
+![Frame share versus normalized gradient-mass share in the frozen phase targets.](figures/phase_weighting.png)
+
 Weights are normalized over positive frames so the positive mean is one. This
 keeps the overall loss scale comparable while changing which frames dominate
 the gradient. The sidecar hash is:
@@ -195,21 +205,23 @@ rigid object and two cameras, and exposes the same state and image keys as the
 real dataset. It includes reset, position control, deterministic stepping,
 attached-camera motion and an explicit placement predicate.
 
-The formal smoke ran 1,000 steps on `gs.amdgpu`, exercised both arms, rendered
-the front and attached hand camera, and validated finite 12-value state. Scene
-build took 144.49 s, dominated by one-time Genesis compilation. Non-render
-step latency was:
+The camera-corrected formal smoke ran 1,000 steps on `gs.amdgpu`, exercised
+both arms, rendered the front and attached hand camera, and validated finite
+12-value state. Scene build took 33.84 s. The recorded all-step latency,
+including the capture steps, was:
 
 | Statistic | Time |
 |---|---:|
-| Median | 4.02 ms |
-| p95 | 4.58 ms |
-| p99 | 5.22 ms |
+| Median | 4.27 ms |
+| p95 | 5.02 ms |
+| p99 | 7.02 ms |
 
-The all-step mean is not used as the steady-state result because it includes
-two explicit high-resolution renders. The scripted motion is a build/control
-test and does not execute a learned handover; `task_success=false` is recorded
-in the formal metrics.
+![Corrected formal Genesis front camera (left) and attached hand camera (right).](../artifacts/formal/genesis_camera_corrected/camera_pair.png)
+
+The scripted motion is a build/control/camera test and does not execute a
+learned handover; `task_success=false` is recorded in the formal metrics. The
+earlier formal scene run remains public but its hand-camera image is excluded
+from visual claims after the relative camera transform was corrected.
 
 ## 5. Policy method
 
@@ -242,6 +254,18 @@ calibrated replica suitable for choosing a real-task checkpoint. We therefore
 predeclared the final checkpoint at step 10,000 as the only candidate for each
 method. Checkpoints saved every 1,000 steps remain debugging artifacts and are
 not searched after observing loss.
+
+### 5.4 Key technical contributions
+
+- a deterministic frame-level intervention objective that plugs into ACT
+  without changing its architecture or duplicating training samples;
+- a matched real/sim observation and action contract for two SO-101 arms,
+  including a moving hand-camera transform verified on `gs.amdgpu`;
+- a fail-closed single-Radeon job protocol that makes hardware identity,
+  source, data, configuration and final model content independently auditable;
+  and
+- a CPU-edge chunk protocol whose timeout, sequence, range and delta checks
+  latch E-stop before unsafe values reach robot I/O.
 
 ## 6. CPU-edge safety
 
@@ -311,24 +335,53 @@ supervised physical rollouts.
 
 | Metric | Baseline ACT | Phase-aware ACT |
 |---|---:|---:|
-| Updates | 10,000 (running) | Pending |
-| Training wall time | Pending | Pending |
-| Terminal training loss | Pending | Pending |
-| Peak sampled VRAM | Pending | Pending |
-| Step-10,000 checkpoint SHA-256 | Pending | Pending |
+| Updates | 10,000 | 10,000 |
+| Training wall time | 87.75 min | 87.68 min |
+| Terminal logged training loss | 0.113 | 0.134 |
+| Mean sampled GPU utilization | 98.59% | 98.45% |
+| Peak sampled VRAM allocation | 17% (≤ 8.16 GiB) | 17% (≤ 8.16 GiB) |
+| Step-10,000 checkpoint SHA-256 | `7c8f2089…29dc79` | `3ae18054…2721d4` |
+
+The complete artifact-tree digests are:
+
+```text
+baseline    7c8f2089c2f9ff5632ab1272754bdece46e30280ffce6c8ecde850956429dc79
+phase-aware 3ae1805441889adf3fcaa23ff45e79509f0be747619c2783227014bc162721d4
+```
+
+The logged losses are optimized under different frame-weight distributions.
+They document convergence but are not an accuracy ranking.
+
+![Matched formal ACT training loss on the single Radeon.](figures/formal_training_loss.png)
 
 ### 8.3 Inference and reconstruction
 
 | Metric | Baseline ACT | Phase-aware ACT |
 |---|---:|---:|
-| Full 100-action chunk, median | Pending | Pending |
-| Full chunk, p95 | Pending | Pending |
-| Queued action dispatch, median | Pending | Pending |
-| Peak allocated inference VRAM | Pending | Pending |
-| Stratified normalized action L1 | Pending | Pending |
+| Full 100-action chunk, median | 18.11 ms | 18.55 ms |
+| Full chunk, p95 | 46.84 ms | 45.73 ms |
+| Queued action dispatch, median | 1.233 ms | 1.233 ms |
+| Peak allocated inference VRAM | 377.8 MiB | 377.8 MiB |
+| Equal-role normalized chunk L1 | **0.09177** | 0.10479 |
+| Correction normalized chunk L1 | 0.11957 | **0.11712** |
+| Correction normalized first-action L1 | **0.09009** | 0.09626 |
 
-No value in these tables will be filled from a shadow host, smoke checkpoint,
-MI300X, APU/NPU, post-hoc checkpoint choice or unregistered directory.
+![Synchronized full-chunk and queued-action latency on the single Radeon.](figures/formal_inference_latency.png)
+
+![Role-stratified train-frame reconstruction; lower is better, but this is not a task-success metric.](figures/formal_reconstruction.png)
+
+### 8.4 Interpretation
+
+The phase-aware checkpoint improved the metric it explicitly emphasized:
+correction-frame chunk L1 decreased 2.05%. The cost is visible rather than
+hidden: the equal-role aggregate worsened 14.19%, demonstration L1 rose from
+0.09745 to 0.11187, successful-policy L1 from 0.07705 to 0.09213, and failed-
+prefix L1 from 0.07301 to 0.09805. Correction first-action L1 also worsened
+6.85%, so the small correction gain is distributed over the predicted chunk,
+not its immediate action. This supports a capacity-reallocation interpretation
+but does not establish better closed-loop recovery. No table value comes from
+a shadow host, smoke checkpoint, MI300X, APU/NPU, post-hoc checkpoint choice or
+unregistered directory.
 
 ## 9. Negative results and scope decisions
 
@@ -363,9 +416,12 @@ policy.
 - The task is constrained to one object family and workspace.
 - The CPU-edge safety kernel has unit tests but no safety certification.
 
-## 10. Reproducibility
+## 10. Reproducibility and final deliverables
 
-The public repository contains:
+The final output forms are this English PDF technical report, the dedicated
+Apache-2.0 source repository and detailed root README, a public 3-5 minute
+H.264/AAC workflow video, machine-readable formal evidence, and the official
+competition pull request. The public repository contains:
 
 - exact environment and dependency bootstraps with wheel/source hashes;
 - immutable data merger, phase-target builder and public source/derived hashes;
