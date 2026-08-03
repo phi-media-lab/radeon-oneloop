@@ -1,0 +1,1 @@
+/root/radeon-oneloop-env/rocm721-py312/bin/python -m sim.genesis_so101.scripted_smoke --asset-root /root/radeon-oneloop-data/assets/so101 --output /root/radeon-oneloop-runs/artifacts/genesis-formal-b00eb59 --steps 1000 

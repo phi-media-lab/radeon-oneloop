@@ -1,0 +1,445 @@
+Ign:1 http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-24.04-deb compute-rocm-rel-7.2 InRelease
+Hit:2 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu noble InRelease
+Ign:1 http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-24.04-deb compute-rocm-rel-7.2 InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Hit:6 https://deb.nodesource.com/node_20.x nodistro InRelease
+Hit:7 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu noble InRelease
+Ign:1 http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-24.04-deb compute-rocm-rel-7.2 InRelease
+Err:1 http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-24.04-deb compute-rocm-rel-7.2 InRelease
+  Something wicked happened resolving 'compute-artifactory.amd.com:http' (-5 - No address associated with hostname)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libavcodec-dev is already the newest version (7:6.1.1-3ubuntu5).
+libavcodec-dev set to manually installed.
+libavformat-dev is already the newest version (7:6.1.1-3ubuntu5).
+libavformat-dev set to manually installed.
+libavutil-dev is already the newest version (7:6.1.1-3ubuntu5).
+libavutil-dev set to manually installed.
+The following additional packages will be installed:
+  libass9 libavc1394-0 libavdevice60 libavfilter9 libbs2b0 libcaca0
+  libcdio-cdda2t64 libcdio-paranoia2t64 libcdio19t64 libdecor-0-0
+  libfftw3-double3 libflite1 libiec61883-0 libjack-jackd2-0 liblilv-0-0
+  libmysofa1 libopenal-data libopenal1 libplacebo338 libpocketsphinx3
+  libpostproc57 librubberband2 libsamplerate0 libsdl2-2.0-0 libserd-0-0
+  libslang2 libsndio7.0 libsord-0-0 libsphinxbase3t64 libsratom-0-0
+  libunibreak5 libvidstab1.1 libxv1 libzimg2 libzix-0-0
+Suggested packages:
+  ffmpeg-doc libfftw3-bin libfftw3-dev jackd2 libportaudio2 xdg-utils serdi
+  sndiod sordi
+Recommended packages:
+  default-libdecor-0-plugin-1 | libdecor-0-plugin-1 pocketsphinx-en-us
+The following NEW packages will be installed:
+  ffmpeg libass9 libavc1394-0 libavdevice60 libavfilter9 libbs2b0 libcaca0
+  libcdio-cdda2t64 libcdio-paranoia2t64 libcdio19t64 libdecor-0-0
+  libfftw3-double3 libflite1 libiec61883-0 libjack-jackd2-0 liblilv-0-0
+  libmysofa1 libopenal-data libopenal1 libplacebo338 libpocketsphinx3
+  libpostproc57 librubberband2 libsamplerate0 libsdl2-2.0-0 libserd-0-0
+  libslang2 libsndio7.0 libsord-0-0 libsphinxbase3t64 libsratom-0-0
+  libunibreak5 libvidstab1.1 libxv1 libzimg2 libzix-0-0
+0 upgraded, 36 newly installed, 0 to remove and 172 not upgraded.
+Need to get 29.4 MB of archives.
+After this operation, 70.2 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble/main amd64 libslang2 amd64 2.3.3-3build2 [506 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 libavc1394-0 amd64 0.5.4-5build3 [15.4 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble/universe amd64 libunibreak5 amd64 5.1-2build1 [25.0 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble/universe amd64 libass9 amd64 1:0.17.1-2build1 [104 kB]
+Get:5 http://archive.ubuntu.com/ubuntu noble/universe amd64 libbs2b0 amd64 3.1.0+dfsg-7build1 [10.6 kB]
+Get:6 http://archive.ubuntu.com/ubuntu noble/universe amd64 libflite1 amd64 2.2-6build3 [13.6 MB]
+Get:7 http://archive.ubuntu.com/ubuntu noble/universe amd64 libserd-0-0 amd64 0.32.2-1 [43.6 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble/universe amd64 libzix-0-0 amd64 0.4.2-2build1 [23.6 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble/universe amd64 libsord-0-0 amd64 0.16.16-2build1 [15.8 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble/universe amd64 libsratom-0-0 amd64 0.6.16-1build1 [17.3 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble/universe amd64 liblilv-0-0 amd64 0.24.22-1build1 [41.0 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble/universe amd64 libmysofa1 amd64 1.3.2+dfsg-2ubuntu2 [1158 kB]
+Get:13 http://archive.ubuntu.com/ubuntu noble/universe amd64 libplacebo338 amd64 6.338.2-2build1 [2654 kB]
+Get:14 http://archive.ubuntu.com/ubuntu noble/universe amd64 libsphinxbase3t64 amd64 0.8+5prealpha+1-17build2 [126 kB]
+Get:15 http://archive.ubuntu.com/ubuntu noble/universe amd64 libpocketsphinx3 amd64 0.8.0+real5prealpha+1-15ubuntu5 [133 kB]
+Get:16 http://archive.ubuntu.com/ubuntu noble/universe amd64 libpostproc57 amd64 7:6.1.1-3ubuntu5 [49.9 kB]
+Get:17 http://archive.ubuntu.com/ubuntu noble/main amd64 libfftw3-double3 amd64 3.3.10-1ubuntu3 [838 kB]
+Get:18 http://archive.ubuntu.com/ubuntu noble/main amd64 libsamplerate0 amd64 0.2.2-4build1 [1344 kB]
+Get:19 http://archive.ubuntu.com/ubuntu noble/universe amd64 librubberband2 amd64 3.3.0+dfsg-2build1 [130 kB]
+Get:20 http://archive.ubuntu.com/ubuntu noble/universe amd64 libvidstab1.1 amd64 1.1.0-2build1 [38.5 kB]
+Get:21 http://archive.ubuntu.com/ubuntu noble/universe amd64 libzimg2 amd64 3.0.5+ds1-1build1 [254 kB]
+Get:22 http://archive.ubuntu.com/ubuntu noble/universe amd64 libavfilter9 amd64 7:6.1.1-3ubuntu5 [4235 kB]
+Get:23 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcaca0 amd64 0.99.beta20-4ubuntu0.2 [209 kB]
+Get:24 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcdio19t64 amd64 2.1.0-4.1ubuntu1.2 [62.4 kB]
+Get:25 http://archive.ubuntu.com/ubuntu noble/main amd64 libcdio-cdda2t64 amd64 10.2+2.0.1-1.1build2 [16.5 kB]
+Get:26 http://archive.ubuntu.com/ubuntu noble/main amd64 libcdio-paranoia2t64 amd64 10.2+2.0.1-1.1build2 [16.6 kB]
+Get:27 http://archive.ubuntu.com/ubuntu noble/main amd64 libiec61883-0 amd64 1.2.0-6build1 [24.5 kB]
+Get:28 http://archive.ubuntu.com/ubuntu noble/main amd64 libjack-jackd2-0 amd64 1.9.21~dfsg-3ubuntu3 [289 kB]
+Get:29 http://archive.ubuntu.com/ubuntu noble/universe amd64 libopenal-data all 1:1.23.1-4build1 [161 kB]
+Get:30 http://archive.ubuntu.com/ubuntu noble/universe amd64 libsndio7.0 amd64 1.9.0-0.3build3 [29.6 kB]
+Get:31 http://archive.ubuntu.com/ubuntu noble/universe amd64 libopenal1 amd64 1:1.23.1-4build1 [540 kB]
+Get:32 http://archive.ubuntu.com/ubuntu noble/main amd64 libdecor-0-0 amd64 0.2.2-1build2 [16.5 kB]
+Get:33 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsdl2-2.0-0 amd64 2.30.0+dfsg-1ubuntu3.1 [686 kB]
+Get:34 http://archive.ubuntu.com/ubuntu noble/main amd64 libxv1 amd64 2:1.0.11-1.1build1 [10.7 kB]
+Get:35 http://archive.ubuntu.com/ubuntu noble/universe amd64 libavdevice60 amd64 7:6.1.1-3ubuntu5 [82.3 kB]
+Get:36 http://archive.ubuntu.com/ubuntu noble/universe amd64 ffmpeg amd64 7:6.1.1-3ubuntu5 [1879 kB]
+Fetched 29.4 MB in 17s (1768 kB/s)
+Selecting previously unselected package libslang2:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 96373 files and directories currently installed.)
+Preparing to unpack .../00-libslang2_2.3.3-3build2_amd64.deb ...
+Unpacking libslang2:amd64 (2.3.3-3build2) ...
+Selecting previously unselected package libavc1394-0:amd64.
+Preparing to unpack .../01-libavc1394-0_0.5.4-5build3_amd64.deb ...
+Unpacking libavc1394-0:amd64 (0.5.4-5build3) ...
+Selecting previously unselected package libunibreak5:amd64.
+Preparing to unpack .../02-libunibreak5_5.1-2build1_amd64.deb ...
+Unpacking libunibreak5:amd64 (5.1-2build1) ...
+Selecting previously unselected package libass9:amd64.
+Preparing to unpack .../03-libass9_1%3a0.17.1-2build1_amd64.deb ...
+Unpacking libass9:amd64 (1:0.17.1-2build1) ...
+Selecting previously unselected package libbs2b0:amd64.
+Preparing to unpack .../04-libbs2b0_3.1.0+dfsg-7build1_amd64.deb ...
+Unpacking libbs2b0:amd64 (3.1.0+dfsg-7build1) ...
+Selecting previously unselected package libflite1:amd64.
+Preparing to unpack .../05-libflite1_2.2-6build3_amd64.deb ...
+Unpacking libflite1:amd64 (2.2-6build3) ...
+Selecting previously unselected package libserd-0-0:amd64.
+Preparing to unpack .../06-libserd-0-0_0.32.2-1_amd64.deb ...
+Unpacking libserd-0-0:amd64 (0.32.2-1) ...
+Selecting previously unselected package libzix-0-0:amd64.
+Preparing to unpack .../07-libzix-0-0_0.4.2-2build1_amd64.deb ...
+Unpacking libzix-0-0:amd64 (0.4.2-2build1) ...
+Selecting previously unselected package libsord-0-0:amd64.
+Preparing to unpack .../08-libsord-0-0_0.16.16-2build1_amd64.deb ...
+Unpacking libsord-0-0:amd64 (0.16.16-2build1) ...
+Selecting previously unselected package libsratom-0-0:amd64.
+Preparing to unpack .../09-libsratom-0-0_0.6.16-1build1_amd64.deb ...
+Unpacking libsratom-0-0:amd64 (0.6.16-1build1) ...
+Selecting previously unselected package liblilv-0-0:amd64.
+Preparing to unpack .../10-liblilv-0-0_0.24.22-1build1_amd64.deb ...
+Unpacking liblilv-0-0:amd64 (0.24.22-1build1) ...
+Selecting previously unselected package libmysofa1:amd64.
+Preparing to unpack .../11-libmysofa1_1.3.2+dfsg-2ubuntu2_amd64.deb ...
+Unpacking libmysofa1:amd64 (1.3.2+dfsg-2ubuntu2) ...
+Selecting previously unselected package libplacebo338:amd64.
+Preparing to unpack .../12-libplacebo338_6.338.2-2build1_amd64.deb ...
+Unpacking libplacebo338:amd64 (6.338.2-2build1) ...
+Selecting previously unselected package libsphinxbase3t64:amd64.
+Preparing to unpack .../13-libsphinxbase3t64_0.8+5prealpha+1-17build2_amd64.deb ...
+Unpacking libsphinxbase3t64:amd64 (0.8+5prealpha+1-17build2) ...
+Selecting previously unselected package libpocketsphinx3:amd64.
+Preparing to unpack .../14-libpocketsphinx3_0.8.0+real5prealpha+1-15ubuntu5_amd64.deb ...
+Unpacking libpocketsphinx3:amd64 (0.8.0+real5prealpha+1-15ubuntu5) ...
+Selecting previously unselected package libpostproc57:amd64.
+Preparing to unpack .../15-libpostproc57_7%3a6.1.1-3ubuntu5_amd64.deb ...
+Unpacking libpostproc57:amd64 (7:6.1.1-3ubuntu5) ...
+Selecting previously unselected package libfftw3-double3:amd64.
+Preparing to unpack .../16-libfftw3-double3_3.3.10-1ubuntu3_amd64.deb ...
+Unpacking libfftw3-double3:amd64 (3.3.10-1ubuntu3) ...
+Selecting previously unselected package libsamplerate0:amd64.
+Preparing to unpack .../17-libsamplerate0_0.2.2-4build1_amd64.deb ...
+Unpacking libsamplerate0:amd64 (0.2.2-4build1) ...
+Selecting previously unselected package librubberband2:amd64.
+Preparing to unpack .../18-librubberband2_3.3.0+dfsg-2build1_amd64.deb ...
+Unpacking librubberband2:amd64 (3.3.0+dfsg-2build1) ...
+Selecting previously unselected package libvidstab1.1:amd64.
+Preparing to unpack .../19-libvidstab1.1_1.1.0-2build1_amd64.deb ...
+Unpacking libvidstab1.1:amd64 (1.1.0-2build1) ...
+Selecting previously unselected package libzimg2:amd64.
+Preparing to unpack .../20-libzimg2_3.0.5+ds1-1build1_amd64.deb ...
+Unpacking libzimg2:amd64 (3.0.5+ds1-1build1) ...
+Selecting previously unselected package libavfilter9:amd64.
+Preparing to unpack .../21-libavfilter9_7%3a6.1.1-3ubuntu5_amd64.deb ...
+Unpacking libavfilter9:amd64 (7:6.1.1-3ubuntu5) ...
+Selecting previously unselected package libcaca0:amd64.
+Preparing to unpack .../22-libcaca0_0.99.beta20-4ubuntu0.2_amd64.deb ...
+Unpacking libcaca0:amd64 (0.99.beta20-4ubuntu0.2) ...
+Selecting previously unselected package libcdio19t64:amd64.
+Preparing to unpack .../23-libcdio19t64_2.1.0-4.1ubuntu1.2_amd64.deb ...
+Unpacking libcdio19t64:amd64 (2.1.0-4.1ubuntu1.2) ...
+Selecting previously unselected package libcdio-cdda2t64:amd64.
+Preparing to unpack .../24-libcdio-cdda2t64_10.2+2.0.1-1.1build2_amd64.deb ...
+Unpacking libcdio-cdda2t64:amd64 (10.2+2.0.1-1.1build2) ...
+Selecting previously unselected package libcdio-paranoia2t64:amd64.
+Preparing to unpack .../25-libcdio-paranoia2t64_10.2+2.0.1-1.1build2_amd64.deb ...
+Unpacking libcdio-paranoia2t64:amd64 (10.2+2.0.1-1.1build2) ...
+Selecting previously unselected package libiec61883-0:amd64.
+Preparing to unpack .../26-libiec61883-0_1.2.0-6build1_amd64.deb ...
+Unpacking libiec61883-0:amd64 (1.2.0-6build1) ...
+Selecting previously unselected package libjack-jackd2-0:amd64.
+Preparing to unpack .../27-libjack-jackd2-0_1.9.21~dfsg-3ubuntu3_amd64.deb ...
+Unpacking libjack-jackd2-0:amd64 (1.9.21~dfsg-3ubuntu3) ...
+Selecting previously unselected package libopenal-data.
+Preparing to unpack .../28-libopenal-data_1%3a1.23.1-4build1_all.deb ...
+Unpacking libopenal-data (1:1.23.1-4build1) ...
+Selecting previously unselected package libsndio7.0:amd64.
+Preparing to unpack .../29-libsndio7.0_1.9.0-0.3build3_amd64.deb ...
+Unpacking libsndio7.0:amd64 (1.9.0-0.3build3) ...
+Selecting previously unselected package libopenal1:amd64.
+Preparing to unpack .../30-libopenal1_1%3a1.23.1-4build1_amd64.deb ...
+Unpacking libopenal1:amd64 (1:1.23.1-4build1) ...
+Selecting previously unselected package libdecor-0-0:amd64.
+Preparing to unpack .../31-libdecor-0-0_0.2.2-1build2_amd64.deb ...
+Unpacking libdecor-0-0:amd64 (0.2.2-1build2) ...
+Selecting previously unselected package libsdl2-2.0-0:amd64.
+Preparing to unpack .../32-libsdl2-2.0-0_2.30.0+dfsg-1ubuntu3.1_amd64.deb ...
+Unpacking libsdl2-2.0-0:amd64 (2.30.0+dfsg-1ubuntu3.1) ...
+Selecting previously unselected package libxv1:amd64.
+Preparing to unpack .../33-libxv1_2%3a1.0.11-1.1build1_amd64.deb ...
+Unpacking libxv1:amd64 (2:1.0.11-1.1build1) ...
+Selecting previously unselected package libavdevice60:amd64.
+Preparing to unpack .../34-libavdevice60_7%3a6.1.1-3ubuntu5_amd64.deb ...
+Unpacking libavdevice60:amd64 (7:6.1.1-3ubuntu5) ...
+Selecting previously unselected package ffmpeg.
+Preparing to unpack .../35-ffmpeg_7%3a6.1.1-3ubuntu5_amd64.deb ...
+Unpacking ffmpeg (7:6.1.1-3ubuntu5) ...
+Setting up libavc1394-0:amd64 (0.5.4-5build3) ...
+Setting up libzix-0-0:amd64 (0.4.2-2build1) ...
+Setting up libmysofa1:amd64 (1.3.2+dfsg-2ubuntu2) ...
+Setting up libcdio19t64:amd64 (2.1.0-4.1ubuntu1.2) ...
+Setting up libcdio-cdda2t64:amd64 (10.2+2.0.1-1.1build2) ...
+Setting up libsphinxbase3t64:amd64 (0.8+5prealpha+1-17build2) ...
+Setting up libplacebo338:amd64 (6.338.2-2build1) ...
+Setting up libslang2:amd64 (2.3.3-3build2) ...
+Setting up libcdio-paranoia2t64:amd64 (10.2+2.0.1-1.1build2) ...
+Setting up libxv1:amd64 (2:1.0.11-1.1build1) ...
+Setting up libunibreak5:amd64 (5.1-2build1) ...
+Setting up libfftw3-double3:amd64 (3.3.10-1ubuntu3) ...
+Setting up libsndio7.0:amd64 (1.9.0-0.3build3) ...
+Setting up libvidstab1.1:amd64 (1.1.0-2build1) ...
+Setting up libflite1:amd64 (2.2-6build3) ...
+Setting up libbs2b0:amd64 (3.1.0+dfsg-7build1) ...
+Setting up libpostproc57:amd64 (7:6.1.1-3ubuntu5) ...
+Setting up libdecor-0-0:amd64 (0.2.2-1build2) ...
+Setting up libzimg2:amd64 (3.0.5+ds1-1build1) ...
+Setting up libopenal-data (1:1.23.1-4build1) ...
+Setting up libsamplerate0:amd64 (0.2.2-4build1) ...
+Setting up libiec61883-0:amd64 (1.2.0-6build1) ...
+Setting up libserd-0-0:amd64 (0.32.2-1) ...
+Setting up libcaca0:amd64 (0.99.beta20-4ubuntu0.2) ...
+Setting up libopenal1:amd64 (1:1.23.1-4build1) ...
+Setting up libpocketsphinx3:amd64 (0.8.0+real5prealpha+1-15ubuntu5) ...
+Setting up libass9:amd64 (1:0.17.1-2build1) ...
+Setting up librubberband2:amd64 (3.3.0+dfsg-2build1) ...
+Setting up libjack-jackd2-0:amd64 (1.9.21~dfsg-3ubuntu3) ...
+Setting up libsord-0-0:amd64 (0.16.16-2build1) ...
+Setting up libsratom-0-0:amd64 (0.6.16-1build1) ...
+Setting up libsdl2-2.0-0:amd64 (2.30.0+dfsg-1ubuntu3.1) ...
+Setting up liblilv-0-0:amd64 (0.24.22-1build1) ...
+Setting up libavfilter9:amd64 (7:6.1.1-3ubuntu5) ...
+Setting up libavdevice60:amd64 (7:6.1.1-3ubuntu5) ...
+Setting up ffmpeg (7:6.1.1-3ubuntu5) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+3e0bd2d3911302b5a08aae4e2eb29294d41c89769465e0ecebb8bee51881efb2  /root/radeon-oneloop-deps/Evo-RL-Phi-d3bee432ab26bab857b232cebefdc57327060ea8.tar.gz
+a8ed7c1d9245dbcb785f92fd64c76da1258a9fba9bba2ba68c11681e5d43ef6b 878
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Collecting accelerate<2,>=1.10
+  Downloading accelerate-1.14.0-py3-none-any.whl (389 kB)
+Requirement already satisfied: av<16,>=15 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (15.1.0)
+Collecting datasets<4.2,>=4.0
+  Downloading datasets-4.1.1-py3-none-any.whl (503 kB)
+Collecting deepdiff<9,>=7
+  Downloading deepdiff-8.6.2-py3-none-any.whl (91 kB)
+Collecting diffusers<0.36,>=0.27.2
+  Downloading diffusers-0.35.2-py3-none-any.whl (4.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.1/4.1 MB 40.4 MB/s  0:00:00
+Collecting draccus==0.10.0
+  Downloading draccus-0.10.0-py3-none-any.whl (71 kB)
+Collecting einops<0.9,>=0.8
+  Downloading einops-0.8.2-py3-none-any.whl (65 kB)
+Collecting gymnasium<2,>=1.1.1
+  Downloading gymnasium-1.3.0-py3-none-any.whl (953 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 953.9/953.9 kB 122.6 MB/s  0:00:00
+Collecting huggingface-hub<0.36,>=0.34.2 (from huggingface-hub[hf-transfer]<0.36,>=0.34.2)
+  Downloading huggingface_hub-0.35.3-py3-none-any.whl (564 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 564.3/564.3 kB 100.8 MB/s  0:00:00
+Requirement already satisfied: imageio<3,>=2.34 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from imageio[ffmpeg]<3,>=2.34) (2.37.4)
+Collecting jsonlines<5,>=4
+  Downloading jsonlines-4.0.0-py3-none-any.whl (8.7 kB)
+Requirement already satisfied: opencv-python-headless<4.13,>=4.9 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (4.11.0.86)
+Collecting packaging<26,>=24.2
+  Downloading packaging-25.0-py3-none-any.whl (66 kB)
+Collecting pandas<3,>=2.2
+  Downloading pandas-2.3.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.4/12.4 MB 90.3 MB/s  0:00:00
+Collecting pyarrow<24,>=17
+  Downloading pyarrow-23.0.1-cp312-cp312-manylinux_2_28_x86_64.whl (47.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 47.6/47.6 MB 79.1 MB/s  0:00:00
+Collecting pyserial==3.5
+  Downloading pyserial-3.5-py2.py3-none-any.whl (90 kB)
+Requirement already satisfied: PyYAML<7,>=6.0.2 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (6.0.3)
+Collecting termcolor<4,>=2.4
+  Downloading termcolor-3.3.0-py3-none-any.whl (7.7 kB)
+Collecting wandb<0.25,>=0.24
+  Downloading wandb-0.24.2-py3-none-manylinux_2_28_x86_64.whl (23.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 23.0/23.0 MB 74.4 MB/s  0:00:00
+Collecting mergedeep~=1.3 (from draccus==0.10.0)
+  Downloading mergedeep-1.3.4-py3-none-any.whl (6.4 kB)
+Collecting pyyaml-include~=1.4 (from draccus==0.10.0)
+  Downloading pyyaml_include-1.4.1-py3-none-any.whl (19 kB)
+Collecting toml~=0.10 (from draccus==0.10.0)
+  Downloading toml-0.10.2-py2.py3-none-any.whl (16 kB)
+Requirement already satisfied: typing-inspect~=0.9.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from draccus==0.10.0) (0.9.0)
+Requirement already satisfied: numpy>=1.17 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from accelerate<2,>=1.10) (1.26.4)
+Requirement already satisfied: psutil in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from accelerate<2,>=1.10) (7.2.2)
+Requirement already satisfied: torch>=2.0.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from accelerate<2,>=1.10) (2.9.1+rocm7.2.1.lw.gitff65f5bc)
+Collecting safetensors>=0.4.3 (from accelerate<2,>=1.10)
+  Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+Requirement already satisfied: filelock in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from datasets<4.2,>=4.0) (3.32.2)
+Collecting dill<0.4.1,>=0.3.0 (from datasets<4.2,>=4.0)
+  Downloading dill-0.4.0-py3-none-any.whl (119 kB)
+Collecting requests>=2.32.2 (from datasets<4.2,>=4.0)
+  Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Requirement already satisfied: tqdm>=4.66.3 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from datasets<4.2,>=4.0) (4.70.0)
+Collecting xxhash (from datasets<4.2,>=4.0)
+  Downloading xxhash-3.8.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (220 kB)
+Collecting multiprocess<0.70.17 (from datasets<4.2,>=4.0)
+  Downloading multiprocess-0.70.16-py312-none-any.whl (146 kB)
+Collecting fsspec<=2025.9.0,>=2023.1.0 (from fsspec[http]<=2025.9.0,>=2023.1.0->datasets<4.2,>=4.0)
+  Downloading fsspec-2025.9.0-py3-none-any.whl (199 kB)
+Collecting orderly-set<6,>=5.4.1 (from deepdiff<9,>=7)
+  Downloading orderly_set-5.5.0-py3-none-any.whl (13 kB)
+Collecting importlib_metadata (from diffusers<0.36,>=0.27.2)
+  Downloading importlib_metadata-9.0.0-py3-none-any.whl (27 kB)
+Collecting regex!=2019.12.17 (from diffusers<0.36,>=0.27.2)
+  Downloading regex-2026.7.19-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 801.8/801.8 kB 121.9 MB/s  0:00:00
+Requirement already satisfied: Pillow in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from diffusers<0.36,>=0.27.2) (11.3.0)
+Collecting cloudpickle>=1.2.0 (from gymnasium<2,>=1.1.1)
+  Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+Requirement already satisfied: typing-extensions>=4.3.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from gymnasium<2,>=1.1.1) (4.16.0)
+Collecting farama-notifications>=0.0.1 (from gymnasium<2,>=1.1.1)
+  Downloading farama_notifications-0.0.6-py3-none-any.whl (2.9 kB)
+Collecting hf-xet<2.0.0,>=1.1.3 (from huggingface-hub<0.36,>=0.34.2->huggingface-hub[hf-transfer]<0.36,>=0.34.2)
+  Downloading hf_xet-1.5.2-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.4/4.4 MB 39.9 MB/s  0:00:00
+Collecting attrs>=19.2.0 (from jsonlines<5,>=4)
+  Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+Requirement already satisfied: python-dateutil>=2.8.2 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from pandas<3,>=2.2) (2.9.0.post0)
+Collecting pytz>=2020.1 (from pandas<3,>=2.2)
+  Downloading pytz-2026.3.post1-py2.py3-none-any.whl (508 kB)
+Collecting tzdata>=2022.7 (from pandas<3,>=2.2)
+  Downloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)
+Collecting click>=8.0.1 (from wandb<0.25,>=0.24)
+  Downloading click-8.4.2-py3-none-any.whl (119 kB)
+Collecting gitpython!=3.1.29,>=1.0.0 (from wandb<0.25,>=0.24)
+  Downloading gitpython-3.1.57-py3-none-any.whl (217 kB)
+Collecting platformdirs (from wandb<0.25,>=0.24)
+  Downloading platformdirs-4.11.0-py3-none-any.whl (23 kB)
+Collecting protobuf!=4.21.0,!=5.28.0,<7,>=3.19.0 (from wandb<0.25,>=0.24)
+  Downloading protobuf-6.33.6-cp39-abi3-manylinux2014_x86_64.whl (323 kB)
+Requirement already satisfied: pydantic<3 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from wandb<0.25,>=0.24) (2.13.4)
+Collecting sentry-sdk>=2.0.0 (from wandb<0.25,>=0.24)
+  Downloading sentry_sdk-2.66.1-py3-none-any.whl (505 kB)
+Collecting aiohttp!=4.0.0a0,!=4.0.0a1 (from fsspec[http]<=2025.9.0,>=2023.1.0->datasets<4.2,>=4.0)
+  Downloading aiohttp-3.14.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (1.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 160.0 MB/s  0:00:00
+Collecting hf-transfer>=0.1.4 (from huggingface-hub[hf-transfer]<0.36,>=0.34.2)
+  Downloading hf_transfer-0.1.9-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.6/3.6 MB 155.9 MB/s  0:00:00
+Requirement already satisfied: imageio-ffmpeg in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from imageio[ffmpeg]<3,>=2.34) (0.6.0)
+Requirement already satisfied: annotated-types>=0.6.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from pydantic<3->wandb<0.25,>=0.24) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.4 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from pydantic<3->wandb<0.25,>=0.24) (2.46.4)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from pydantic<3->wandb<0.25,>=0.24) (0.4.2)
+Collecting charset_normalizer<4,>=2 (from requests>=2.32.2->datasets<4.2,>=4.0)
+  Downloading charset_normalizer-3.4.9-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (224 kB)
+Collecting idna<4,>=2.5 (from requests>=2.32.2->datasets<4.2,>=4.0)
+  Downloading idna-3.18-py3-none-any.whl (65 kB)
+Collecting urllib3<3,>=1.26 (from requests>=2.32.2->datasets<4.2,>=4.0)
+  Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
+Collecting certifi>=2023.5.7 (from requests>=2.32.2->datasets<4.2,>=4.0)
+  Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Requirement already satisfied: mypy-extensions>=0.3.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from typing-inspect~=0.9.0->draccus==0.10.0) (1.1.0)
+Collecting aiohappyeyeballs>=2.5.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets<4.2,>=4.0)
+  Downloading aiohappyeyeballs-2.7.1-py3-none-any.whl (15 kB)
+Collecting aiosignal>=1.4.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets<4.2,>=4.0)
+  Downloading aiosignal-1.4.0-py3-none-any.whl (7.5 kB)
+Collecting frozenlist>=1.1.1 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets<4.2,>=4.0)
+  Downloading frozenlist-1.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (242 kB)
+Collecting multidict<7.0,>=4.5 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets<4.2,>=4.0)
+  Downloading multidict-6.7.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (256 kB)
+Collecting propcache>=0.2.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets<4.2,>=4.0)
+  Downloading propcache-0.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (61 kB)
+Collecting yarl<2.0,>=1.17.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets<4.2,>=4.0)
+  Downloading yarl-1.24.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (109 kB)
+Collecting gitdb<5,>=4.0.1 (from gitpython!=3.1.29,>=1.0.0->wandb<0.25,>=0.24)
+  Downloading gitdb-4.0.12-py3-none-any.whl (62 kB)
+Collecting smmap<6,>=3.0.1 (from gitdb<5,>=4.0.1->gitpython!=3.1.29,>=1.0.0->wandb<0.25,>=0.24)
+  Downloading smmap-5.0.3-py3-none-any.whl (24 kB)
+Requirement already satisfied: six>=1.5 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from python-dateutil>=2.8.2->pandas<3,>=2.2) (1.17.0)
+Requirement already satisfied: setuptools in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from torch>=2.0.0->accelerate<2,>=1.10) (83.0.0)
+Requirement already satisfied: sympy>=1.13.3 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from torch>=2.0.0->accelerate<2,>=1.10) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from torch>=2.0.0->accelerate<2,>=1.10) (3.6.1)
+Requirement already satisfied: jinja2 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from torch>=2.0.0->accelerate<2,>=1.10) (3.1.6)
+Requirement already satisfied: triton==3.5.1+rocm7.2.1.gita272dfa8 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from torch>=2.0.0->accelerate<2,>=1.10) (3.5.1+rocm7.2.1.gita272dfa8)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from sympy>=1.13.3->torch>=2.0.0->accelerate<2,>=1.10) (1.3.0)
+Requirement already satisfied: zipp>=3.20 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from importlib_metadata->diffusers<0.36,>=0.27.2) (4.1.0)
+Requirement already satisfied: MarkupSafe>=2.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from jinja2->torch>=2.0.0->accelerate<2,>=1.10) (3.0.3)
+Installing collected packages: pytz, pyserial, farama-notifications, xxhash, urllib3, tzdata, toml, termcolor, smmap, safetensors, regex, pyyaml-include, pyarrow, protobuf, propcache, platformdirs, packaging, orderly-set, multidict, mergedeep, importlib_metadata, idna, hf-xet, hf-transfer, fsspec, frozenlist, einops, dill, cloudpickle, click, charset_normalizer, certifi, attrs, aiohappyeyeballs, yarl, sentry-sdk, requests, pandas, multiprocess, jsonlines, gymnasium, gitdb, draccus, deepdiff, aiosignal, huggingface-hub, gitpython, aiohttp, wandb, diffusers, accelerate, datasets
+  Attempting uninstall: packaging
+    Found existing installation: packaging 26.2
+    Uninstalling packaging-26.2:
+      Successfully uninstalled packaging-26.2
+  Attempting uninstall: fsspec
+    Found existing installation: fsspec 2026.7.0
+    Uninstalling fsspec-2026.7.0:
+      Successfully uninstalled fsspec-2026.7.0
+  Attempting uninstall: dill
+    Found existing installation: dill 0.4.1
+    Uninstalling dill-0.4.1:
+      Successfully uninstalled dill-0.4.1
+
+Successfully installed accelerate-1.14.0 aiohappyeyeballs-2.7.1 aiohttp-3.14.3 aiosignal-1.4.0 attrs-26.1.0 certifi-2026.7.22 charset_normalizer-3.4.9 click-8.4.2 cloudpickle-3.1.2 datasets-4.1.1 deepdiff-8.6.2 diffusers-0.35.2 dill-0.4.0 draccus-0.10.0 einops-0.8.2 farama-notifications-0.0.6 frozenlist-1.8.0 fsspec-2025.9.0 gitdb-4.0.12 gitpython-3.1.57 gymnasium-1.3.0 hf-transfer-0.1.9 hf-xet-1.5.2 huggingface-hub-0.35.3 idna-3.18 importlib_metadata-9.0.0 jsonlines-4.0.0 mergedeep-1.3.4 multidict-6.7.1 multiprocess-0.70.16 orderly-set-5.5.0 packaging-25.0 pandas-2.3.3 platformdirs-4.11.0 propcache-0.5.2 protobuf-6.33.6 pyarrow-23.0.1 pyserial-3.5 pytz-2026.3.post1 pyyaml-include-1.4.1 regex-2026.7.19 requests-2.34.2 safetensors-0.8.0 sentry-sdk-2.66.1 smmap-5.0.3 termcolor-3.3.0 toml-0.10.2 tzdata-2026.3 urllib3-2.7.0 wandb-0.24.2 xxhash-3.8.1 yarl-1.24.5
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Obtaining file:///root/radeon-oneloop-deps/Evo-RL-Phi-d3bee432ab26bab857b232cebefdc57327060ea8
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: lerobot
+  Building editable for lerobot (pyproject.toml): started
+  Building editable for lerobot (pyproject.toml): finished with status 'done'
+  Created wheel for lerobot: filename=lerobot-0.4.4-0.editable-py3-none-any.whl size=15657 sha256=125667e2b8f4d70737b28532165761109015385251f22af8d702cb60fadfea67
+  Stored in directory: /tmp/pip-ephem-wheel-cache-8a7xgdts/wheels/26/8f/2f/02363c4e6e3ae37c29d41b4489398a436397f4286a167cc327
+Successfully built lerobot
+Installing collected packages: lerobot
+Successfully installed lerobot-0.4.4
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Obtaining file:///root/radeon-oneloop/current
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: numpy==1.26.4 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from radeon-oneloop==0.1.0) (1.26.4)
+Requirement already satisfied: PyYAML<7,>=6.0.2 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from radeon-oneloop==0.1.0) (6.0.3)
+Collecting jsonschema<5,>=4.23 (from radeon-oneloop==0.1.0)
+  Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+Requirement already satisfied: pandas<3,>=2.2 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from radeon-oneloop==0.1.0) (2.3.3)
+Requirement already satisfied: pyarrow<24,>=17 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from radeon-oneloop==0.1.0) (23.0.1)
+Requirement already satisfied: attrs>=22.2.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from jsonschema<5,>=4.23->radeon-oneloop==0.1.0) (26.1.0)
+Collecting jsonschema-specifications>=2023.03.6 (from jsonschema<5,>=4.23->radeon-oneloop==0.1.0)
+  Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+Collecting referencing>=0.28.4 (from jsonschema<5,>=4.23->radeon-oneloop==0.1.0)
+  Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+Collecting rpds-py>=0.25.0 (from jsonschema<5,>=4.23->radeon-oneloop==0.1.0)
+  Downloading rpds_py-2026.6.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (366 kB)
+Requirement already satisfied: python-dateutil>=2.8.2 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from pandas<3,>=2.2->radeon-oneloop==0.1.0) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from pandas<3,>=2.2->radeon-oneloop==0.1.0) (2026.3.post1)
+Requirement already satisfied: tzdata>=2022.7 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from pandas<3,>=2.2->radeon-oneloop==0.1.0) (2026.3)
+Requirement already satisfied: six>=1.5 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from python-dateutil>=2.8.2->pandas<3,>=2.2->radeon-oneloop==0.1.0) (1.17.0)
+Requirement already satisfied: typing-extensions>=4.4.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from referencing>=0.28.4->jsonschema<5,>=4.23->radeon-oneloop==0.1.0) (4.16.0)
+Building wheels for collected packages: radeon-oneloop
+  Building editable for radeon-oneloop (pyproject.toml): started
+  Building editable for radeon-oneloop (pyproject.toml): finished with status 'done'
+  Created wheel for radeon-oneloop: filename=radeon_oneloop-0.1.0-0.editable-py3-none-any.whl size=7931 sha256=c0948cf469b8b3fbceec028a007e47427a8b38e4ef04bc1844e3d38af32e6c5d
+  Stored in directory: /tmp/pip-ephem-wheel-cache-wolz2u5j/wheels/ca/1a/df/fe3b637c4060131fb8d6c544ad0b5d3c449fd6aeb3785694b3
+Successfully built radeon-oneloop
+Installing collected packages: rpds-py, referencing, jsonschema-specifications, jsonschema, radeon-oneloop
+
+Successfully installed jsonschema-4.26.0 jsonschema-specifications-2025.9.1 radeon-oneloop-0.1.0 referencing-0.37.0 rpds-py-2026.6.3
+{"act_policy_import": "ACTPolicy", "device": "AMD Radeon Graphics", "hip": "7.2.53211-e1a6bc5663", "lerobot": "0.4.4", "torch": "2.9.1+rocm7.2.1.gitff65f5bc", "train_config_import": "TrainPipelineConfig"}
+LeRobot environment bootstrap passed: /root/radeon-oneloop-runs/environment/20260803T155136Z_bootstrap_lerobot

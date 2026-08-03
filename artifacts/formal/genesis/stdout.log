@@ -1,0 +1,63 @@
+[38;5;159m[Genesis] [15:55:42] [INFO] [38;5;121m╭───────────────────────────────────────────────╮[0m[38;5;159m[0m
+[38;5;159m[Genesis] [15:55:42] [INFO] [38;5;121m│┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈[0m[38;5;159m [38;5;121m[1m[3mGenesis[0m[38;5;159m [38;5;121m┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈│[0m[38;5;159m[0m
+[38;5;159m[Genesis] [15:55:42] [INFO] [38;5;121m╰───────────────────────────────────────────────╯[0m[38;5;159m[0m
+[38;5;159m[Genesis] [15:55:43] [INFO] Running on [38;5;121m[4m[AMD Radeon Graphics][0m[38;5;159m with backend [38;5;121m[4mgs.amdgpu[0m[38;5;159m. Device memory: [38;5;121m[4m47.98[0m[38;5;159m GB.[0m
+[38;5;159m[Genesis] [15:55:43] [INFO] 🚀 Genesis initialized. 🔖 version: [38;5;121m[4m1.3.1[0m[38;5;159m, 🎨 theme: [38;5;121m[4mdark[0m[38;5;159m, 🌱 seed: [38;5;121m[4m20260803[0m[38;5;159m, 🐛 debug: [38;5;121m[4mFalse[0m[38;5;159m, 📏 precision: [38;5;121m[4m32[0m[38;5;159m, 🔥 performance: [38;5;121m[4mFalse[0m[38;5;159m, 💬 verbose: [38;5;121m[4mINFO[0m[38;5;159m[0m
+[38;5;226m[Genesis] [15:55:44] [WARNING] Scene.show_FPS is deprecated. Please use Scene.profiling_options.show_FPS[0m
+[38;5;159m[Genesis] [15:55:45] [INFO] Scene [38;5;121m[3m<097ff31>[0m[38;5;159m created.[0m
+[38;5;159m[Genesis] [15:55:45] [INFO] Adding [38;5;121m<gs.engine.entities.RigidEntity>[0m[38;5;159m. idx: [38;5;121m0[0m[38;5;159m, uid: [38;5;121m[3m<9108f6f>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Plane>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:55:50] [INFO] Adding [38;5;121m<gs.engine.entities.RigidEntity>[0m[38;5;159m. idx: [38;5;121m1[0m[38;5;159m, uid: [38;5;121m[3m<ec04b56>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Box>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:55:51] [INFO] Adding [38;5;121m<gs.engine.entities.RigidEntity>[0m[38;5;159m. idx: [38;5;121m2[0m[38;5;159m, uid: [38;5;121m[3m<6472963>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.MJCF(file='/root/radeon-oneloop-data/assets/so101/so101_new_calib.xml')>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;226m[Genesis] [15:55:55] [WARNING] Mesh is not watertight. Falling back to convex hull for estimating inertial properties.[0m
+[38;5;226m[Genesis] [15:55:58] [WARNING] Mesh is not watertight. Falling back to convex hull for estimating inertial properties.[0m
+[38;5;159m[Genesis] [15:55:58] [INFO] Adding [38;5;121m<gs.engine.entities.RigidEntity>[0m[38;5;159m. idx: [38;5;121m3[0m[38;5;159m, uid: [38;5;121m[3m<393644d>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.MJCF(file='/root/radeon-oneloop-data/assets/so101/so101_new_calib.xml')>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:55:59] [INFO] Adding [38;5;121m<gs.engine.entities.RigidEntity>[0m[38;5;159m. idx: [38;5;121m4[0m[38;5;159m, uid: [38;5;121m[3m<6c15482>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Sphere>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:55:59] [INFO] Building scene [38;5;121m[3m<097ff31>[0m[38;5;159m...[0m
+[38;5;159m[Genesis] [15:56:11] [INFO] Preprocessing geom idx [38;5;121m[4m1[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:11] [INFO] Preprocessing geom idx [38;5;121m[4m2[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:12] [INFO] Preprocessing geom idx [38;5;121m[4m3[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:12] [INFO] Preprocessing geom idx [38;5;121m[4m4[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:13] [INFO] Preprocessing geom idx [38;5;121m[4m6[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:13] [INFO] Preprocessing geom idx [38;5;121m[4m7[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:14] [INFO] Preprocessing geom idx [38;5;121m[4m8[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:14] [INFO] Preprocessing geom idx [38;5;121m[4m10[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:14] [INFO] Preprocessing geom idx [38;5;121m[4m11[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:15] [INFO] Preprocessing geom idx [38;5;121m[4m13[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:15] [INFO] Preprocessing geom idx [38;5;121m[4m14[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [15:56:23] [INFO] Compiling simulation kernels...[0m
+[38;5;159m[Genesis] [15:58:00] [INFO] Building visualizer...[0m
+{
+  "schema_version": "radeon_oneloop.genesis_smoke.v1",
+  "backend": "3",
+  "device": "cuda:0",
+  "torch_device": "AMD Radeon Graphics",
+  "gcn_arch": "gfx1100",
+  "steps": 1000,
+  "build_seconds": 144.493638175074,
+  "step_ms": {
+    "mean": 25.80917361145839,
+    "p50": 4.023451125249267,
+    "p95": 4.582947795279323,
+    "p99": 5.217059929855167
+  },
+  "observation": {
+    "state_shape": [
+      12
+    ],
+    "camera_shapes": {
+      "observation.images.front_cam": [
+        480,
+        640,
+        3
+      ],
+      "observation.images.hand_cam": [
+        480,
+        640,
+        3
+      ]
+    }
+  },
+  "task_success": false,
+  "task_success_note": "Joint-sweep smoke validates the scene and contracts; it is not a handover evaluation."
+}
+[38;5;159m[Genesis] [15:58:30] [INFO] 💤 Exiting Genesis and caching compiled kernels...[0m

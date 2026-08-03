@@ -1,0 +1,53 @@
+{
+  "inputs": {
+    "dataset_parquet": "/root/radeon-oneloop-data/formal_handover_v1/data/chunk-000/file-000.parquet",
+    "dataset_parquet_sha256": "8c90ff9cb647a285e6457b3d0c41e0fab1345a4e7439c3f1bd1d44aa7ad386eb",
+    "episode_manifest": "/root/radeon-oneloop-data/formal_handover_v1/oneloop/episode_manifest.jsonl",
+    "episode_manifest_sha256": "f3f27b13af85d42e2a029d3476eaff9b217d68d2411649396395b50f6610e05d"
+  },
+  "method": "phase_aware_per_frame_loss_weighting",
+  "normalization": "positive_frame_mean_equals_one",
+  "output": {
+    "targets": "/root/radeon-oneloop-data/formal_handover_v1/oneloop/phase_targets.parquet",
+    "targets_sha256": "b34f5559db6d697890a08b6a7e49b52f3a916537c3328aea72c8470bb90bec57"
+  },
+  "schema_version": "radeon_oneloop.phase_targets.v1",
+  "summary": {
+    "episodes": 124,
+    "frames": 178465,
+    "mean_positive_weight": 1.0,
+    "positive_frames": 178465,
+    "roles": {
+      "bc_demonstration": {
+        "frames": 116550,
+        "gradient_mass": 96802.98333326614,
+        "gradient_mass_ratio": 0.5424199889794906
+      },
+      "correction": {
+        "frames": 15906,
+        "gradient_mass": 52844.212883680506,
+        "gradient_mass_ratio": 0.29610407017430834
+      },
+      "failed_policy_prefix": {
+        "frames": 11908,
+        "gradient_mass": 494.5216325749497,
+        "gradient_mass_ratio": 0.002770972642113235
+      },
+      "success_policy": {
+        "frames": 34101,
+        "gradient_mass": 28323.282150554638,
+        "gradient_mass_ratio": 0.15870496820408786
+      }
+    },
+    "zero_frames": 0
+  },
+  "weights": {
+    "bc_demonstration": 1.0,
+    "correction": 4.0,
+    "failed_policy_no_correction": 0.0,
+    "failed_policy_prefix": 0.05,
+    "failed_policy_suffix": 0.05,
+    "recovery": 4.0,
+    "success_policy": 1.0
+  }
+}

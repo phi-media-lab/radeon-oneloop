@@ -1,0 +1,10 @@
+{
+  "schema_version": "radeon_oneloop.dataset_build.v1",
+  "git_commit": "b00eb5917dd7ad57622796ee69488427ff9a2b4c",
+  "status": "done",
+  "output": "/root/radeon-oneloop-data/formal_handover_v1",
+  "dataset_hash": "ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf",
+  "phase_targets_sha256": "b34f5559db6d697890a08b6a7e49b52f3a916537c3328aea72c8470bb90bec57",
+  "episodes": 124,
+  "frames": 178465
+}

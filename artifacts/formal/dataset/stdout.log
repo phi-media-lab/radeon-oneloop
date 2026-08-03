@@ -1,0 +1,103 @@
+{
+  "action_names": [
+    "left_shoulder_pan.pos",
+    "left_shoulder_lift.pos",
+    "left_elbow_flex.pos",
+    "left_wrist_flex.pos",
+    "left_wrist_roll.pos",
+    "left_gripper.pos",
+    "right_shoulder_pan.pos",
+    "right_shoulder_lift.pos",
+    "right_elbow_flex.pos",
+    "right_wrist_flex.pos",
+    "right_wrist_roll.pos",
+    "right_gripper.pos"
+  ],
+  "artifacts": {
+    "data": "data/chunk-000/file-000.parquet",
+    "episodes": "meta/episodes/chunk-000/file-000.parquet",
+    "hashes": "oneloop/hashes.sha256",
+    "info": "meta/info.json",
+    "manifest": "oneloop/episode_manifest.jsonl"
+  },
+  "camera_keys": [
+    "observation.images.front_cam",
+    "observation.images.hand_cam"
+  ],
+  "canonical_task_source": "bc_seed_handover_v1",
+  "dataset_hash": "ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf",
+  "episodes": 124,
+  "fps": 30,
+  "frames": 178465,
+  "intervention_frames": 15906,
+  "repo_id": "phi-media-lab/radeon-oneloop-formal-handover-v1",
+  "schema_version": "radeon_oneloop.formal_dataset.v1",
+  "sources": [
+    {
+      "data_sha256": "a15975d734013f3c45e9ec8869573ac09d52a8f6ae9e47b68ebd0bf28380a64f",
+      "episodes": 84,
+      "frames": 116550,
+      "info_sha256": "2e7db73c99f95bb7ff403f1f2ba630750dbc1bb07d4b52e2b300704bd220999b",
+      "kind": "bc_seed",
+      "manifest_sha256": null,
+      "name": "bc_seed_handover_v1",
+      "task_labels": [
+        "{'Constrained bimanual sock-ball handover': 'left pick, aerial transfer, right place into yellow target zone.'}"
+      ],
+      "tasks_sha256": "38e2a267e0dd82d09b40ea5d66e6d210c9d383b72804f0f90b790fd144e59a91"
+    },
+    {
+      "data_sha256": "dafbbf6db47685ed433b7e2f4383191f7498b3ae037289f6c0fc7e77e1f0f88b",
+      "episodes": 40,
+      "frames": 61915,
+      "info_sha256": "e198927b1fc7f0d7566e5a4b622872ba3f2a0bafa58010f5d900441e6debcb3d",
+      "kind": "hil",
+      "manifest_sha256": "17fbf9625ec31da4368f974a480ff60695215b8ec7dd16261568547df98dff66",
+      "name": "hil_rlready_batch1_batch2",
+      "task_labels": [
+        "SO101 \u53cc\u81c2\u889c\u5b50\u7403\u7a7a\u4e2d\u4ea4\u63a5\uff1a\u5de6\u81c2\u9012\u4ea4\uff0c\u53f3\u5939\u722a\u63a5\u4f4f\u5e76\u7a33\u5b9a\u6301\u6709\u3002"
+      ],
+      "tasks_sha256": "508f9f43c01519d4176d4250864c45f4ce6e620b9bf746d6b1ea9fd1da1eb61c"
+    }
+  ]
+}
+{
+  "episodes": 124,
+  "frames": 178465,
+  "mean_positive_weight": 1.0,
+  "positive_frames": 178465,
+  "roles": {
+    "bc_demonstration": {
+      "frames": 116550,
+      "gradient_mass": 96802.98333326614,
+      "gradient_mass_ratio": 0.5424199889794906
+    },
+    "correction": {
+      "frames": 15906,
+      "gradient_mass": 52844.212883680506,
+      "gradient_mass_ratio": 0.29610407017430834
+    },
+    "failed_policy_prefix": {
+      "frames": 11908,
+      "gradient_mass": 494.5216325749497,
+      "gradient_mass_ratio": 0.002770972642113235
+    },
+    "success_policy": {
+      "frames": 34101,
+      "gradient_mass": 28323.282150554638,
+      "gradient_mass_ratio": 0.15870496820408786
+    }
+  },
+  "zero_frames": 0
+}
+{
+  "schema_version": "radeon_oneloop.dataset_build.v1",
+  "git_commit": "b00eb5917dd7ad57622796ee69488427ff9a2b4c",
+  "status": "done",
+  "output": "/root/radeon-oneloop-data/formal_handover_v1",
+  "dataset_hash": "ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf",
+  "phase_targets_sha256": "b34f5559db6d697890a08b6a7e49b52f3a916537c3328aea72c8470bb90bec57",
+  "episodes": 124,
+  "frames": 178465
+}
+formal dataset build passed: /root/radeon-oneloop-runs/dataset/20260803T155523Z_formal_dataset_b00eb59

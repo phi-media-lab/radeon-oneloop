@@ -1,0 +1,29 @@
+{
+  "episodes": 124,
+  "frames": 178465,
+  "mean_positive_weight": 1.0,
+  "positive_frames": 178465,
+  "roles": {
+    "bc_demonstration": {
+      "frames": 116550,
+      "gradient_mass": 96802.98333326614,
+      "gradient_mass_ratio": 0.5424199889794906
+    },
+    "correction": {
+      "frames": 15906,
+      "gradient_mass": 52844.212883680506,
+      "gradient_mass_ratio": 0.29610407017430834
+    },
+    "failed_policy_prefix": {
+      "frames": 11908,
+      "gradient_mass": 494.5216325749497,
+      "gradient_mass_ratio": 0.002770972642113235
+    },
+    "success_policy": {
+      "frames": 34101,
+      "gradient_mass": 28323.282150554638,
+      "gradient_mass_ratio": 0.15870496820408786
+    }
+  },
+  "zero_frames": 0
+}

@@ -1,0 +1,361 @@
+run_id=20260803T154917Z_bootstrap_rocm721
+host=u-9752-9c0a120c
+install_root=/root/radeon-oneloop-env/rocm721-py312
+wheel_root=/root/radeon-oneloop-wheelhouse/rocm721-py312
+Hit:1 https://deb.nodesource.com/node_20.x nodistro InRelease
+Hit:2 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu noble InRelease
+Hit:4 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu noble InRelease
+Ign:5 http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-24.04-deb compute-rocm-rel-7.2 InRelease
+Ign:5 http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-24.04-deb compute-rocm-rel-7.2 InRelease
+Hit:6 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Ign:5 http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-24.04-deb compute-rocm-rel-7.2 InRelease
+Err:5 http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-24.04-deb compute-rocm-rel-7.2 InRelease
+  Something wicked happened resolving 'compute-artifactory.amd.com:http' (-5 - No address associated with hostname)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+build-essential is already the newest version (12.10ubuntu1).
+cmake is already the newest version (3.28.3-1build7).
+git is already the newest version (1:2.43.0-1ubuntu7.3).
+libegl1 is already the newest version (1.7.0-1build1).
+libgl1 is already the newest version (1.7.0-1build1).
+libglfw3 is already the newest version (3.3.10-1build1).
+libsm6 is already the newest version (2:1.2.3-1build3).
+libxext6 is already the newest version (2:1.3.4-1build2).
+libxrender1 is already the newest version (1:0.9.10-1.1build1).
+ninja-build is already the newest version (1.11.1-2).
+python3-dev is already the newest version (3.12.3-0ubuntu2.1).
+python3-venv is already the newest version (3.12.3-0ubuntu2.1).
+vulkan-tools is already the newest version (1.3.275.0+dfsg1-1).
+0 upgraded, 0 newly installed, 0 to remove and 172 not upgraded.
+Requirement already satisfied: pip in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (26.2)
+Requirement already satisfied: wheel in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (0.47.0)
+Requirement already satisfied: setuptools in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (83.0.0)
+Requirement already satisfied: packaging>=24.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from wheel) (26.2)
+fb45ace0a27e9f0d0e3c4c6efd8932162743f8376f2aa4752a4d31ef5a1bd3d7  /root/radeon-oneloop-wheelhouse/rocm721-py312/torch-2.9.1+rocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl
+d5fca8cda173235a3b7434baeebe04c3ebffec3c6fc191e79aa8aa300633f2c9  /root/radeon-oneloop-wheelhouse/rocm721-py312/torchvision-0.24.0+rocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl
+023d1ce5d847b2a0fbebacf52d35b4c7a233ca07b3dbd0f1cbde84362cbcf33d  /root/radeon-oneloop-wheelhouse/rocm721-py312/torchaudio-2.9.0+rocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl
+07787af1d28c273852f897bfeaa7bca29f2fa4a13ca0f28f535832b240ce7016  /root/radeon-oneloop-wheelhouse/rocm721-py312/triton-3.5.1+rocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl
+8cbc9c0d7985092b3b19749039b32b399ffd07f512e6ce050ce6b714271bb895  /root/radeon-oneloop-wheelhouse/rocm721-py312/genesis_world-1.3.1-py3-none-any.whl
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Processing ./radeon-oneloop-wheelhouse/rocm721-py312/torch-2.9.1+rocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl
+Processing ./radeon-oneloop-wheelhouse/rocm721-py312/torchvision-0.24.0+rocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl
+Processing ./radeon-oneloop-wheelhouse/rocm721-py312/torchaudio-2.9.0+rocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl
+Processing ./radeon-oneloop-wheelhouse/rocm721-py312/triton-3.5.1+rocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl
+Collecting filelock (from torch==2.9.1+rocm7.2.1.lw.gitff65f5bc)
+  Downloading filelock-3.32.2-py3-none-any.whl (98 kB)
+Collecting typing-extensions>=4.10.0 (from torch==2.9.1+rocm7.2.1.lw.gitff65f5bc)
+  Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Requirement already satisfied: setuptools in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from torch==2.9.1+rocm7.2.1.lw.gitff65f5bc) (83.0.0)
+Collecting sympy>=1.13.3 (from torch==2.9.1+rocm7.2.1.lw.gitff65f5bc)
+  Downloading sympy-1.14.0-py3-none-any.whl (6.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 42.4 MB/s  0:00:00
+Collecting networkx>=2.5.1 (from torch==2.9.1+rocm7.2.1.lw.gitff65f5bc)
+  Downloading networkx-3.6.1-py3-none-any.whl (2.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 143.1 MB/s  0:00:00
+Collecting jinja2 (from torch==2.9.1+rocm7.2.1.lw.gitff65f5bc)
+  Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+Collecting fsspec>=0.8.5 (from torch==2.9.1+rocm7.2.1.lw.gitff65f5bc)
+  Downloading fsspec-2026.7.0-py3-none-any.whl (206 kB)
+Collecting numpy (from torchvision==0.24.0+rocm7.2.1.gitb919bd0c)
+  Downloading numpy-1.26.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (18.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 18.0/18.0 MB 99.2 MB/s  0:00:00
+Collecting pillow!=8.3.*,>=5.3.0 (from torchvision==0.24.0+rocm7.2.1.gitb919bd0c)
+  Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 117.3 MB/s  0:00:00
+Collecting mpmath<1.4,>=1.1.0 (from sympy>=1.13.3->torch==2.9.1+rocm7.2.1.lw.gitff65f5bc)
+  Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 kB 105.6 MB/s  0:00:00
+Collecting MarkupSafe>=2.0 (from jinja2->torch==2.9.1+rocm7.2.1.lw.gitff65f5bc)
+  Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Installing collected packages: mpmath, typing-extensions, triton, sympy, pillow, numpy, networkx, MarkupSafe, fsspec, filelock, jinja2, torch, torchvision, torchaudio
+
+Successfully installed MarkupSafe-3.0.3 filelock-3.32.2 fsspec-2026.7.0 jinja2-3.1.6 mpmath-1.3.0 networkx-3.6.1 numpy-1.26.4 pillow-12.3.0 sympy-1.14.0 torch-2.9.1+rocm7.2.1.lw.gitff65f5bc torchaudio-2.9.0+rocm7.2.1.gite3c6ee2b torchvision-0.24.0+rocm7.2.1.gitb919bd0c triton-3.5.1+rocm7.2.1.gita272dfa8 typing-extensions-4.16.0
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Collecting Cython==3.2.4
+  Downloading cython-3.2.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.4/3.4 MB 61.2 MB/s  0:00:00
+Collecting quadrants==1.2.0
+  Downloading quadrants-1.2.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (41.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41.0/41.0 MB 91.3 MB/s  0:00:00
+Collecting psutil==7.2.2
+  Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+Collecting py-cpuinfo==9.0.0
+  Downloading py_cpuinfo-9.0.0-py3-none-any.whl (22 kB)
+Collecting frozendict==2.4.7
+  Downloading frozendict-2.4.7-py3-none-any.whl (16 kB)
+Collecting trimesh==5.0.0
+  Downloading trimesh-5.0.0-py3-none-any.whl (745 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 745.5/745.5 kB 133.8 MB/s  0:00:00
+Collecting xacro==2.1.1
+  Downloading xacro-2.1.1-py3-none-any.whl (27 kB)
+Collecting pyglet==2.1.16
+  Downloading pyglet-2.1.16-py3-none-any.whl (1.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 160.2 MB/s  0:00:00
+Collecting freetype-py==2.5.1
+  Downloading freetype_py-2.5.1-py3-none-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl (1.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 132.0 MB/s  0:00:00
+Collecting PyOpenGL==3.1.10
+  Downloading pyopengl-3.1.10-py3-none-any.whl (3.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 43.7 MB/s  0:00:00
+Collecting numba==0.66.0
+  Downloading numba-0.66.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (3.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.9/3.9 MB 51.4 MB/s  0:00:00
+Collecting opencv-python-headless==4.11.0.86
+  Downloading opencv_python_headless-4.11.0.86-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (50.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 50.0/50.0 MB 70.0 MB/s  0:00:00
+Collecting scikit-image==0.25.2
+  Downloading scikit_image-0.25.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (15.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.0/15.0 MB 80.2 MB/s  0:00:00
+Collecting coacd==1.0.11
+  Downloading coacd-1.0.11-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.6/2.6 MB 13.7 MB/s  0:00:00
+Collecting rtree==1.4.1
+  Downloading rtree-1.4.1-py3-none-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (507 kB)
+Collecting z3-solver==4.15.4.0
+  Downloading z3_solver-4.15.4.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (29.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 29.3/29.3 MB 35.0 MB/s  0:00:00
+Collecting OpenEXR==3.4.13
+  Downloading openexr-3.4.13-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 80.9 MB/s  0:00:00
+Collecting fast_simplification==0.1.13
+  Downloading fast_simplification-0.1.13-cp311-abi3-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (1.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.6/1.6 MB 84.3 MB/s  0:00:00
+Collecting mujoco==3.11.0
+  Downloading mujoco-3.11.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (18.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 18.9/18.9 MB 82.4 MB/s  0:00:00
+Collecting PyGEL3D==0.6.1
+  Downloading PyGEL3D-0.6.1-py3-none-any.whl (4.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.1/4.1 MB 124.4 MB/s  0:00:00
+Collecting libigl==2.6.1
+  Downloading libigl-2.6.1-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (13.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.4/13.4 MB 87.7 MB/s  0:00:00
+Collecting pycollada==0.9.3
+  Downloading pycollada-0.9.3-py3-none-any.whl (129 kB)
+Collecting pygltflib==1.16.0
+  Downloading pygltflib-1.16.0.tar.gz (41 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting DracoPy==2.0.0
+  Downloading dracopy-2.0.0-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (5.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.1/5.1 MB 86.6 MB/s  0:00:00
+Collecting tetgen==0.8.2
+  Downloading tetgen-0.8.2-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (408 kB)
+Collecting pysplashsurf==0.14.1.0
+  Downloading pysplashsurf-0.14.1.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.0/3.0 MB 104.0 MB/s  0:00:00
+Collecting av==15.1.0
+  Downloading av-15.1.0-cp312-cp312-manylinux_2_28_x86_64.whl (39.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 39.9/39.9 MB 83.9 MB/s  0:00:00
+Collecting moviepy==2.2.1
+  Downloading moviepy-2.2.1-py3-none-any.whl (129 kB)
+Collecting matplotlib==3.11.1
+  Downloading matplotlib-3.11.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (10.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.0/10.0 MB 88.5 MB/s  0:00:00
+Collecting tifffile==2024.12.12
+  Downloading tifffile-2024.12.12-py3-none-any.whl (227 kB)
+Requirement already satisfied: numpy>=1.26.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from quadrants==1.2.0) (1.26.4)
+Collecting colorama (from quadrants==1.2.0)
+  Downloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+Collecting dill (from quadrants==1.2.0)
+  Downloading dill-0.4.1-py3-none-any.whl (120 kB)
+Collecting pydantic>=2.0.0 (from quadrants==1.2.0)
+  Downloading pydantic-2.13.4-py3-none-any.whl (472 kB)
+Collecting rich>=1.0.0 (from quadrants==1.2.0)
+  Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+Requirement already satisfied: setuptools>=77.0.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from quadrants==1.2.0) (83.0.0)
+Collecting cffi>=1.16.0 (from quadrants==1.2.0)
+  Downloading cffi-2.1.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+Collecting pyyaml (from xacro==2.1.1)
+  Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 87.9 MB/s  0:00:00
+Collecting llvmlite<0.49,>=0.48.0dev0 (from numba==0.66.0)
+  Downloading llvmlite-0.48.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (59.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 59.9/59.9 MB 89.9 MB/s  0:00:00
+Collecting scipy>=1.11.4 (from scikit-image==0.25.2)
+  Downloading scipy-1.18.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.3/35.3 MB 91.2 MB/s  0:00:00
+Requirement already satisfied: networkx>=3.0 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from scikit-image==0.25.2) (3.6.1)
+Requirement already satisfied: pillow>=10.1 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from scikit-image==0.25.2) (12.3.0)
+Collecting imageio!=2.35.0,>=2.33 (from scikit-image==0.25.2)
+  Downloading imageio-2.37.4-py3-none-any.whl (318 kB)
+Requirement already satisfied: packaging>=21 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from scikit-image==0.25.2) (26.2)
+Collecting lazy-loader>=0.4 (from scikit-image==0.25.2)
+  Downloading lazy_loader-0.5-py3-none-any.whl (8.0 kB)
+Collecting absl-py (from mujoco==3.11.0)
+  Downloading absl_py-2.5.0-py3-none-any.whl (137 kB)
+Collecting etils[epath] (from mujoco==3.11.0)
+  Downloading etils-1.14.0-py3-none-any.whl (172 kB)
+Collecting glfw (from mujoco==3.11.0)
+  Downloading glfw-2.10.2-py2.py3-none-manylinux_2_28_x86_64.whl (248 kB)
+Collecting plotly==5.24.1 (from PyGEL3D==0.6.1)
+  Downloading plotly-5.24.1-py3-none-any.whl (19.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 19.1/19.1 MB 83.3 MB/s  0:00:00
+Collecting python-dateutil (from pycollada==0.9.3)
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Collecting dataclasses-json>=0.0.25 (from pygltflib==1.16.0)
+  Downloading dataclasses_json-0.6.7-py3-none-any.whl (28 kB)
+Collecting deprecated (from pygltflib==1.16.0)
+  Downloading deprecated-1.3.1-py2.py3-none-any.whl (11 kB)
+Collecting decorator<6.0,>=4.0.2 (from moviepy==2.2.1)
+  Downloading decorator-5.3.1-py3-none-any.whl (10 kB)
+Collecting imageio_ffmpeg>=0.2.0 (from moviepy==2.2.1)
+  Downloading imageio_ffmpeg-0.6.0-py3-none-manylinux2014_x86_64.whl (29.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 29.5/29.5 MB 89.4 MB/s  0:00:00
+Collecting proglog<=1.0.0 (from moviepy==2.2.1)
+  Downloading proglog-0.1.12-py3-none-any.whl (6.3 kB)
+Collecting python-dotenv>=0.10 (from moviepy==2.2.1)
+  Downloading python_dotenv-1.2.2-py3-none-any.whl (22 kB)
+Collecting pillow>=10.1 (from scikit-image==0.25.2)
+  Downloading pillow-11.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.6/6.6 MB 92.0 MB/s  0:00:00
+Collecting contourpy>=1.0.1 (from matplotlib==3.11.1)
+  Downloading contourpy-1.3.3-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (362 kB)
+Collecting cycler>=0.10 (from matplotlib==3.11.1)
+  Downloading cycler-0.12.1-py3-none-any.whl (8.3 kB)
+Collecting fonttools>=4.28.2 (from matplotlib==3.11.1)
+  Downloading fonttools-4.63.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.0/5.0 MB 87.7 MB/s  0:00:00
+Collecting kiwisolver>=1.3.1 (from matplotlib==3.11.1)
+  Downloading kiwisolver-1.5.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 97.2 MB/s  0:00:00
+Collecting pyparsing>=3 (from matplotlib==3.11.1)
+  Downloading pyparsing-3.3.2-py3-none-any.whl (122 kB)
+Collecting tenacity>=6.2.0 (from plotly==5.24.1->PyGEL3D==0.6.1)
+  Downloading tenacity-9.1.4-py3-none-any.whl (28 kB)
+Collecting tqdm (from proglog<=1.0.0->moviepy==2.2.1)
+  Downloading tqdm-4.70.0-py3-none-any.whl (80 kB)
+Collecting pycparser (from cffi>=1.16.0->quadrants==1.2.0)
+  Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+Collecting marshmallow<4.0.0,>=3.18.0 (from dataclasses-json>=0.0.25->pygltflib==1.16.0)
+  Downloading marshmallow-3.26.2-py3-none-any.whl (50 kB)
+Collecting typing-inspect<1,>=0.4.0 (from dataclasses-json>=0.0.25->pygltflib==1.16.0)
+  Downloading typing_inspect-0.9.0-py3-none-any.whl (8.8 kB)
+Collecting mypy-extensions>=0.3.0 (from typing-inspect<1,>=0.4.0->dataclasses-json>=0.0.25->pygltflib==1.16.0)
+  Downloading mypy_extensions-1.1.0-py3-none-any.whl (5.0 kB)
+Requirement already satisfied: typing-extensions>=3.7.4 in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from typing-inspect<1,>=0.4.0->dataclasses-json>=0.0.25->pygltflib==1.16.0) (4.16.0)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.0.0->quadrants==1.2.0)
+  Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Collecting pydantic-core==2.46.4 (from pydantic>=2.0.0->quadrants==1.2.0)
+  Downloading pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 89.0 MB/s  0:00:00
+Collecting typing-inspection>=0.4.2 (from pydantic>=2.0.0->quadrants==1.2.0)
+  Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Collecting six>=1.5 (from python-dateutil->pycollada==0.9.3)
+  Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=1.0.0->quadrants==1.2.0)
+  Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=1.0.0->quadrants==1.2.0)
+  Downloading pygments-2.20.0-py3-none-any.whl (1.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 87.8 MB/s  0:00:00
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=1.0.0->quadrants==1.2.0)
+  Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+INFO: pip is looking at multiple versions of scipy to determine which version is compatible with other requirements. This could take a while.
+Collecting scipy>=1.11.4 (from scikit-image==0.25.2)
+  Downloading scipy-1.17.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.2/35.2 MB 88.2 MB/s  0:00:00
+Collecting wrapt<3,>=1.10 (from deprecated->pygltflib==1.16.0)
+  Downloading wrapt-2.3.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (172 kB)
+Requirement already satisfied: fsspec in ./radeon-oneloop-env/rocm721-py312/lib/python3.12/site-packages (from etils[epath]->mujoco==3.11.0) (2026.7.0)
+Collecting zipp (from etils[epath]->mujoco==3.11.0)
+  Downloading zipp-4.1.0-py3-none-any.whl (10 kB)
+Building wheels for collected packages: pygltflib
+  Building wheel for pygltflib (pyproject.toml): started
+  Building wheel for pygltflib (pyproject.toml): finished with status 'done'
+  Created wheel for pygltflib: filename=pygltflib-1.16.0-py3-none-any.whl size=26818 sha256=6aa572398ad6d9500a1d376b543a9c37ee4dbd43d64af7c244d61e65ba856afc
+  Stored in directory: /root/.cache/pip/wheels/d7/bf/ce/7af3e74b69678b8e9d0f112d26f799e5c4c45606f9eb31f583
+Successfully built pygltflib
+Installing collected packages: z3-solver, PyOpenGL, py-cpuinfo, glfw, DracoPy, zipp, wrapt, typing-inspection, trimesh, tqdm, tifffile, tetgen, tenacity, six, scipy, rtree, pyyaml, python-dotenv, pysplashsurf, pyparsing, pygments, pyglet, pydantic-core, pycparser, psutil, pillow, OpenEXR, opencv-python-headless, mypy-extensions, mdurl, marshmallow, llvmlite, lazy-loader, kiwisolver, imageio_ffmpeg, frozendict, freetype-py, fonttools, fast_simplification, etils, dill, decorator, Cython, cycler, contourpy, colorama, coacd, av, annotated-types, absl-py, xacro, typing-inspect, python-dateutil, pydantic, proglog, plotly, numba, markdown-it-py, libigl, imageio, deprecated, cffi, scikit-image, rich, PyGEL3D, pycollada, moviepy, matplotlib, dataclasses-json, quadrants, pygltflib, mujoco
+  Attempting uninstall: pillow
+    Found existing installation: pillow 12.3.0
+    Uninstalling pillow-12.3.0:
+      Successfully uninstalled pillow-12.3.0
+
+Successfully installed Cython-3.2.4 DracoPy-2.0.0 OpenEXR-3.4.13 PyGEL3D-0.6.1 PyOpenGL-3.1.10 absl-py-2.5.0 annotated-types-0.8.0 av-15.1.0 cffi-2.1.0 coacd-1.0.11 colorama-0.4.6 contourpy-1.3.3 cycler-0.12.1 dataclasses-json-0.6.7 decorator-5.3.1 deprecated-1.3.1 dill-0.4.1 etils-1.14.0 fast_simplification-0.1.13 fonttools-4.63.0 freetype-py-2.5.1 frozendict-2.4.7 glfw-2.10.2 imageio-2.37.4 imageio_ffmpeg-0.6.0 kiwisolver-1.5.0 lazy-loader-0.5 libigl-2.6.1 llvmlite-0.48.0 markdown-it-py-4.2.0 marshmallow-3.26.2 matplotlib-3.11.1 mdurl-0.1.2 moviepy-2.2.1 mujoco-3.11.0 mypy-extensions-1.1.0 numba-0.66.0 opencv-python-headless-4.11.0.86 pillow-11.3.0 plotly-5.24.1 proglog-0.1.12 psutil-7.2.2 py-cpuinfo-9.0.0 pycollada-0.9.3 pycparser-3.0 pydantic-2.13.4 pydantic-core-2.46.4 pyglet-2.1.16 pygltflib-1.16.0 pygments-2.20.0 pyparsing-3.3.2 pysplashsurf-0.14.1.0 python-dateutil-2.9.0.post0 python-dotenv-1.2.2 pyyaml-6.0.3 quadrants-1.2.0 rich-15.0.0 rtree-1.4.1 scikit-image-0.25.2 scipy-1.17.1 six-1.17.0 tenacity-9.1.4 tetgen-0.8.2 tifffile-2024.12.12 tqdm-4.70.0 trimesh-5.0.0 typing-inspect-0.9.0 typing-inspection-0.4.2 wrapt-2.3.0 xacro-2.1.1 z3-solver-4.15.4.0 zipp-4.1.0
+Processing ./radeon-oneloop-wheelhouse/rocm721-py312/genesis_world-1.3.1-py3-none-any.whl
+Installing collected packages: genesis-world
+Successfully installed genesis-world-1.3.1
+{"device_0": "AMD Radeon Graphics", "device_count": 1, "hip": "7.2.53211-e1a6bc5663", "matmul_finite": true, "matmul_shape": [1024, 1024], "torch": "2.9.1+rocm7.2.1.gitff65f5bc"}
+[38;5;159m[Genesis] [15:51:24] [INFO] [38;5;121m╭───────────────────────────────────────────────╮[0m[38;5;159m[0m
+[38;5;159m[Genesis] [15:51:24] [INFO] [38;5;121m│┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈[0m[38;5;159m [38;5;121m[1m[3mGenesis[0m[38;5;159m [38;5;121m┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈│[0m[38;5;159m[0m
+[38;5;159m[Genesis] [15:51:24] [INFO] [38;5;121m╰───────────────────────────────────────────────╯[0m[38;5;159m[0m
+[38;5;159m[Genesis] [15:51:25] [INFO] Running on [38;5;121m[4m[AMD Radeon Graphics][0m[38;5;159m with backend [38;5;121m[4mgs.amdgpu[0m[38;5;159m. Device memory: [38;5;121m[4m47.98[0m[38;5;159m GB.[0m
+[38;5;159m[Genesis] [15:51:25] [INFO] 🚀 Genesis initialized. 🔖 version: [38;5;121m[4m1.3.1[0m[38;5;159m, 🎨 theme: [38;5;121m[4mdark[0m[38;5;159m, 🌱 seed: [38;5;121m[4m20260803[0m[38;5;159m, 🐛 debug: [38;5;121m[4mFalse[0m[38;5;159m, 📏 precision: [38;5;121m[4m32[0m[38;5;159m, 🔥 performance: [38;5;121m[4mFalse[0m[38;5;159m, 💬 verbose: [38;5;121m[4mINFO[0m[38;5;159m[0m
+{"backend": "3", "device": "cuda:0", "genesis": "1.3.1"}
+[38;5;159m[Genesis] [15:51:25] [INFO] 💤 Exiting Genesis and caching compiled kernels...[0m
+==========
+VULKANINFO
+==========
+
+Vulkan Instance Version: 1.3.275
+
+
+Instance Extensions: count = 24
+-------------------------------
+VK_EXT_acquire_drm_display             : extension revision 1
+VK_EXT_acquire_xlib_display            : extension revision 1
+VK_EXT_debug_report                    : extension revision 10
+VK_EXT_debug_utils                     : extension revision 2
+VK_EXT_direct_mode_display             : extension revision 1
+VK_EXT_display_surface_counter         : extension revision 1
+VK_EXT_headless_surface                : extension revision 1
+VK_EXT_surface_maintenance1            : extension revision 1
+VK_EXT_swapchain_colorspace            : extension revision 5
+VK_KHR_device_group_creation           : extension revision 1
+VK_KHR_display                         : extension revision 23
+VK_KHR_external_fence_capabilities     : extension revision 1
+VK_KHR_external_memory_capabilities    : extension revision 1
+VK_KHR_external_semaphore_capabilities : extension revision 1
+VK_KHR_get_display_properties2         : extension revision 1
+VK_KHR_get_physical_device_properties2 : extension revision 2
+VK_KHR_get_surface_capabilities2       : extension revision 1
+VK_KHR_portability_enumeration         : extension revision 1
+VK_KHR_surface                         : extension revision 25
+VK_KHR_surface_protected_capabilities  : extension revision 1
+VK_KHR_wayland_surface                 : extension revision 6
+VK_KHR_xcb_surface                     : extension revision 6
+VK_KHR_xlib_surface                    : extension revision 6
+VK_LUNARG_direct_driver_loading        : extension revision 1
+
+Instance Layers: count = 3
+--------------------------
+VK_LAYER_INTEL_nullhw       INTEL NULL HW                1.1.73   version 1
+VK_LAYER_MESA_device_select Linux device selection layer 1.4.303  version 1
+VK_LAYER_MESA_overlay       Mesa Overlay layer           1.4.303  version 1
+
+Devices:
+========
+GPU0:
+	apiVersion         = 1.4.318
+	driverVersion      = 25.2.8
+	vendorID           = 0x1002
+	deviceID           = 0x744b
+	deviceType         = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
+	deviceName         = AMD Radeon Graphics (RADV NAVI31)
+	driverID           = DRIVER_ID_MESA_RADV
+	driverName         = radv
+	driverInfo         = Mesa 25.2.8-0ubuntu0.24.04.1
+	conformanceVersion = 1.4.0.0
+	deviceUUID         = 00000000-6300-0000-0000-000000000000
+	driverUUID         = 414d442d-4d45-5341-2d44-525600000000
+GPU1:
+	apiVersion         = 1.4.318
+	driverVersion      = 25.2.8
+	vendorID           = 0x10005
+	deviceID           = 0x0000
+	deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+	deviceName         = llvmpipe (LLVM 20.1.2, 256 bits)
+	driverID           = DRIVER_ID_MESA_LLVMPIPE
+	driverName         = llvmpipe
+	driverInfo         = Mesa 25.2.8-0ubuntu0.24.04.1 (LLVM 20.1.2)
+	conformanceVersion = 1.3.1.1
+	deviceUUID         = 6d657361-3235-2e32-2e38-2d3075627500
+	driverUUID         = 6c6c766d-7069-7065-5555-494400000000
+environment bootstrap passed: /root/radeon-oneloop-runs/environment/20260803T154917Z_bootstrap_rocm721

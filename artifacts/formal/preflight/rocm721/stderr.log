@@ -1,0 +1,3 @@
+W: Failed to fetch http://compute-artifactory.amd.com/artifactory/list/rocm-osdb-24.04-deb/dists/compute-rocm-rel-7.2/InRelease  Something wicked happened resolving 'compute-artifactory.amd.com:http' (-5 - No address associated with hostname)
+W: Some index files failed to download. They have been ignored, or old ones used instead.
+'DISPLAY' environment variable not set... skipping surface info
