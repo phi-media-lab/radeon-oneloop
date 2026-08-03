@@ -206,7 +206,7 @@ def main() -> None:
         "--output", type=Path, default=Path("output/video/radeon-oneloop-demo.mp4")
     )
     parser.add_argument("--voice", default="Samantha")
-    parser.add_argument("--rate", type=int, default=145)
+    parser.add_argument("--rate", type=int, default=260)
     args = parser.parse_args()
 
     for executable in ("say", "ffmpeg", "ffprobe"):
