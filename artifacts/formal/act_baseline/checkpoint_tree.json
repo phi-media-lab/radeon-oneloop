@@ -1,0 +1,42 @@
+{
+  "schema_version": "radeon_oneloop.artifact_tree.v1",
+  "root": "/root/radeon-oneloop-runs/artifacts/act-baseline-formal-5146562/checkpoints/010000/pretrained_model",
+  "tree_sha256": "7c8f2089c2f9ff5632ab1272754bdece46e30280ffce6c8ecde850956429dc79",
+  "files": [
+    {
+      "path": "config.json",
+      "bytes": 1678,
+      "sha256": "8c8ffc97280e1eb86b7447eaf34c816a290684464ac0df2036bcd8115f714cff"
+    },
+    {
+      "path": "model.safetensors",
+      "bytes": 206748912,
+      "sha256": "e498acc98fe14d58a92728ad06004b5830aa488bf72ab833fa21b8d3005ec8ff"
+    },
+    {
+      "path": "policy_postprocessor.json",
+      "bytes": 661,
+      "sha256": "bd961e39cbfdcb373975ea807822294934758c93ee3ff5e6e764c2615d8a8c56"
+    },
+    {
+      "path": "policy_postprocessor_step_0_unnormalizer_processor.safetensors",
+      "bytes": 4488,
+      "sha256": "7fe7dc379e20e83af71abab72d1156f1956ae86e0be09505712a5b9e21cb3930"
+    },
+    {
+      "path": "policy_preprocessor.json",
+      "bytes": 1337,
+      "sha256": "9457447d06a84bae30316194774a7e3632ba062de5bd01402f024660137d1f19"
+    },
+    {
+      "path": "policy_preprocessor_step_3_normalizer_processor.safetensors",
+      "bytes": 4488,
+      "sha256": "7fe7dc379e20e83af71abab72d1156f1956ae86e0be09505712a5b9e21cb3930"
+    },
+    {
+      "path": "train_config.json",
+      "bytes": 6005,
+      "sha256": "54d6d1e42a41d41f2f6e7d3977192b6400194652b8b87ea19827c0bbe39247ab"
+    }
+  ]
+}

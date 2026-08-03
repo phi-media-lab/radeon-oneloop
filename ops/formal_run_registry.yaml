@@ -41,3 +41,43 @@ runs:
       - non_render_step_p99_5.2171_ms
     excluded_claims:
       - task_success
+      - attached_hand_camera_visual_fidelity
+  - id: 20260803T173527Z_genesis_smoke_74c95c1_20260803
+    role: genesis_camera_corrected
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: 74c95c1c7f67d4f62121337a2b6889dcb2cf20e2
+    config_sha256: cf56fb57f768678d757592e8479734d2e3de6aac3e50258a623fb45a9e2aec48
+    dataset_sha256: null
+    seed: 20260803
+    checkpoint_sha256: null
+    evidence: artifacts/formal/genesis_camera_corrected
+    accepted_claims:
+      - genesis_amdgpu_scene_build_and_1000_steps
+      - corrected_front_and_attached_hand_camera_views
+      - two_480x640_rgb_observations_and_12_value_state
+      - all_step_p50_4.2743_ms
+      - all_step_p95_5.0172_ms
+      - all_step_p99_7.0204_ms
+    excluded_claims:
+      - task_success
+  - id: 20260803T160720Z_act_train_5146562_20260803
+    role: act_baseline
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: 51465620ff59f670a2537bc47637ebe2d808dbe6
+    config_sha256: aad14a2fe7187bf045025c761fc658dc6ffde19cf699c6ad57bd8e0fc39bb674
+    dataset_sha256: ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf
+    seed: 20260803
+    checkpoint_sha256: 7c8f2089c2f9ff5632ab1272754bdece46e30280ffce6c8ecde850956429dc79
+    evidence: artifacts/formal/act_baseline
+    accepted_claims:
+      - uniform_act_training_10000_updates
+      - final_checkpoint_selected_at_predeclared_step_10000
+      - training_wall_time_and_loss
+      - external_gpu_utilization_and_vram_samples
+    excluded_claims:
+      - task_success
+      - generalization
