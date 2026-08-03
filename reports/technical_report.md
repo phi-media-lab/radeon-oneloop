@@ -73,6 +73,12 @@ The formal host exposes one ROCm agent and one PyTorch device:
 | VRAM | 51,522,830,336 bytes (47.98 GiB) |
 | Visible accelerator count | 1 |
 
+PyTorch uses its CUDA-compatible Python namespace for ROCm devices. Therefore
+Genesis/PyTorch logs can display `cuda:0` even though the underlying runtime is
+HIP. The simultaneous `torch.version.hip`, `gfx1100`, AMD device name, ROCm
+UID and dependency audit establish that this is the Radeon device; the
+bootstrap rejects NVIDIA packages and no CUDA runtime is present.
+
 The same device executes:
 
 1. Genesis scene build, rigid-body stepping and camera rendering;

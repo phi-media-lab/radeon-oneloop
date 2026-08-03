@@ -91,6 +91,12 @@ Completed platform evidence already establishes:
 - a 1,000-step dual-arm Genesis run with two 480×640 RGB observations; and
 - median / p95 / p99 non-render simulation steps of 4.02 / 4.58 / 5.22 ms.
 
+PyTorch intentionally exposes ROCm tensors through its CUDA-compatible Python
+API, so logs may print `cuda:0` or configs may say `device: cuda`. In this
+profile that string identifies the single HIP-backed Radeon device: the same
+records show `torch.version.hip`, `gfx1100`, the AMD device name and Radeon GPU
+UID. No NVIDIA driver, CUDA runtime or NVIDIA package is installed.
+
 The scripted Genesis sweep is an environment, control, and observation test;
 it is not counted as a handover success. Likewise, the action-reconstruction
 diagnostic uses deterministic training-set frames and is not a validation
