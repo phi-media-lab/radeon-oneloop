@@ -1,0 +1,12 @@
+schema_version: 1
+experiment: act_phase_aware
+formal_profile: formal_radeon_only
+dataset_registry: data/registry.yaml
+method:
+  policy_family: ACT
+  phase_aware: true
+  intervention: phase_balanced_sampling
+reproducibility:
+  seed: 20260803
+  checkpoint_selection_rule: fixed_validation_seeds
+status: scaffold

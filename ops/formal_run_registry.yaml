@@ -1,0 +1,4 @@
+schema_version: 1
+formal_host: radeon-c
+formal_gpu: GPU0
+runs: []

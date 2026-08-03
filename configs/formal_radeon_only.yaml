@@ -1,0 +1,23 @@
+schema_version: 1
+profile: formal_radeon_only
+formal_host: radeon-c
+accelerator:
+  vendor: AMD
+  family: Radeon
+  gfx_target: gfx1100
+  expected_device_count: 1
+backends:
+  simulation: genesis_amdgpu
+  policy: pytorch_rocm
+  gaussian: vksplat_vulkan_radv
+cpu_edge:
+  accelerator_inference_allowed: false
+forbidden_formal_sources:
+  - radeon-f
+  - amd
+  - phi-amd-work
+fail_closed:
+  reject_cuda: true
+  reject_software_renderer: true
+  reject_device_count_mismatch: true
+  require_rocm_vulkan_identity_match: true

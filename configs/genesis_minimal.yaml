@@ -1,0 +1,11 @@
+schema_version: 1
+environment: so101_bimanual_handover
+formal_profile: formal_radeon_only
+backend: amdgpu
+headless: true
+task:
+  arms: 2
+  fixed_policy_cameras: 2
+  scripted_smoke: true
+  large_scale_domain_randomization: false
+status: scaffold

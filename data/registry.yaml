@@ -1,0 +1,9 @@
+schema_version: 1
+datasets: []
+phase_vocabulary:
+  - approach_and_grasp
+  - lift_and_align
+  - handover
+  - receive_and_transfer
+  - place_and_release
+status: scaffold

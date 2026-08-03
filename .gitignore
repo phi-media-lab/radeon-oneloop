@@ -1,0 +1,34 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Local data and generated artifacts are referenced by manifests, not committed.
+data/raw/
+data/derived/
+runs/
+artifacts/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.ply
+*.spz
+*.rad
+*.mp4
+
+# Secrets and host-local configuration.
+*.pem
+*.key
+auth.json
+secrets/

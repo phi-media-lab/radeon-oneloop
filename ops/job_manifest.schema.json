@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/phi-media-lab/radeon-oneloop/schemas/job-manifest.json",
+  "title": "Radeon OneLoop job manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "job_id",
+    "host",
+    "formal",
+    "role",
+    "git_commit",
+    "config_hash",
+    "dataset_hash",
+    "seed",
+    "gfx_target",
+    "status"
+  ],
+  "properties": {
+    "job_id": {"type": "string", "minLength": 1},
+    "host": {"type": "string", "minLength": 1},
+    "formal": {"type": "boolean"},
+    "role": {
+      "type": "string",
+      "enum": [
+        "hardware_smoke",
+        "genesis_smoke",
+        "act_smoke",
+        "act_train",
+        "act_eval",
+        "gaussian_train",
+        "gaussian_render",
+        "real_eval",
+        "reproduction"
+      ]
+    },
+    "git_commit": {"type": "string", "minLength": 7},
+    "config_hash": {"type": "string", "minLength": 1},
+    "dataset_hash": {"type": ["string", "null"]},
+    "parent_checkpoint": {"type": ["string", "null"]},
+    "seed": {"type": "integer"},
+    "gpu_uid": {"type": ["string", "null"]},
+    "gfx_target": {"type": "string", "pattern": "^gfx[0-9a-z]+$"},
+    "status": {
+      "type": "string",
+      "enum": ["queued", "running", "done", "failed", "cancelled"]
+    },
+    "started_at": {"type": ["string", "null"], "format": "date-time"},
+    "finished_at": {"type": ["string", "null"], "format": "date-time"},
+    "artifact_dir": {"type": ["string", "null"]},
+    "notes": {"type": ["string", "null"]}
+  }
+}

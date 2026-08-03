@@ -1,0 +1,13 @@
+schema_version: 1
+experiment: calibrated_gaussian_workspace
+formal_profile: formal_radeon_only
+backend: vksplat_vulkan_radv
+representation: static_3dgs
+policy_observation_dependency: false
+required_artifacts:
+  - dataset_hash
+  - calibration_hash
+  - splat_hash
+  - train_metrics
+  - render_metrics
+status: scaffold
