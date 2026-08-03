@@ -229,6 +229,8 @@ def main() -> None:
     phase_hash = phase["checkpoint"]["tree_sha256"]
     base_l1 = base_recon["aggregate_equal_role_stratified_samples"]["normalized_chunk_l1"]["mean"]
     phase_l1 = phase_recon["aggregate_equal_role_stratified_samples"]["normalized_chunk_l1"]["mean"]
+    base_correction_l1 = base_recon["roles"]["correction"]["normalized_chunk_l1"]["mean"]
+    phase_correction_l1 = phase_recon["roles"]["correction"]["normalized_chunk_l1"]["mean"]
     correction = targets["summary"]["roles"]["correction"]
 
     work = args.work_dir.resolve()
@@ -325,12 +327,12 @@ def main() -> None:
             "title": "Full chunks on Radeon, queued actions at the edge",
             "bullets": [
                 f"Full 100-action chunk p50: {base_latency['chunk_generation']['p50_ms']:.2f} ms · {phase_latency['chunk_generation']['p50_ms']:.2f} ms",
-                f"Full chunk p95: {base_latency['chunk_generation']['p95_ms']:.2f} ms · {phase_latency['chunk_generation']['p95_ms']:.2f} ms",
+                f"Correction-frame normalized chunk L1: {base_correction_l1:.4f} · {phase_correction_l1:.4f}",
                 f"Stratified train-frame chunk L1: {base_l1:.4f} · {phase_l1:.4f}",
             ],
             "metric": "200 synchronized calls after warm-up",
             "image_path": figures / "formal_inference_latency.png",
-            "narration": f"For runtime measurement, one real dataset observation drives full one-hundred-action chunk generation. After warm-up, two hundred synchronized calls give median latency {base_latency['chunk_generation']['p50_ms']:.2f} milliseconds for baseline and {phase_latency['chunk_generation']['p50_ms']:.2f} milliseconds for phase-aware ACT. Their p ninety-five values are {base_latency['chunk_generation']['p95_ms']:.2f} and {phase_latency['chunk_generation']['p95_ms']:.2f} milliseconds. Queued actions dispatch without regenerating a chunk. The stratified normalized chunk L one values, {base_l1:.4f} and {phase_l1:.4f}, use training frames and are diagnostics only, never task-success estimates.",
+            "narration": f"For runtime measurement, one real dataset observation drives full one-hundred-action chunk generation. After warm-up, two hundred synchronized calls give median latency {base_latency['chunk_generation']['p50_ms']:.2f} milliseconds for baseline and {phase_latency['chunk_generation']['p50_ms']:.2f} milliseconds for phase-aware ACT. Queued actions dispatch without regenerating a chunk. On sampled correction frames, normalized chunk L one is {base_correction_l1:.4f} versus {phase_correction_l1:.4f}; the equal-role stratified values are {base_l1:.4f} and {phase_l1:.4f}. These use training frames and are diagnostics only, never task-success estimates.",
         },
         {
             "kicker": "Fail-closed deployment",
