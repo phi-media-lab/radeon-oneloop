@@ -17,6 +17,7 @@ data = ["pandas>=2.2,<3", "pyarrow>=17,<24"]
 test = ["pytest>=8.3,<9"]
 
 [project.scripts]
+oneloop-hash-tree = "radeon_oneloop.artifact_hash:main"
 oneloop-build-targets = "radeon_oneloop.phase_targets:main"
 oneloop-train-command = "radeon_oneloop.train_command:main"
 oneloop-merge-data = "radeon_oneloop.data_merge:main"
