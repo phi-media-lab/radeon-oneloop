@@ -9,6 +9,7 @@ import os
 import shlex
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -148,7 +149,33 @@ def main() -> None:
         args.command_json.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
     print(shlex.join(command), flush=True)
     if args.execute:
-        raise SystemExit(subprocess.run(command, check=False).returncode)
+        started = time.perf_counter()
+        completed = subprocess.run(command, check=False)
+        elapsed = time.perf_counter() - started
+        checkpoints = sorted(
+            str(path.relative_to(args.output_dir))
+            for path in args.output_dir.rglob("*")
+            if path.is_file() and "checkpoint" in str(path).lower()
+        ) if args.output_dir.exists() else []
+        metrics = {
+            "schema_version": "radeon_oneloop.act_train.v1",
+            "experiment": config["experiment"],
+            "phase_aware": bool(config["method"]["phase_aware"]),
+            "configured_steps": int(config["training"]["steps"]),
+            "elapsed_seconds": elapsed,
+            "peak_vram_bytes": None,
+            "peak_vram_note": "Collected by the external ROCm sampler for formal runs.",
+            "exit_code": completed.returncode,
+            "output_dir": str(args.output_dir.resolve()),
+            "checkpoint_files": checkpoints,
+        }
+        run_dir = os.environ.get("ONELOOP_RUN_DIR")
+        if run_dir:
+            Path(run_dir, "metrics.json").write_text(
+                json.dumps(metrics, indent=2) + "\n", encoding="utf-8"
+            )
+        print(json.dumps(metrics, indent=2), flush=True)
+        raise SystemExit(completed.returncode)
 
 
 if __name__ == "__main__":

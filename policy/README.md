@@ -23,3 +23,7 @@ oneloop-train-command --config configs/act_baseline.yaml \
   --paired-config configs/act_phase_aware.yaml --dataset-root DATA \
   --output-dir RUN/output
 ```
+
+Before the 10,000-step formal pair, run the two-step shadow pair using
+`configs/act_baseline_smoke.yaml` and `configs/act_phase_aware_smoke.yaml`.
+Smoke checkpoints are permanently excluded from formal lineage.

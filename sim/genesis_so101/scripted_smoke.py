@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import time
 from pathlib import Path
 
@@ -80,9 +81,12 @@ def main() -> None:
             "Joint-sweep smoke validates the scene and contracts; it is not a handover evaluation."
         ),
     }
-    (args.output / "metrics.json").write_text(
-        json.dumps(report, indent=2) + "\n", encoding="utf-8"
-    )
+    payload = json.dumps(report, indent=2) + "\n"
+    (args.output / "metrics.json").write_text(payload, encoding="utf-8")
+    if os.environ.get("ONELOOP_RUN_DIR"):
+        (Path(os.environ["ONELOOP_RUN_DIR"]) / "metrics.json").write_text(
+            payload, encoding="utf-8"
+        )
     print(json.dumps(report, indent=2))
 
 

@@ -1,0 +1,39 @@
+schema_version: 1
+experiment: act_phase_aware_smoke
+formal_profile: shadow_only
+dataset_registry: data/registry.yaml
+dataset:
+  repo_id: phi-media-lab/radeon-oneloop-formal-handover-v1
+  video_backend: pyav
+policy:
+  family: ACT
+  device: cuda
+  architecture: lerobot_act_default
+optimizer:
+  source: lerobot_act_default
+training:
+  batch_size: 2
+  steps: 2
+  num_workers: 0
+  log_freq: 1
+  save_freq: 1
+method:
+  policy_family: ACT
+  phase_aware: true
+  intervention: per_frame_loss_weighting
+  targets_relative_path: oneloop/phase_targets.parquet
+  weights:
+    bc_demonstration: 1.0
+    success_policy: 1.0
+    failed_policy_prefix: 0.05
+    recovery: 4.0
+    correction: 4.0
+    failed_policy_suffix: 0.05
+    failed_policy_no_correction: 0.0
+reproducibility:
+  seed: 20260803
+  checkpoint_selection_rule: smoke_only
+  candidate_steps: [2]
+lineage:
+  parent_checkpoint: null
+status: shadow_only

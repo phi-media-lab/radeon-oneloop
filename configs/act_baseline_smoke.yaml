@@ -1,0 +1,29 @@
+schema_version: 1
+experiment: act_baseline_smoke
+formal_profile: shadow_only
+dataset_registry: data/registry.yaml
+dataset:
+  repo_id: phi-media-lab/radeon-oneloop-formal-handover-v1
+  video_backend: pyav
+policy:
+  family: ACT
+  device: cuda
+  architecture: lerobot_act_default
+optimizer:
+  source: lerobot_act_default
+training:
+  batch_size: 2
+  steps: 2
+  num_workers: 0
+  log_freq: 1
+  save_freq: 1
+method:
+  policy_family: ACT
+  phase_aware: false
+reproducibility:
+  seed: 20260803
+  checkpoint_selection_rule: smoke_only
+  candidate_steps: [2]
+lineage:
+  parent_checkpoint: null
+status: shadow_only

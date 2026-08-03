@@ -81,6 +81,7 @@ class SO101HandoverTask:
             "observation.state": np.asarray(left + right, dtype=np.float32)
         }
         if render:
+            self.handles.hand_camera.move_to_attach()
             front_rgb, _, _, _ = self.handles.front_camera.render(rgb=True)
             hand_rgb, _, _, _ = self.handles.hand_camera.render(rgb=True)
             observation[CAMERA_KEYS[0]] = self._array(front_rgb)
@@ -135,11 +136,11 @@ def build(
         surface=gs.surfaces.Default(color=(0.85, 0.12, 0.12, 1.0)),
     )
     front_camera = scene.add_camera(
-        res=(480, 640), pos=(0.85, -0.85, 0.95),
+        res=(640, 480), pos=(0.85, -0.85, 0.95),
         lookat=(0.0, 0.0, 0.50), fov=55, GUI=False,
     )
     hand_camera = scene.add_camera(
-        res=(480, 640), pos=(0.0, -0.60, 0.72),
+        res=(640, 480), pos=(0.0, -0.60, 0.72),
         lookat=(0.0, 0.0, 0.48), fov=65, GUI=False,
     )
     scene.build()
@@ -152,4 +153,3 @@ def build(
     task = SO101HandoverTask(handles)
     task.reset()
     return task, handles
-

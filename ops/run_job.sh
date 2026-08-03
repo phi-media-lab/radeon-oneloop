@@ -19,6 +19,7 @@ shift
 
 repo_root=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
 commit=$(git -C "$repo_root" rev-parse HEAD)
+cd "$repo_root"
 config_hash=$(sha256sum "$config" | awk '{print $1}')
 seed=${ONELOOP_SEED:-20260803}
 run_root=${ONELOOP_RUN_ROOT:-/root/radeon-oneloop-runs/jobs}
@@ -90,8 +91,26 @@ open(path, "w").write(json.dumps(value, indent=2) + "\n")
 PY
 
 set +e
+sampler_stop="$run_dir/.sampler_stop"
+(
+  printf 'timestamp_utc\tdevice_sample\n'
+  while [[ ! -e $sampler_stop ]]; do
+    printf '%s\t' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    rocm-smi --showmemuse --showuse --csv 2>/dev/null | tail -n +2 | tr '\n' ';'
+    printf '\n'
+    sleep 1
+  done
+) > "$run_dir/gpu_samples.tsv" &
+sampler_pid=$!
+stop_sampler() {
+  touch "$sampler_stop"
+  wait "$sampler_pid" 2>/dev/null || true
+}
+trap stop_sampler EXIT INT TERM
 "$@" > >(tee "$run_dir/stdout.log") 2> >(tee "$run_dir/stderr.log" >&2)
 exit_code=$?
+stop_sampler
+trap - EXIT INT TERM
 set -e
 finished=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 status=failed

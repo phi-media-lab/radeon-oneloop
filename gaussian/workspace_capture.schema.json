@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/phi-media-lab/radeon-oneloop/schemas/workspace-capture.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["capture_id", "camera", "images", "colmap_model", "scale_anchor"],
+  "properties": {
+    "capture_id": {"type": "string", "minLength": 1},
+    "camera": {"type": "string", "minLength": 1},
+    "images": {"type": "integer", "minimum": 8},
+    "colmap_model": {"type": "string", "enum": ["PINHOLE", "SIMPLE_PINHOLE", "OPENCV"]},
+    "scale_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "distance_m"],
+      "properties": {
+        "description": {"type": "string", "minLength": 1},
+        "distance_m": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "notes": {"type": ["string", "null"]}
+  }
+}

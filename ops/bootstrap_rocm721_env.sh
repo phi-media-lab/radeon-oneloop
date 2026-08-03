@@ -60,9 +60,14 @@ pip_bin="$install_root/bin/pip"
 
 cat > "$run_dir/constraints.txt" <<'EOF'
 numpy==1.26.4
+tifffile==2024.12.12
+scikit-image==0.25.2
 EOF
 
-download_wheel() {
+pip_index='https://pypi.tuna.tsinghua.edu.cn/simple'
+pip_host='pypi.tuna.tsinghua.edu.cn'
+
+download_artifact() {
   local output_name=$1
   local source_url=$2
   if [[ ! -s "$wheel_root/$output_name" ]]; then
@@ -71,27 +76,73 @@ download_wheel() {
   fi
 }
 
-download_wheel \
+download_artifact \
   torch-2.9.1+rocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl \
   'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torch-2.9.1%2Brocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl'
-download_wheel \
+download_artifact \
   torchvision-0.24.0+rocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl \
   'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torchvision-0.24.0%2Brocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl'
-download_wheel \
+download_artifact \
   torchaudio-2.9.0+rocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl \
   'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torchaudio-2.9.0%2Brocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl'
-download_wheel \
+download_artifact \
   triton-3.5.1+rocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl \
   'https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/triton-3.5.1%2Brocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl'
 
+download_artifact \
+  genesis-world-v1.3.1.tar.gz \
+  'https://codeload.github.com/Genesis-Embodied-AI/genesis-world/tar.gz/refs/tags/v1.3.1'
+printf '%s  %s\n' \
+  bd09210ce33b223ee452170bdb33a13d9a30ed91f0f45de87def989111f581d1 \
+  "$wheel_root/genesis-world-v1.3.1.tar.gz" | sha256sum -c -
+
 "$pip_bin" install -c "$run_dir/constraints.txt" \
+  -i "$pip_index" --trusted-host "$pip_host" \
   "$wheel_root/torch-2.9.1+rocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl" \
   "$wheel_root/torchvision-0.24.0+rocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl" \
   "$wheel_root/torchaudio-2.9.0+rocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl" \
   "$wheel_root/triton-3.5.1+rocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl"
 
 "$pip_bin" install -c "$run_dir/constraints.txt" \
-  'https://codeload.github.com/Genesis-Embodied-AI/genesis-world/tar.gz/refs/tags/v1.3.1'
+  -i "$pip_index" --trusted-host "$pip_host" \
+  'Cython==3.2.4' \
+  'quadrants==1.2.0' \
+  'psutil==7.2.2' \
+  'py-cpuinfo==9.0.0' \
+  'frozendict==2.4.7' \
+  'trimesh==5.0.0' \
+  'xacro==2.1.1' \
+  'pyglet==2.1.16' \
+  'freetype-py==2.5.1' \
+  'PyOpenGL==3.1.10' \
+  'numba==0.66.0' \
+  'opencv-python-headless==4.11.0.86' \
+  'scikit-image==0.25.2' \
+  'coacd==1.0.11' \
+  'rtree==1.4.1' \
+  'z3-solver==4.15.4.0' \
+  'OpenEXR==3.4.13' \
+  'fast_simplification==0.1.13' \
+  'mujoco==3.11.0' \
+  'PyGEL3D==0.6.1' \
+  'libigl==2.6.1' \
+  'pycollada==0.9.3' \
+  'pygltflib==1.16.0' \
+  'DracoPy==2.0.0' \
+  'tetgen==0.8.2' \
+  'pysplashsurf==0.14.1.0' \
+  'av==18.0.0' \
+  'moviepy==2.2.1' \
+  'matplotlib==3.11.1' \
+  'tifffile==2024.12.12'
+
+"$pip_bin" install -c "$run_dir/constraints.txt" --no-deps --no-build-isolation \
+  "$wheel_root/genesis-world-v1.3.1.tar.gz"
+
+if "$pip_bin" list --format=freeze | grep -Eq '^(nvidia-|gs-madrona==)'; then
+  printf '%s\n' 'prohibited NVIDIA/Madrona dependency detected in Radeon environment' >&2
+  exit 70
+fi
 
 export TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1
 "$python_bin" - <<'PY' | tee "$run_dir/torch_smoke.json"

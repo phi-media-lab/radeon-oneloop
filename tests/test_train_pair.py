@@ -29,6 +29,5 @@ class TrainPairTests(unittest.TestCase):
         with self.assertRaises(TrainingConfigError):
             assert_fair_pair(baseline, phase)
 
-
 if __name__ == "__main__":
     unittest.main()
