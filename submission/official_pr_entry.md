@@ -49,9 +49,9 @@ API, or historical MI300X checkpoint participates in the formal lineage.
 ## Links
 
 - Source and reproduction: https://github.com/phi-media-lab/radeon-oneloop
-- Technical report: https://github.com/phi-media-lab/radeon-oneloop/blob/main/reports/technical_report.pdf
+- Technical report: https://github.com/phi-media-lab/radeon-oneloop/blob/main/output/pdf/radeon-oneloop-technical-report.pdf
 - Formal evidence: https://github.com/phi-media-lab/radeon-oneloop/tree/main/artifacts/formal
-- Demo video: `PENDING_PUBLIC_VIDEO_URL`
+- Demo video: https://github.com/phi-media-lab/radeon-oneloop/releases/download/v1.0.0/radeon-oneloop-demo.mp4
 
 ## Reproduction entry point
 
