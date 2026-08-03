@@ -179,6 +179,8 @@ labeled as a failed policy prefix.
 | Failed policy prefix | 11,908 | 0.05 | 0.28% |
 | Human correction | 15,906 | 4.00 | 29.61% |
 
+![Frame share versus normalized gradient-mass share in the frozen phase targets.](figures/phase_weighting.png)
+
 Weights are normalized over positive frames so the positive mean is one. This
 keeps the overall loss scale comparable while changing which frames dominate
 the gradient. The sidecar hash is:
@@ -331,6 +333,8 @@ supervised physical rollouts.
 | Peak sampled VRAM | Pending | Pending |
 | Step-10,000 checkpoint SHA-256 | Pending | Pending |
 
+![Matched formal ACT training loss on the single Radeon.](figures/formal_training_loss.png)
+
 ### 8.3 Inference and reconstruction
 
 | Metric | Baseline ACT | Phase-aware ACT |
@@ -340,6 +344,10 @@ supervised physical rollouts.
 | Queued action dispatch, median | Pending | Pending |
 | Peak allocated inference VRAM | Pending | Pending |
 | Stratified normalized action L1 | Pending | Pending |
+
+![Synchronized full-chunk and queued-action latency on the single Radeon.](figures/formal_inference_latency.png)
+
+![Role-stratified train-frame reconstruction; lower is better, but this is not a task-success metric.](figures/formal_reconstruction.png)
 
 No value in these tables will be filled from a shadow host, smoke checkpoint,
 MI300X, APU/NPU, post-hoc checkpoint choice or unregistered directory.
