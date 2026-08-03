@@ -88,7 +88,10 @@ def _episode_plan(row: dict[str, Any]) -> tuple[str, list[Interval]]:
     success = bool(row.get("handover_success"))
     if success:
         return "success_policy", []
-    segments = row.get("segments") or {}
+    # Reviewed HIL v0 manifests stored intervals at the top level. The merged
+    # formal manifest normalizes them under ``segments``, while this fallback
+    # keeps the target builder safe for direct source audits.
+    segments = row.get("segments") or row
     intervals = []
     for name, role in (
         ("policy_prefix", "failed_policy_prefix"),
@@ -216,4 +219,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

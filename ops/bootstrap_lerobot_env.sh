@@ -8,7 +8,7 @@ log_root=${4:-/root/radeon-oneloop-runs/environment}
 
 lerobot_commit=d3bee432ab26bab857b232cebefdc57327060ea8
 lerobot_url="https://codeload.github.com/phi-media-lab/Evo-RL-Phi/tar.gz/$lerobot_commit"
-lerobot_archive_sha=13b11882d6f3ed5a55ee9461c8e21457afa24e32aa7318b17c2409af7a682c87
+lerobot_tree_sha=a8ed7c1d9245dbcb785f92fd64c76da1258a9fba9bba2ba68c11681e5d43ef6b
 archive="$source_root/Evo-RL-Phi-$lerobot_commit.tar.gz"
 checkout="$source_root/Evo-RL-Phi-$lerobot_commit"
 python_bin="$env_root/bin/python"
@@ -39,8 +39,36 @@ if [[ ! -s "$archive" ]]; then
   curl -fL --retry 5 --retry-delay 2 -o "$archive.part" "$lerobot_url"
   mv "$archive.part" "$archive"
 fi
-printf '%s  %s\n' "$lerobot_archive_sha" "$archive" \
-  | tee "$run_dir/lerobot_archive.sha256" | sha256sum -c -
+sha256sum "$archive" | tee "$run_dir/lerobot_archive.sha256"
+tree_result=$("$python_bin" - "$archive" <<'PY'
+import hashlib
+import sys
+import tarfile
+
+digest = hashlib.sha256()
+with tarfile.open(sys.argv[1], "r:gz") as archive:
+    members = []
+    for member in archive.getmembers():
+        parts = member.name.split("/", 1)
+        if len(parts) == 2 and parts[1]:
+            members.append((parts[1], member))
+    for path, member in sorted(members):
+        if member.isfile():
+            payload = archive.extractfile(member).read()
+            digest.update(
+                b"F\0" + path.encode() + b"\0"
+                + hashlib.sha256(payload).hexdigest().encode() + b"\0"
+                + oct(member.mode).encode() + b"\n"
+            )
+        elif member.issym():
+            digest.update(
+                b"L\0" + path.encode() + b"\0" + member.linkname.encode() + b"\n"
+            )
+print(digest.hexdigest(), len(members))
+PY
+)
+printf '%s\n' "$tree_result" | tee "$run_dir/lerobot_tree.sha256"
+[[ $tree_result == "$lerobot_tree_sha 878" ]]
 if [[ ! -d "$checkout" ]]; then
   extract_tmp=$(mktemp -d "$source_root/.lerobot-extract.XXXXXX")
   trap 'code=$?; if [[ -n "${extract_tmp:-}" && -d "$extract_tmp" ]]; then rm -rf "$extract_tmp"; fi; if [[ $code -ne 0 ]]; then touch "$run_dir/FAILED"; fi' EXIT

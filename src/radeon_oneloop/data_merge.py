@@ -209,6 +209,17 @@ def _source_manifest(source: Source, episodes: Any, episode_offset: int, frame_o
         new["source_kind"] = "hil"
         new["episode_index"] = new_index
         new["episode_id"] = f"episode_{new_index:06d}"
+        new["segments"] = {
+            name: new[name]
+            for name in (
+                "policy_prefix",
+                "recovery",
+                "correction",
+                "human_correction",
+                "policy_suffix",
+            )
+            if new.get(name)
+        }
         for field in ("dataset_from_index", "dataset_to_index"):
             if new.get(field) is not None:
                 new[field] = int(new[field]) + frame_offset
@@ -350,4 +361,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
