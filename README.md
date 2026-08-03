@@ -109,6 +109,31 @@ The inspected formal camera pair is published at
 [`artifacts/formal/genesis_camera_corrected/camera_pair.png`](artifacts/formal/genesis_camera_corrected/camera_pair.png),
 alongside its run manifest, raw timing metrics, GPU samples and hashes.
 
+## Formal result snapshot
+
+| Metric | Baseline ACT | Phase-aware ACT |
+|---|---:|---:|
+| Training time, 10,000 updates | 87.75 min | 87.68 min |
+| Mean sampled GPU use | 98.59% | 98.45% |
+| Full 100-action chunk, p50 / p95 | 18.11 / 46.84 ms | 18.55 / 45.73 ms |
+| Queued action dispatch, p50 | 1.233 ms | 1.233 ms |
+| Equal-role train-frame chunk L1 | 0.09177 | 0.10479 |
+| Correction-frame chunk L1 | 0.11957 | **0.11712** |
+
+Phase-aware ACT reduced the correction-frame chunk diagnostic by 2.05%, its
+intended target, while worsening the equal-role aggregate by 14.19% and the
+three non-correction roles. Even on corrections, first-action L1 worsened from
+0.09009 to 0.09626. This is evidence of a targeted tradeoff, not a blanket
+improvement. All reconstruction values use training frames; neither model has
+a new task-success or generalization claim.
+
+The final checkpoints are content-addressed as
+`7c8f2089…29dc79` (baseline) and `3ae18054…2721d4` (phase-aware).
+The full digests, raw logs and metrics live under
+[`artifacts/formal`](artifacts/formal). The English technical report is
+[`output/pdf/radeon-oneloop-technical-report.pdf`](output/pdf/radeon-oneloop-technical-report.pdf),
+and the public demo is attached to release `v1.0.0`.
+
 ## Reproduce
 
 ### 1. Validate the source tree

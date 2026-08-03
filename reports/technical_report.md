@@ -8,8 +8,8 @@
 
 **Formal profile:** one AMD Radeon `gfx1100`, ROCm 7.2.1
 
-**Report status:** formal ACT results pending; completed claims below are backed
-by immutable run records.
+**Report status:** complete; every result below is backed by a registered,
+immutable single-Radeon run record.
 
 ## Abstract
 
@@ -33,6 +33,14 @@ train-only, so this report separates training-set diagnostics from task
 success. A reviewed 37/45 real-robot result is included only as historical
 evidence for the inherited closed-loop system, never as performance of the new
 formal checkpoints.
+
+Under the predeclared step-10,000 rule, phase-aware ACT reduced normalized
+chunk L1 on sampled correction frames from 0.11957 to 0.11712 (2.05%), while
+the equal-role aggregate worsened from 0.09177 to 0.10479 (14.19%). This mixed
+train-frame diagnostic is consistent with reallocating capacity toward
+corrections, but it is neither validation nor task-success evidence. Full
+100-action chunk median latency was 18.11 ms for baseline and 18.55 ms for
+phase-aware ACT on the same Radeon.
 
 ## 1. Problem and motivation
 
@@ -327,11 +335,22 @@ supervised physical rollouts.
 
 | Metric | Baseline ACT | Phase-aware ACT |
 |---|---:|---:|
-| Updates | 10,000 (running) | Pending |
-| Training wall time | Pending | Pending |
-| Terminal training loss | Pending | Pending |
-| Peak sampled VRAM | Pending | Pending |
-| Step-10,000 checkpoint SHA-256 | Pending | Pending |
+| Updates | 10,000 | 10,000 |
+| Training wall time | 87.75 min | 87.68 min |
+| Terminal logged training loss | 0.113 | 0.134 |
+| Mean sampled GPU utilization | 98.59% | 98.45% |
+| Peak sampled VRAM allocation | 17% (≤ 8.16 GiB) | 17% (≤ 8.16 GiB) |
+| Step-10,000 checkpoint SHA-256 | `7c8f2089…29dc79` | `3ae18054…2721d4` |
+
+The complete artifact-tree digests are:
+
+```text
+baseline    7c8f2089c2f9ff5632ab1272754bdece46e30280ffce6c8ecde850956429dc79
+phase-aware 3ae1805441889adf3fcaa23ff45e79509f0be747619c2783227014bc162721d4
+```
+
+The logged losses are optimized under different frame-weight distributions.
+They document convergence but are not an accuracy ranking.
 
 ![Matched formal ACT training loss on the single Radeon.](figures/formal_training_loss.png)
 
@@ -339,18 +358,30 @@ supervised physical rollouts.
 
 | Metric | Baseline ACT | Phase-aware ACT |
 |---|---:|---:|
-| Full 100-action chunk, median | Pending | Pending |
-| Full chunk, p95 | Pending | Pending |
-| Queued action dispatch, median | Pending | Pending |
-| Peak allocated inference VRAM | Pending | Pending |
-| Stratified normalized action L1 | Pending | Pending |
+| Full 100-action chunk, median | 18.11 ms | 18.55 ms |
+| Full chunk, p95 | 46.84 ms | 45.73 ms |
+| Queued action dispatch, median | 1.233 ms | 1.233 ms |
+| Peak allocated inference VRAM | 377.8 MiB | 377.8 MiB |
+| Equal-role normalized chunk L1 | **0.09177** | 0.10479 |
+| Correction normalized chunk L1 | 0.11957 | **0.11712** |
+| Correction normalized first-action L1 | **0.09009** | 0.09626 |
 
 ![Synchronized full-chunk and queued-action latency on the single Radeon.](figures/formal_inference_latency.png)
 
 ![Role-stratified train-frame reconstruction; lower is better, but this is not a task-success metric.](figures/formal_reconstruction.png)
 
-No value in these tables will be filled from a shadow host, smoke checkpoint,
-MI300X, APU/NPU, post-hoc checkpoint choice or unregistered directory.
+### 8.4 Interpretation
+
+The phase-aware checkpoint improved the metric it explicitly emphasized:
+correction-frame chunk L1 decreased 2.05%. The cost is visible rather than
+hidden: the equal-role aggregate worsened 14.19%, demonstration L1 rose from
+0.09745 to 0.11187, successful-policy L1 from 0.07705 to 0.09213, and failed-
+prefix L1 from 0.07301 to 0.09805. Correction first-action L1 also worsened
+6.85%, so the small correction gain is distributed over the predicted chunk,
+not its immediate action. This supports a capacity-reallocation interpretation
+but does not establish better closed-loop recovery. No table value comes from
+a shadow host, smoke checkpoint, MI300X, APU/NPU, post-hoc checkpoint choice or
+unregistered directory.
 
 ## 9. Negative results and scope decisions
 

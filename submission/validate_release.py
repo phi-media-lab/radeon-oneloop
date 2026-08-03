@@ -89,6 +89,7 @@ def main() -> None:
 
     evidence_labels = [
         "genesis_camera_corrected",
+        "genesis_demo_video",
         "act_baseline",
         "act_phase_aware",
         "baseline_latency",

@@ -35,6 +35,11 @@ API, or historical MI300X checkpoint participates in the formal lineage.
   reviewed intervention/correction frames.
 - Fair 10,000-step baseline-versus-phase-aware ACT experiment with a
   predeclared final-step checkpoint rule.
+- Correction-frame normalized chunk L1 improved 2.05% (0.11957 → 0.11712),
+  while the equal-role aggregate worsened 14.19%; the tradeoff is reported
+  explicitly and is not relabeled as task success.
+- Full 100-action chunk median latency is 18.11 ms / 18.55 ms, with 1.233 ms
+  queued-action median for both checkpoints.
 - Dual-SO-101 Genesis environment with two 480×640 cameras and measured
   single-Radeon execution.
 - Fail-closed evidence launcher binding every result to GPU UID, Git commit,

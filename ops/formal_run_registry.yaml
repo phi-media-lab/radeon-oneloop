@@ -81,3 +81,111 @@ runs:
     excluded_claims:
       - task_success
       - generalization
+  - id: 20260803T173646Z_act_train_5146562_20260803
+    role: act_phase_aware
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: 51465620ff59f670a2537bc47637ebe2d808dbe6
+    config_sha256: c47d2a61eb9304cae5da6fdee4dab0bb7426ac9f74e71080162a8db897cfdafe
+    dataset_sha256: ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf
+    seed: 20260803
+    checkpoint_sha256: 3ae1805441889adf3fcaa23ff45e79509f0be747619c2783227014bc162721d4
+    evidence: artifacts/formal/act_phase_aware
+    accepted_claims:
+      - phase_aware_act_training_10000_updates
+      - all_178465_phase_weights_loaded_before_training
+      - final_checkpoint_selected_at_predeclared_step_10000
+      - training_wall_time_and_loss
+      - external_gpu_utilization_and_vram_samples
+    excluded_claims:
+      - task_success
+      - generalization
+  - id: 20260803T190542Z_genesis_smoke_e334c6c_20260803
+    role: genesis_demo_video
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: e334c6c0a1e47697aa437c9cc1c1f81041e0e84c
+    config_sha256: cf56fb57f768678d757592e8479734d2e3de6aac3e50258a623fb45a9e2aec48
+    dataset_sha256: null
+    seed: 20260803
+    checkpoint_sha256: null
+    evidence: artifacts/formal/genesis_demo_video
+    accepted_claims:
+      - formal_dual_camera_joint_sweep_video_120_frames_at_12_fps
+    excluded_claims:
+      - performance_metrics
+      - task_success
+  - id: 20260803T190707Z_act_eval_e334c6c_20260803
+    role: baseline_latency
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: e334c6c0a1e47697aa437c9cc1c1f81041e0e84c
+    config_sha256: aad14a2fe7187bf045025c761fc658dc6ffde19cf699c6ad57bd8e0fc39bb674
+    dataset_sha256: ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf
+    seed: 20260803
+    parent_checkpoint_sha256: 7c8f2089c2f9ff5632ab1272754bdece46e30280ffce6c8ecde850956429dc79
+    checkpoint_sha256: null
+    evidence: artifacts/formal/baseline_latency
+    accepted_claims:
+      - real_observation_full_chunk_latency_200_samples
+      - queued_action_dispatch_latency_99_samples
+      - peak_allocated_inference_vram
+    excluded_claims:
+      - task_success
+  - id: 20260803T190722Z_act_eval_e334c6c_20260803
+    role: phase_latency
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: e334c6c0a1e47697aa437c9cc1c1f81041e0e84c
+    config_sha256: c47d2a61eb9304cae5da6fdee4dab0bb7426ac9f74e71080162a8db897cfdafe
+    dataset_sha256: ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf
+    seed: 20260803
+    parent_checkpoint_sha256: 3ae1805441889adf3fcaa23ff45e79509f0be747619c2783227014bc162721d4
+    checkpoint_sha256: null
+    evidence: artifacts/formal/phase_latency
+    accepted_claims:
+      - real_observation_full_chunk_latency_200_samples
+      - queued_action_dispatch_latency_99_samples
+      - peak_allocated_inference_vram
+    excluded_claims:
+      - task_success
+  - id: 20260803T190738Z_act_eval_e334c6c_20260803
+    role: baseline_reconstruction
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: e334c6c0a1e47697aa437c9cc1c1f81041e0e84c
+    config_sha256: aad14a2fe7187bf045025c761fc658dc6ffde19cf699c6ad57bd8e0fc39bb674
+    dataset_sha256: ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf
+    seed: 20260803
+    parent_checkpoint_sha256: 7c8f2089c2f9ff5632ab1272754bdece46e30280ffce6c8ecde850956429dc79
+    checkpoint_sha256: null
+    evidence: artifacts/formal/baseline_reconstruction
+    accepted_claims:
+      - deterministic_256_samples_per_segment_role
+      - normalized_chunk_and_first_action_l1
+    excluded_claims:
+      - task_success
+      - generalization
+  - id: 20260803T190805Z_act_eval_e334c6c_20260803
+    role: phase_reconstruction
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: e334c6c0a1e47697aa437c9cc1c1f81041e0e84c
+    config_sha256: c47d2a61eb9304cae5da6fdee4dab0bb7426ac9f74e71080162a8db897cfdafe
+    dataset_sha256: ba18dd207ffd00c562a7ad18c831508d0529cd4d8d7b478a9b2f6d46618489cf
+    seed: 20260803
+    parent_checkpoint_sha256: 3ae1805441889adf3fcaa23ff45e79509f0be747619c2783227014bc162721d4
+    checkpoint_sha256: null
+    evidence: artifacts/formal/phase_reconstruction
+    accepted_claims:
+      - deterministic_256_samples_per_segment_role
+      - normalized_chunk_and_first_action_l1
+    excluded_claims:
+      - task_success
+      - generalization

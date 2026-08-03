@@ -1,0 +1,1 @@
+/root/radeon-oneloop-env/rocm721-py312/bin/python -m evaluation.policy_latency --checkpoint /root/radeon-oneloop-runs/artifacts/act-phase-formal-5146562/checkpoints/010000/pretrained_model --dataset-root /root/radeon-oneloop-data/formal_handover_v1 --frame-index 0 --warmup 20 --iterations 200 

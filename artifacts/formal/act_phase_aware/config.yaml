@@ -1,0 +1,39 @@
+schema_version: 1
+experiment: act_phase_aware
+formal_profile: formal_radeon_only
+dataset_registry: data/registry.yaml
+dataset:
+  repo_id: phi-media-lab/radeon-oneloop-formal-handover-v1
+  video_backend: pyav
+policy:
+  family: ACT
+  device: cuda
+  architecture: lerobot_act_default
+optimizer:
+  source: lerobot_act_default
+training:
+  batch_size: 16
+  steps: 10000
+  num_workers: 4
+  log_freq: 50
+  save_freq: 1000
+method:
+  policy_family: ACT
+  phase_aware: true
+  intervention: per_frame_loss_weighting
+  targets_relative_path: oneloop/phase_targets.parquet
+  weights:
+    bc_demonstration: 1.0
+    success_policy: 1.0
+    failed_policy_prefix: 0.05
+    recovery: 4.0
+    correction: 4.0
+    failed_policy_suffix: 0.05
+    failed_policy_no_correction: 0.0
+reproducibility:
+  seed: 20260803
+  checkpoint_selection_rule: fixed_training_budget_final_step
+  candidate_steps: [10000]
+lineage:
+  parent_checkpoint: null
+status: frozen_preflight

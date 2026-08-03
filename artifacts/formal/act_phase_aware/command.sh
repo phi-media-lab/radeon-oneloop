@@ -1,0 +1,1 @@
+/root/radeon-oneloop-env/rocm721-py312/bin/python -m radeon_oneloop.train_command --config configs/act_phase_aware.yaml --paired-config configs/act_baseline.yaml --dataset-root /root/radeon-oneloop-data/formal_handover_v1 --output-dir /root/radeon-oneloop-runs/artifacts/act-phase-formal-5146562 --python /root/radeon-oneloop-env/rocm721-py312/bin/python --execute 

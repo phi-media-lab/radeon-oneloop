@@ -1,0 +1,141 @@
+Loading weights from local directory
+{
+  "schema_version": "radeon_oneloop.action_reconstruction.v1",
+  "diagnostic_scope": "deterministic_stratified_training_set_frames",
+  "checkpoint": "/root/radeon-oneloop-runs/artifacts/act-baseline-formal-5146562/checkpoints/010000/pretrained_model",
+  "dataset_root": "/root/radeon-oneloop-data/formal_handover_v1",
+  "targets_path": "/root/radeon-oneloop-data/formal_handover_v1/oneloop/phase_targets.parquet",
+  "samples_per_role_limit": 256,
+  "aggregate_equal_role_stratified_samples": {
+    "normalized_chunk_l1": {
+      "samples": 1024,
+      "mean": 0.09176961845514597,
+      "p50": 0.07949662208557129,
+      "p95": 0.17403482347726817,
+      "p99": 0.23886447116732593,
+      "min": 0.03042297437787056,
+      "max": 0.30677300691604614
+    },
+    "normalized_first_action_l1": {
+      "samples": 1024,
+      "mean": 0.07636011712384061,
+      "p50": 0.07073724642395973,
+      "p95": 0.13778272718191134,
+      "p99": 0.1723008632659912,
+      "min": 0.02042381279170513,
+      "max": 0.30520105361938477
+    }
+  },
+  "roles": {
+    "bc_demonstration": {
+      "population_frames": 116550,
+      "sampled_frames": 256,
+      "index_first": 0,
+      "index_last": 116549,
+      "normalized_chunk_l1": {
+        "samples": 256,
+        "mean": 0.09744756262807641,
+        "p50": 0.08407536894083023,
+        "p95": 0.18088241294026375,
+        "p99": 0.2509493507444857,
+        "min": 0.03042297437787056,
+        "max": 0.2882334291934967
+      },
+      "normalized_first_action_l1": {
+        "samples": 256,
+        "mean": 0.07738339523348259,
+        "p50": 0.07030930742621422,
+        "p95": 0.1381191611289978,
+        "p99": 0.2204456672072406,
+        "min": 0.02042381279170513,
+        "max": 0.30520105361938477
+      }
+    },
+    "correction": {
+      "population_frames": 15906,
+      "sampled_frames": 256,
+      "index_first": 118641,
+      "index_last": 178464,
+      "normalized_chunk_l1": {
+        "samples": 256,
+        "mean": 0.11957081900618505,
+        "p50": 0.11499116942286491,
+        "p95": 0.21398470550775528,
+        "p99": 0.2682781115174292,
+        "min": 0.04528477415442467,
+        "max": 0.30677300691604614
+      },
+      "normalized_first_action_l1": {
+        "samples": 256,
+        "mean": 0.09009055848582648,
+        "p50": 0.08242925256490707,
+        "p95": 0.1519216001033783,
+        "p99": 0.17318939268589018,
+        "min": 0.036339983344078064,
+        "max": 0.19381658732891083
+      }
+    },
+    "failed_policy_prefix": {
+      "population_frames": 11908,
+      "sampled_frames": 256,
+      "index_first": 117968,
+      "index_last": 177369,
+      "normalized_chunk_l1": {
+        "samples": 256,
+        "mean": 0.07301195706531871,
+        "p50": 0.06832513213157654,
+        "p95": 0.12112477794289589,
+        "p99": 0.16856951937079429,
+        "min": 0.0313437357544899,
+        "max": 0.20864690840244293
+      },
+      "normalized_first_action_l1": {
+        "samples": 256,
+        "mean": 0.06530526489223121,
+        "p50": 0.06073128432035446,
+        "p95": 0.11462230794131756,
+        "p99": 0.15595907345414156,
+        "min": 0.022579526528716087,
+        "max": 0.16096150875091553
+      }
+    },
+    "success_policy": {
+      "population_frames": 34101,
+      "sampled_frames": 256,
+      "index_first": 116550,
+      "index_last": 172477,
+      "normalized_chunk_l1": {
+        "samples": 256,
+        "mean": 0.07704813512100372,
+        "p50": 0.0703822635114193,
+        "p95": 0.13385815173387527,
+        "p99": 0.1638327613472937,
+        "min": 0.031403958797454834,
+        "max": 0.19917917251586914
+      },
+      "normalized_first_action_l1": {
+        "samples": 256,
+        "mean": 0.07266124988382217,
+        "p50": 0.06714329123497009,
+        "p95": 0.12500208243727684,
+        "p99": 0.17458497136831277,
+        "min": 0.022986672818660736,
+        "max": 0.18416664004325867
+      }
+    }
+  },
+  "hardware": {
+    "torch": "2.9.1+rocm7.2.1.gitff65f5bc",
+    "hip": "7.2.53211-e1a6bc5663",
+    "device_count": 1,
+    "device_name": "AMD Radeon Graphics",
+    "gcn_arch": "gfx1100",
+    "total_memory": 51522830336
+  },
+  "task_success": null,
+  "limitations": [
+    "The formal dataset has no independent validation split.",
+    "These reconstruction errors are training-set diagnostics, not task-success estimates.",
+    "Closed-loop task performance must be reported separately."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "job_id": "20260803T190542Z_genesis_smoke_e334c6c_20260803",
+  "host": "radeon-c",
+  "formal": true,
+  "role": "genesis_smoke",
+  "git_commit": "e334c6c0a1e47697aa437c9cc1c1f81041e0e84c",
+  "config_hash": "cf56fb57f768678d757592e8479734d2e3de6aac3e50258a623fb45a9e2aec48",
+  "dataset_hash": null,
+  "parent_checkpoint": null,
+  "seed": 20260803,
+  "gpu_uid": "0x153f7d55778ab659",
+  "gfx_target": "gfx1100",
+  "status": "done",
+  "started_at": "2026-08-03T19:05:44Z",
+  "finished_at": "2026-08-03T19:06:28Z",
+  "artifact_dir": "/root/radeon-oneloop-runs/jobs/20260803T190542Z_genesis_smoke_e334c6c_20260803",
+  "notes": null
+}

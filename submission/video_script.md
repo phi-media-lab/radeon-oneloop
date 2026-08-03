@@ -1,7 +1,8 @@
 # Radeon OneLoop demo video
 
-Target duration: **4:00**. Spoken language and all on-screen text: English.
-Only team-cleared robot footage may be uploaded; dataset videos remain private.
+Final generated duration target: **3:40–4:00**. Spoken language and all
+on-screen text: English. Private dataset video is not used; the only motion is
+the registered formal Genesis dual-camera sweep.
 
 ## Shot list and narration
 
@@ -62,22 +63,22 @@ other training setting remains identical.”
 **Picture:** Synchronized loss curves, 10,000-step markers, GPU utilization and
 the two checkpoint hashes.
 
-**Narration template:** “Both policies start from random initialization with
-the same seed, batch size, architecture, optimizer and 10,000-step budget on
-the formal Radeon. [Insert final wall time, loss and memory comparison.] We
-predeclared the final-step checkpoint; there is no post-hoc search on training
-loss.”
+**Narration:** “Both policies start from random initialization with the same
+seed, batch size, architecture, optimizer and 10,000-step budget on the formal
+Radeon. Training took 87.75 and 87.68 minutes, with 98.59 and 98.45 percent
+mean sampled GPU utilization. We predeclared the final-step checkpoint; there
+is no post-hoc search on training loss.”
 
 ### 2:40–3:10 — Real-time path and safety
 
 **Picture:** Full-chunk and queued-dispatch latency plots; inject a stale
 sequence in a terminal demo and show the controller latch E-stop.
 
-**Narration template:** “ACT generates 100-action chunks. A real observation
-produces a full chunk in [baseline / phase-aware latency], while queued actions
-dispatch in [latency]. The edge rejects stale or reordered packets, mismatched
-observations, unsafe joints and excessive deltas. Any violation latches the
-stop.”
+**Narration:** “ACT generates 100-action chunks. A real observation produces a
+full chunk at 18.11 and 18.55 millisecond median latency, while queued actions
+dispatch at 1.233 milliseconds. The edge rejects stale or reordered packets,
+mismatched observations, unsafe joints and excessive deltas. Any violation
+latches the stop.”
 
 ### 3:10–3:35 — Physical evidence, honestly bounded
 
@@ -101,12 +102,11 @@ inference evaluators and safety tests. Radeon OneLoop shows how one Radeon can
 carry a physical-AI project from environment, through learning, to real-time
 deployment—without hiding negative results or borrowing another accelerator.”
 
-## Required pre-export replacements
+## Export verification
 
-- Replace both narration templates with registered formal numbers.
-- Use only cleared real-robot clips; otherwise substitute a task diagram and
-  retain the historical text label.
-- Show the full 64-character checkpoint hashes at least once.
-- End card: source URL, report URL, Apache-2.0, and the public video URL.
-- Export 1080p H.264/AAC, 24 or 30 fps, 3–5 minutes; verify audio and anonymous
-  link access before filing the official PR.
+- No access-controlled robot video is included.
+- Both full 64-character checkpoint hashes appear on screen.
+- The end card contains the source URL, Apache-2.0 license and reproduction
+  command.
+- The release validator checks 1080p H.264/AAC, 30 fps, 3–5 minute duration,
+  formal evidence identity, and absence of placeholders.
