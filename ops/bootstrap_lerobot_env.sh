@@ -123,8 +123,11 @@ print(json.dumps({
 }, sort_keys=True))
 PY
 
-PYTHONPATH="$project_root/src" "$python_bin" -m unittest discover -s "$project_root/tests" -v \
-  | tee "$run_dir/project_tests.txt"
+(
+  cd "$project_root"
+  PYTHONPATH="$project_root/src:$project_root" \
+    "$python_bin" -m unittest discover -s tests -v
+) | tee "$run_dir/project_tests.txt"
 "$pip_bin" freeze | sort > "$run_dir/pip_freeze.txt"
 sha256sum "$run_dir"/*.txt "$run_dir"/*.json "$run_dir"/*.sha256 > "$run_dir/hashes.sha256"
 touch "$run_dir/DONE"

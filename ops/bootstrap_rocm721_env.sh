@@ -131,7 +131,7 @@ printf '%s  %s\n' \
   'DracoPy==2.0.0' \
   'tetgen==0.8.2' \
   'pysplashsurf==0.14.1.0' \
-  'av==18.0.0' \
+  'av==15.1.0' \
   'moviepy==2.2.1' \
   'matplotlib==3.11.1' \
   'tifffile==2024.12.12'
