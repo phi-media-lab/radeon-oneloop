@@ -70,3 +70,12 @@ ONELOOP_PARENT_CHECKPOINT=64_HEX_SHA256 \
   --checkpoint /absolute/checkpoint/pretrained_model \
   --dataset-root /root/radeon-oneloop-data/formal_handover_v1
 ```
+
+After hashing both predeclared final checkpoints, the complete matched latency
+and stratified-reconstruction suite can be dispatched sequentially with:
+
+```bash
+./ops/run_formal_pair_evaluations.sh \
+  /absolute/baseline/checkpoints/010000/pretrained_model BASELINE_SHA256 \
+  /absolute/phase/checkpoints/010000/pretrained_model PHASE_SHA256
+```
