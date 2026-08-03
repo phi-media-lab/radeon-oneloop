@@ -25,7 +25,20 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--steps", type=int, default=1000)
     parser.add_argument("--seed", type=int, default=20260803)
+    parser.add_argument(
+        "--video-frames",
+        type=int,
+        default=0,
+        help="Capture this many evenly spaced side-by-side frames (zero disables video).",
+    )
+    parser.add_argument("--video-fps", type=int, default=12)
     args = parser.parse_args()
+    if args.steps < 2:
+        raise ValueError("steps must be at least two")
+    if args.video_frames < 0 or args.video_frames > args.steps:
+        raise ValueError("video-frames must be between zero and steps")
+    if args.video_fps < 1:
+        raise ValueError("video-fps must be positive")
     args.output.mkdir(parents=True, exist_ok=True)
 
     started = time.perf_counter()
@@ -33,6 +46,15 @@ def main() -> None:
     build_seconds = time.perf_counter() - started
     step_times = []
     rendered = None
+    video_frames: list[np.ndarray] = []
+    capture_steps = (
+        {
+            index * (args.steps - 1) // (args.video_frames - 1)
+            for index in range(args.video_frames)
+        }
+        if args.video_frames > 1
+        else ({args.steps // 2} if args.video_frames == 1 else set())
+    )
     for step in range(args.steps):
         action = list(HOME_ACTION)
         joint = (step // 140) % 5
@@ -40,11 +62,18 @@ def main() -> None:
         action[joint] += offset
         action[6 + joint] -= offset
         begin = time.perf_counter()
-        observation = task.step(action, render=(step in (0, args.steps - 1)))
+        observation = task.step(
+            action,
+            render=(step in (0, args.steps - 1) or step in capture_steps),
+        )
         torch.cuda.synchronize()
         step_times.append(time.perf_counter() - begin)
         if CAMERA_KEYS[0] in observation:
             rendered = observation
+            if step in capture_steps:
+                front = np.asarray(observation[CAMERA_KEYS[0]], dtype=np.uint8)
+                hand = np.asarray(observation[CAMERA_KEYS[1]], dtype=np.uint8)
+                video_frames.append(np.concatenate((front, hand), axis=1))
     if rendered is None:
         rendered = task.observe(render=True)
     for key in CAMERA_KEYS:
@@ -55,6 +84,16 @@ def main() -> None:
     state = np.asarray(rendered["observation.state"])
     if state.shape != (12,) or not np.isfinite(state).all():
         raise RuntimeError(f"invalid state: shape={state.shape}")
+    video_path = None
+    if video_frames:
+        video_path = args.output / "genesis_dual_camera.mp4"
+        iio.imwrite(
+            video_path,
+            np.stack(video_frames),
+            fps=args.video_fps,
+            codec="libx264",
+            pixelformat="yuv420p",
+        )
     props = torch.cuda.get_device_properties(0)
     report = {
         "schema_version": "radeon_oneloop.genesis_smoke.v1",
@@ -80,6 +119,13 @@ def main() -> None:
         "task_success_note": (
             "Joint-sweep smoke validates the scene and contracts; it is not a handover evaluation."
         ),
+        "video": {
+            "path": str(video_path) if video_path else None,
+            "frames": len(video_frames),
+            "fps": args.video_fps if video_frames else None,
+            "metric_eligible": False,
+            "note": "Optional joint-sweep visualization; captured render steps are included in step timings.",
+        },
     }
     payload = json.dumps(report, indent=2) + "\n"
     (args.output / "metrics.json").write_text(payload, encoding="utf-8")
