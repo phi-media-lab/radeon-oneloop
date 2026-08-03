@@ -101,7 +101,7 @@ def main() -> None:
 
     policy_cfg = PreTrainedConfig.from_pretrained(
         str(checkpoint),
-        cli_overrides=["device=cuda"],
+        cli_overrides=["--device=cuda"],
     )
     policy_cfg.pretrained_path = str(checkpoint)
     policy = make_policy(policy_cfg, ds_meta=dataset.meta)
