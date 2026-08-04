@@ -33,12 +33,18 @@ def camera_error(input_transforms: dict[str, Any], output_transforms: dict[str, 
         raise ValueError("SEVA input transforms must contain 4 inputs and 49 targets")
     if not isinstance(generated_frames, list) or len(generated_frames) != 53:
         raise ValueError("SEVA output transforms must contain 4 inputs and 49 targets")
-    source = np.asarray(
-        [frame["transform_matrix"] for frame in source_frames[4:]], dtype=np.float64
-    )
-    generated = np.asarray(
-        [frame["transform_matrix"] for frame in generated_frames[4:]], dtype=np.float64
-    )
+    def homogeneous(frames: list[dict[str, Any]]) -> np.ndarray:
+        matrices = np.asarray(
+            [frame["transform_matrix"] for frame in frames[4:]], dtype=np.float64
+        )
+        if matrices.shape == (49, 3, 4):
+            bottom = np.zeros((49, 1, 4), dtype=np.float64)
+            bottom[:, 0, 3] = 1.0
+            matrices = np.concatenate((matrices, bottom), axis=1)
+        return matrices
+
+    source = homogeneous(source_frames)
+    generated = homogeneous(generated_frames)
     if source.shape != (49, 4, 4) or generated.shape != (49, 4, 4):
         raise ValueError("SEVA target camera matrix shape is invalid")
     if not np.all(np.isfinite(source)) or not np.all(np.isfinite(generated)):
@@ -132,6 +138,7 @@ def record_run(args: argparse.Namespace) -> dict[str, Any]:
         "schema_version": SCHEMA_VERSION,
         "created_utc": utc_now(),
         "formal": False,
+        "credential_material_recorded": False,
         "eligible_for_formal_metrics": False,
         "eligible_for_heldout_real_metrics": False,
         "asset_name": input_manifest["asset_name"],

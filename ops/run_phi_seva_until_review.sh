@@ -54,7 +54,7 @@ trap mark_failure EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
-if [[ ! -s "$model_root/modelv1.1.safetensors" || ! -s "$model_root/config.yaml" ]]; then
+if [[ ! -s "$model_root/modelv1.1.safetensors" || ! -f "$model_root/config.yaml" ]]; then
   "$runner_dir/install_phi_seva_model.sh" \
     "$model_root" "$model_install_root" "$python_bin" \
     >"$pipeline_dir/model_install.log" 2>&1

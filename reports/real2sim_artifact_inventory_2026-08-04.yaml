@@ -16,7 +16,7 @@ release_decision:
   surface_carrier_installed_in_genesis: false
   candidate_requires_explicit_nonformal_switch: true
   physical_force_feedback_priority: deferred_not_submission_blocking
-  next_gate: restore_authorized_seva_weights_then_generate_audit_and_distill_primary_orbit
+  next_gate: complete_explicit_human_seva_identity_review_then_build_pseudoview_dataset_if_accepted
 
 artifacts:
   - id: m1_reviewed_orbitfix
@@ -982,17 +982,19 @@ artifacts:
   - id: seva_v1_1_primary_access_gate
     kind: external_model_access_gate
     host_role: phi-amd-work
-    code_commit: fe19948e
+    code_commit: fe19948e9b7bea261ab2db780a59656131404a83
     camera_contract_ready: true
     audit_and_dataset_builders_ready: true
     authorized_fixed_revision_installer_ready: true
     required_model_revision: e538e251c1009e9a41cf8b7fee5f21332a1960de
     automatic_promotion_after_generation: false
     accepted_review_required_before_pseudoview_dataset: true
-    model_weights_present: false
-    stored_huggingface_credential_valid: false
+    model_weights_present: true
+    stored_huggingface_credential_valid: true
+    credential_huggingface_user: fbsh96
+    install_run_id: seva_model_install_20260804T215409Z_1434707
     secrets_recorded: false
-    status: awaiting_interactive_authorized_model_access
+    status: authorized_fixed_revision_installed
     formal: false
 
   - id: seva_v1_1_invalid_credential_fail_closed
@@ -1007,16 +1009,59 @@ artifacts:
     status: expected_failure_preserved_awaiting_interactive_authorization
     formal: false
 
+  - id: seva_v1_1_completed_inference_record_contract_failure
+    kind: completed_inference_with_preserved_recorder_failure
+    host_role: phi-amd-work
+    pipeline_run_id: seva_primary_20260804T222216Z_1436441
+    model_revision: e538e251c1009e9a41cf8b7fee5f21332a1960de
+    generated_frames: 49
+    diffusion_steps: 300
+    runtime_s: 4349.76
+    failure_boundary: valid_seva_3x4_camera_matrices_rejected_by_old_4x4_only_recorder
+    inference_complete: true
+    terminal_status: failed_exit_1_preserved
+    credential_material_recorded: false
+    status: recovered_without_inference_rerun
+    formal: false
+
+  - id: seva_v1_1_primary_recovered_audit
+    kind: generated_orbit_numeric_audit_pending_human_review
+    host_role: phi-amd-work
+    pipeline_run_id: seva_primary_recovered_20260804T233837Z_1438301
+    generation_run_id: seva_four_view_seva_primary_recovered_20260804T233837Z_1438301_seed10027
+    audit_run_id: seva_orbit_audit_seva_primary_recovered_20260804T233837Z_1438301
+    inference_rerun: false
+    generated_frames: 49
+    frame_width: 576
+    frame_height: 576
+    camera_max_abs_error: 5.238306899357781e-08
+    real_anchor_silhouette_iou_mean: 0.981942997742729
+    real_anchor_silhouette_iou_min: 0.9768897012209681
+    adjacent_foreground_iou_mean: 0.9435690512
+    adjacent_foreground_iou_min: 0.9042794485
+    cyclic_seam_first_last_foreground_iou: 0.961873492
+    generation_manifest_sha256: 9a513b9ae3b992e2fce05615b8cec909ecd89ffd85aacd3f909bfc6d4911f328
+    video_sha256: f0500ff4c2e76e40e7ff8bc147aaf1120fd9d46a70636c1e2497f7ee41db5ec2
+    metrics_sha256: ce098f841a8cf5654bd12878644d5ecc5f77a7b9975865270b4467b85e029a76
+    generated_contact_sha256: b155de53e5f75a36db796f540a1daaec8a865d2bff848689b01149223bd171d3
+    anchor_comparison_sha256: b54ed92f384c349b42aa132225ba50b99e3aa053b2f0cb4ac60c73213bc47107
+    review_required_sha256: 443b37f3ed41f2a93a7cd5339e6d592c1d2735ee3872e3c90fa0c022a9c8584d
+    hashes_sha256: 469803f81c7fd1e7177af0b0999734fe5adf473788ba9e716965b7123122cc10
+    automatic_promotion: false
+    credential_material_recorded: false
+    status: done_pending_human_review
+    formal: false
+
 validation:
-  scaffold_tests_collected: 262
-  scaffold_tests_passed: 249
+  scaffold_tests_collected: 264
+  scaffold_tests_passed: 251
   scaffold_tests_skipped_dependency_specific: 13
   git_diff_check: passed
   formal_result_claim: observed_object_training_and_anchor_render_only
 
 open_gates:
-  - restore_authorized_seva_v1_1_model_access
-  - generate_audit_and_distill_seva_primary_orbit
+  - explicit_human_seva_identity_temporal_review
+  - seva_pseudoview_dataset_only_if_review_accepted
   - capture_reserved_real_interanchor_heldout_views
   - recorded_approach_grasp_handover_release_demo
   - heldout_real_capture_and_metrics

@@ -75,6 +75,9 @@ environment variables:
 ```bash
 hf auth login
 
+# The upstream environment currently omits this imported runtime dependency.
+uv pip install --python SEVA_PYTHON scipy==1.14.1
+
 ./ops/run_phi_seva_until_review.sh \
   FOUR_VIEW_INPUT PIPELINE_RUN_ROOT SEVA_CHECKOUT LOCAL_MODEL_ROOT \
   MODEL_INSTALL_RUN_ROOT SEVA_PYTHON
@@ -85,6 +88,31 @@ The installer pins model revision
 before inference if authorization or either required model file is missing.
 The pipeline writes `REVIEW_REQUIRED.json` and stops after the 49-frame numeric
 audit; successful generation is not automatic approval.
+
+The current `phi-amd-work` execution is at that review stop. Install run
+`seva_model_install_20260804T215409Z_1434707` is account-bound to `fbsh96`.
+Recovery pipeline `seva_primary_recovered_20260804T233837Z_1438301` reuses the
+completed 49-frame inference from parent run
+`seva_primary_20260804T222216Z_1436441` without rerunning the model; the parent
+failed only because the original recorder required `4x4` matrices while SEVA
+emits valid `3x4` extrinsics. The fixed recorder appends the homogeneous row
+and measured a maximum camera error of `5.24e-08`.
+
+Two upstream compatibility details are explicit rather than hidden in the
+environment: the official fixed model revision contains a legitimate empty
+`config.yaml`, so installation validates its exact upstream size while still
+requiring a nonempty checkpoint; and the deleted SD2.1-base VAE locator is
+replaced by the reviewed `ops/patches/seva_official_vae_31f26fde.patch`. That
+patch pins the official `stabilityai/sd-vae-ft-mse` revision and the runner
+verifies the expected VAE file hashes. The runtime also records SciPy and uses
+a finite `10800 s` timeout because the fixed workload is 300 diffusion steps.
+
+The audit reports real-anchor silhouette IoU `0.981943` mean / `0.976890`
+minimum, adjacent-frame foreground IoU `0.943569` mean / `0.904279` minimum,
+and first/last foreground IoU `0.961873`. These are consistency diagnostics,
+not a held-out-real-view quality claim. Explicit review of identity, adjacent
+motion, cyclic seam, background stability, and private HIL rear/top exemplars
+is still required.
 
 ### G2: SEVA-to-Gaussian distillation
 

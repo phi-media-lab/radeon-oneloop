@@ -25,6 +25,15 @@ class SevaFourViewAuditTests(unittest.TestCase):
         output["frames"][10]["transform_matrix"][0][3] += 0.01
         self.assertAlmostEqual(camera_error(source, output), 0.01)
 
+    def test_accepts_seva_three_by_four_output_matrices(self):
+        source = transforms()
+        for frame in source["frames"]:
+            frame["transform_matrix"][3] = [0.0, 0.0, 0.0, 1.0]
+        output = transforms()
+        for source_frame, output_frame in zip(source["frames"], output["frames"]):
+            output_frame["transform_matrix"] = source_frame["transform_matrix"][:3]
+        self.assertEqual(camera_error(source, output), 0.0)
+
     def test_rejects_wrong_frame_count(self):
         with self.assertRaisesRegex(ValueError, "4 inputs and 49 targets"):
             camera_error(transforms(52), transforms())

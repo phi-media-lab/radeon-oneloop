@@ -48,7 +48,8 @@ but it is deferred and is no longer on the submission critical path:
 9. The independent Hunyuan seed-`10030` fallback now completes the full
    observed-core/generated-fill separation and Genesis static-binding path.
    It passes the no-harm gate only as a default-off nonformal toggle; it does
-   not replace the still access-gated SEVA primary branch.
+   not replace the SEVA primary branch, whose 49-frame orbit is now generated
+   and audited but still blocked on explicit human identity/temporal review.
 10. The final read-only handover recorder now evaluates task semantics rather
     than runtime health alone. A preserved stationary-input trial proves that
     it rejects missing arm/gripper motion and a missing left-grasp → dual-contact
@@ -502,14 +503,31 @@ authorized installer, four-view generation, numeric audit, mandatory human
 review boundary, and accepted-review-only pseudo-view builder are now deployed
 on `phi-amd-work`. The installer accepts no token argument or environment
 token and uses only a credential entered interactively with the Hugging Face
-CLI. The current stored credential is invalid and no local v1.1 weights are
-present, so preserved runs `seva_model_install_20260804T212528Z_1432732` and
-`seva_primary_20260804T212528Z_1432725` fail closed with hash-index SHA-256
-`c611e07a1c8b4311fa9df2b81b8ee11e51e71e6dcd1ae3585ff0ff8bc4b3053b`
-and `015ca1e4a9279833245e66280fb600ccfba1bab43e5486b85f178394056a90db`.
-Both declare `credential_material_recorded=false`; no token is recorded in the
-repository or command logs. Hunyuan seed `10030` remains a controlled fallback,
-not a replacement for the preferred geometry-free SEVA path.
+CLI. Authorized install run `seva_model_install_20260804T215409Z_1434707`
+binds model revision `e538e251c1009e9a41cf8b7fee5f21332a1960de` to account
+`fbsh96`. The upstream empty `config.yaml` is accepted only when its fixed-
+revision size matches repository metadata; the nonempty safetensors checkpoint
+remains mandatory. The upstream deleted SD2.1 VAE locator is replaced by a
+reviewed patch pinned to the official byte-identical Stability AI VAE revision,
+and its files are hash-checked before each run.
+
+Run `seva_primary_20260804T222216Z_1436441` completed all 300 diffusion steps
+and produced 49 frames in `4349.76 s`; its inference is preserved even though
+the old recorder rejected SEVA's valid `3x4` camera matrices. Recovery pipeline
+`seva_primary_recovered_20260804T233837Z_1438301` canonicalized those matrices
+to homogeneous `4x4`, reran no inference, and completed the numeric orbit
+audit. Real-anchor silhouette IoU is `0.981943` mean / `0.976890` minimum;
+adjacent-frame foreground IoU is `0.943569` mean / `0.904279` minimum; and the
+first/last cyclic seam foreground IoU is `0.961873`. The camera round-trip
+maximum error is `5.24e-08`. Automatic promotion remains disabled: the video,
+all-frame contact sheet, four real/generated anchor comparison, and private HIL
+rear/top exemplars still require explicit human review before any pseudo-view
+dataset is built. Prior invalid-credential and recorder failures remain
+preserved negative engineering evidence. Every run declares
+`credential_material_recorded=false`; no token is recorded in the repository
+or command logs for the account-bound install and pipeline. Hunyuan seed
+`10030` remains a controlled fallback, not a replacement for the preferred
+geometry-free SEVA path.
 
 ### 2026-08-05 layered fallback and Genesis gate
 
@@ -569,7 +587,7 @@ collision proxy remains active; no USB bus or physical output is involved.
 | Vista4D surface-carrier videos | Rejected for depth lift | Preserved continuity/identity ablation; never promoted to Gaussian or mesh truth |
 | Surface-carrier Genesis GLBs | Rejected visual fallback | Portable conversion evidence only; procedural debug proxy remains active |
 | Four-view generator input | Accepted nonformal contract | Sole identity source for SEVA and Hunyuan branches |
-| Stable Virtual Camera v1.1 | Access-gated preferred mainline | Code/cameras ready; phi credential invalid and weights absent |
+| Stable Virtual Camera v1.1 | Generated and numerically audited; human review open | 49-frame orbit prior only; no pseudo-view promotion before explicit acceptance |
 | Hunyuan3D-2mv seed 10027 | Rejected and hash-quarantined | Preserved negative control; all descendants blocked |
 | Hunyuan3D-2mv seeds 10028/10029 | Valid but superseded candidates | Candidate diversity evidence only |
 | Hunyuan3D-2mv seed 10030 | Accepted nonformal conditioning only | Vista4D/direct appearance A/B; never observed/collision/formal truth |
@@ -595,10 +613,10 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Remaining critical path
 
-1. Accept the gated SEVA v1.1 repository terms and authenticate interactively
-   on `phi-amd-work`; then run the prepared fixed-revision four-image/49-camera
-   pipeline to the mandatory human-review stop. Build the observed-initialized
-   frozen-geometry dataset only if the separately bound review accepts it.
+1. Review the completed SEVA v1.1 video, all-frame contact sheet, real/generated
+   anchor comparison, and private HIL rear/top exemplars. Record an explicit
+   hash-bound accepted or rejected decision. Build the observed-initialized,
+   frozen-geometry pseudo-view dataset only if that review accepts it.
 2. Capture additional real views at inter-anchor angles and freeze them as a
    held-out set before the next optimization run. Use them for silhouette and
    photometric evaluation, not as hidden training views.
@@ -619,7 +637,7 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Verification status
 
-The fresh full scaffold runs 262 tests and passes 249, with 13 dependency-
+The fresh full scaffold runs 264 tests and passes 251, with 13 dependency-
 specific tests skipped in the local environment. Shell syntax, YAML/JSON
 parsing, and `git diff --check` also pass. These source-tree checks are not a
 substitute for held-out capture or the final recorded handover demo.

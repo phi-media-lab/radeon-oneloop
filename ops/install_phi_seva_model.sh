@@ -81,10 +81,18 @@ if actual_hf_user != expected_hf_user:
     raise RuntimeError(
         f"wrong Hugging Face account: expected {expected_hf_user}, got {actual_hf_user}"
     )
-info = HfApi().model_info(repo_id=repo_id, revision=revision)
+info = HfApi().model_info(
+    repo_id=repo_id, revision=revision, files_metadata=True
+)
 if info.sha != revision:
     raise RuntimeError(f"resolved model revision drifted: {info.sha}")
+upstream_sizes = {
+    sibling.rfilename: sibling.size for sibling in info.siblings
+}
 for filename in ("modelv1.1.safetensors", "config.yaml"):
+    expected_size = upstream_sizes.get(filename)
+    if expected_size is None:
+        raise RuntimeError(f"upstream model file metadata is missing: {filename}")
     resolved = Path(
         hf_hub_download(
             repo_id=repo_id,
@@ -93,7 +101,12 @@ for filename in ("modelv1.1.safetensors", "config.yaml"):
             local_dir=model_root,
         )
     ).resolve()
-    if resolved.parent != model_root or not resolved.is_file() or resolved.stat().st_size == 0:
+    if (
+        resolved.parent != model_root
+        or not resolved.is_file()
+        or resolved.stat().st_size != expected_size
+        or (filename.endswith(".safetensors") and expected_size == 0)
+    ):
         raise RuntimeError(f"invalid downloaded model file: {resolved}")
 print("authorized fixed-revision SEVA files are present")
 PY
@@ -118,7 +131,9 @@ def sha256(path: Path) -> str:
 files = {}
 for name in ("modelv1.1.safetensors", "config.yaml"):
     path = root / name
-    if not path.is_file() or path.stat().st_size == 0:
+    if not path.is_file() or (
+        name.endswith(".safetensors") and path.stat().st_size == 0
+    ):
         raise SystemExit(f"installed SEVA file is missing: {name}")
     files[name] = {"bytes": path.stat().st_size, "sha256": sha256(path)}
 manifest = {
