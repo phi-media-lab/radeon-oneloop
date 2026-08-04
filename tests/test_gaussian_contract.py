@@ -3,7 +3,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from gaussian.vksplat_train import load_trainer, validate_dataset
+from gaussian.vksplat_train import (
+    FROZEN_MEANS_LR,
+    freeze_geometry_learning_rates,
+    load_trainer,
+    validate_dataset,
+)
 
 
 class GaussianContractTests(unittest.TestCase):
@@ -71,3 +76,30 @@ class GaussianContractTests(unittest.TestCase):
         self.assertIn("ONELOOP_OBJECT_DATASET:?", runner)
         self.assertNotIn("/root/radeon-oneloop-data", runner)
         self.assertIn("--formal", runner)
+
+    def test_geometry_freeze_zeroes_only_center_and_shape_rates(self):
+        class Config:
+            means_lr = 1.6e-4
+            means_lr_final = 1.6e-6
+            scales_lr = 5.0e-3
+            quats_lr = 1.0e-3
+            features_dc_lr = 2.5e-3
+            opacities_lr = 5.0e-2
+
+        config = Config()
+        original = freeze_geometry_learning_rates(config)
+        self.assertEqual(
+            original,
+            {
+                "means_lr": 1.6e-4,
+                "means_lr_final": 1.6e-6,
+                "scales_lr": 5.0e-3,
+                "quats_lr": 1.0e-3,
+            },
+        )
+        self.assertEqual(config.means_lr, FROZEN_MEANS_LR)
+        self.assertEqual(config.means_lr_final, FROZEN_MEANS_LR)
+        self.assertEqual(config.scales_lr, 0.0)
+        self.assertEqual(config.quats_lr, 0.0)
+        self.assertEqual(config.features_dc_lr, 2.5e-3)
+        self.assertEqual(config.opacities_lr, 5.0e-2)

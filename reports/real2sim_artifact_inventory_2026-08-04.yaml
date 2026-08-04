@@ -9,9 +9,12 @@ privacy:
 
 release_decision:
   default_appearance_id: formal_observed_core_canonical_30k
+  continuous_live_demo_appearance_id: geometry_frozen_observed_candidate_30k
   default_physics_id: graffiti_mickey_rigid_proxy
   generated_fill_enabled_by_default: false
-  next_gate: calibrated_left_elbow_flex_physical_haptic_bench
+  candidate_requires_explicit_nonformal_switch: true
+  physical_force_feedback_priority: deferred_not_submission_blocking
+  next_gate: capture_reserved_real_interanchor_views_then_formal_candidate_rerun
 
 artifacts:
   - id: m1_reviewed_orbitfix
@@ -152,6 +155,106 @@ artifacts:
     redistribution: false
     status: accepted_default_formal_appearance
     formal: true
+
+  - id: formal_observed_core_continuous_orbit_negative
+    kind: continuous_360_degree_novel_angle_audit
+    host_role: amd
+    run_id: 20260804T125613Z_184390_amd_gaussian_orbit_audit
+    parent_id: formal_observed_core_canonical_30k
+    frames_without_duplicate_endpoint: 72
+    cycle_closure_rgb_mae: 0.0
+    border_contact_frames: 49
+    mean_render_ms: 25.963682863121367
+    metrics_sha256: df55ea5dd4360c29f6eb0c665c688132ec3cbae7c46299c6ce74c91ac28e8ba4
+    contact_sheet_sha256: 5a915b618bd7d1cbd4cef3b9b154dac6351713d5a40844ffb79253fca33ad943
+    visual_review: rejected_doubled_surfaces_tearing_and_ghosting
+    status: failed_preserved_not_live_demo_asset
+    heldout_real_evidence: false
+    formal: false
+
+  - id: geometry_frozen_observed_candidate_30k
+    kind: single_radeon_geometry_frozen_observed_photo_optimization
+    host_role: radeon-c
+    run_id: 20260804T130751Z_1956764_radeon_c_object_geometry_frozen_preflight
+    parent_id: formal_observed_core_dataset
+    gpu_uid: "0x153f7d55778ab659"
+    gfx_target: gfx1100
+    steps: 2000
+    elapsed_s: 10.354543128050864
+    peak_vram_bytes: 122502412
+    geometry_frozen: true
+    higher_sh_frozen: true
+    generated_views: false
+    gaussian_count: 30000
+    canonical_ply_sha256: dc4de9a0a3f4dadf62a4c03c2be939a9b178d284254c9e833a2e19941e41793b
+    cameras_sha256: 050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26
+    provenance_sha256: 713e8da93db3fea122a1c298122650d1d01cbc61b192c9ea1bca9dbee653c6d4
+    run_manifest_sha256: 024ac85e459a83f549692cb5e935fc8895d66a7f03f108c4ebec301c533c314f
+    metrics_sha256: 9caf8760b4bc81b3c30f91b0d7ef46f25e9ac6cf735368cdb1dfd7e854bef323
+    hashes_manifest_sha256: f69b78f8b161ed3bc6a6871fab857a62ceeebd5b8a1e1087ed368b0ca64ea410
+    status: accepted_nonformal_continuous_view_candidate
+    heldout_real_evidence: false
+    formal: false
+
+  - id: amd_geometry_frozen_continuous_orbit
+    kind: continuous_360_degree_candidate_visual_audit
+    host_role: amd
+    run_id: 20260804T131459Z_193927_amd_gaussian_orbit_audit
+    parent_id: geometry_frozen_observed_candidate_30k
+    frames_without_duplicate_endpoint: 72
+    cycle_closure_rgb_mae: 0.0
+    border_contact_frames: 0
+    alpha_support_fraction_range: [0.43903350830078125, 0.6279983520507812]
+    mean_render_ms: 25.12681505432327
+    metrics_sha256: 2a0db9d114ef8a8b6a37469bd0181ef103d8b4aa0678ab4d28ab78a712ba7787
+    contact_sheet_sha256: 122e3b355fb25578f6bc694055ec227bdbc27e1e799671b38aacdd3b6ace2707
+    video_sha256: fdac198ba479508e3ff8692f9f2d101c5dc5509fd830dd2ae12ded8559cf7d10
+    hashes_manifest_sha256: a660d36cd14bb5154a78865209fb34aa97d418e13f0b92aaf8ba6cef2a9a276f
+    visual_review: accepted_shell_continuity_with_four_view_side_blur_limit
+    status: accepted_nonformal_numeric_and_visual_orbit
+    heldout_real_evidence: false
+    formal: false
+
+  - id: amd_geometry_frozen_live_real2sim
+    kind: readonly_dual_leader_genesis_gaussian_browser_demo_gate
+    host_role: amd
+    run_id: 20260804T131754Z_194185_amd_decoupled_gaussian_live_gate
+    parent_id: geometry_frozen_observed_candidate_30k
+    duration_s: 12.000226923963055
+    control_effective_hz: 119.9994128127211
+    control_watchdog_events: 0
+    state_snapshots_accepted: 360
+    renderer_combined_frames: 92
+    renderer_combined_hz: 7.666521690209601
+    appearance_camera_renders: 184
+    appearance_fallbacks: 0
+    presenter_frames_published: 92
+    presenter_frame_requests: 220
+    physical_output_commands: false
+    run_manifest_sha256: 02c9d1a117d18d510c5f59e81d64517c065413630fb1e6ceb73ad213a0e3e50a
+    gate_metrics_sha256: a006f1807d8eb4c90e5ff128449e9332cdd6c6a05dbe5d25bb3edf44e3c4978d
+    renderer_metrics_sha256: b26fc02e388fa81bbe29025b99efdadb66ca566a93b58c232030d83eb091af1e
+    video_sha256: 405719de6a361dddc3c61934a66233b832c494b494b70062c95120b502555231
+    hashes_manifest_sha256: b62f689847a8a05b0ab1c85287a590be1f7815ed875433a25b964846a5145a1d
+    status: accepted_nonformal_end_to_end_real2sim_demo_gate
+    formal: false
+
+  - id: amd_private_hil_same_object_visual_audit
+    kind: private_dual_camera_same_object_identity_and_domain_audit
+    host_role: amd
+    parent_id: geometry_frozen_observed_candidate_30k
+    reviewed_success_episodes: 8
+    cameras: [front_cam, hand_cam]
+    sampled_images: 96
+    manifest_sha256: 9a65a276c213c30ed0cccc2adf10e87c20d119bd90209ea55dce98037f240801
+    front_contact_sheet_sha256: 26a15cd061be9d964f90de55171bde6ce0bddc8a86cfca0460bea687bbd9bd58
+    hand_contact_sheet_sha256: f6308c48dfbe7b79cd8f8fed4a2c7514abcb81dc78a8d3fd13e481cd96c18976
+    hashes_manifest_sha256: f6f85ca28d1a924add8b9467e066dfd2d365667df134f51d2db0d5c2c348cddd
+    metric_geometry_evidence: false
+    heldout_real_evidence: false
+    redistribution: false
+    status: accepted_private_identity_and_task_domain_evidence
+    formal: false
 
   - id: amd_formal_observed_core_runtime_probe
     kind: vksplat_radv_runtime_capability_and_asset_integrity_probe
@@ -519,16 +622,19 @@ artifacts:
     formal: false
 
 validation:
-  scaffold_tests_collected: 182
-  scaffold_tests_passed: 177
-  scaffold_tests_skipped_no_local_opencv: 5
+  scaffold_tests_collected: 201
+  scaffold_tests_passed: 195
+  scaffold_tests_skipped_dependency_specific: 6
   git_diff_check: passed
   formal_result_claim: observed_object_training_and_anchor_render_only
 
 open_gates:
+  - capture_reserved_real_interanchor_heldout_views
+  - register_and_rerun_geometry_frozen_candidate_on_radeon_c
+  - recorded_approach_grasp_handover_release_demo
+  - heldout_real_capture_and_metrics
+deferred_gates:
   - left_elbow_flex_readonly_joint_margin_gate
   - calibrated_left_elbow_flex_single_joint_physical_gate
   - guarded_single_arm_haptic_gate
   - guarded_dual_arm_haptic_gate
-  - recorded_approach_grasp_handover_release_demo
-  - heldout_real_capture_and_metrics

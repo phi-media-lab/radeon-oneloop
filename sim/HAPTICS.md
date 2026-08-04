@@ -1,5 +1,11 @@
 # Haptic feedback design
 
+> Submission priority (2026-08-04): physical force-feedback expansion is
+> deferred. The Real2Sim demo uses both leaders read-only with
+> `physical_output=false`; no haptic motor-output result is required to package
+> the continuous-view asset and live Genesis bridge. The guarded branch below
+> remains available for later work and none of its safety gates are weakened.
+
 The live bridge carries a 30 Hz return stream from Genesis to the leader host.
 Its default is **monitor-only**: no torque is enabled and no goal is written to
 either physical leader.

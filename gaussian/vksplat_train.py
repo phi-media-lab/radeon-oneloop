@@ -13,6 +13,9 @@ from pathlib import Path
 from typing import Any
 
 
+FROZEN_MEANS_LR = 1.0e-12
+
+
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -110,6 +113,24 @@ def load_trainer(source: Path) -> Any:
     return module
 
 
+def freeze_geometry_learning_rates(config: Any) -> dict[str, float]:
+    """Freeze visual-hull centers and shapes while retaining appearance fitting."""
+
+    required = ("means_lr", "means_lr_final", "scales_lr", "quats_lr")
+    missing = [name for name in required if not hasattr(config, name)]
+    if missing:
+        raise AttributeError(f"trainer config is missing geometry rates: {missing}")
+    original = {name: float(getattr(config, name)) for name in required}
+    # VkSplat's exponential center schedule evaluates log(lr). Exact zero
+    # therefore creates NaNs even though the optimizer should be frozen. Use a
+    # constant, negligible positive center rate and exact zero for shape rates.
+    config.means_lr = FROZEN_MEANS_LR
+    config.means_lr_final = FROZEN_MEANS_LR
+    config.scales_lr = 0.0
+    config.quats_lr = 0.0
+    return original
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", type=Path, required=True)
@@ -124,6 +145,11 @@ def main() -> None:
         "--strategy", choices=("default", "mcmc"), default="default"
     )
     parser.add_argument("--freeze-higher-sh", action="store_true")
+    parser.add_argument(
+        "--freeze-geometry",
+        action="store_true",
+        help="Keep visual-hull means/scales/quaternions fixed and fit appearance only.",
+    )
     parser.add_argument("--disable-refinement", action="store_true")
     parser.add_argument("--init-scale", type=float)
     parser.add_argument("--scale-reg", type=float)
@@ -164,8 +190,11 @@ def main() -> None:
         else trainer.TrainerConfig
     )
     config = config_type()
+    original_geometry_learning_rates = None
     if args.freeze_higher_sh:
         config.features_rest_lr = 0.0
+    if args.freeze_geometry:
+        original_geometry_learning_rates = freeze_geometry_learning_rates(config)
     if args.disable_refinement:
         config.refine_start_iter = args.steps + 1
         config.refine_stop_iter = 0
@@ -217,6 +246,12 @@ def main() -> None:
         "optimization_profile": {
             "freeze_higher_sh": bool(args.freeze_higher_sh),
             "features_rest_lr": config.features_rest_lr,
+            "freeze_geometry": bool(args.freeze_geometry),
+            "original_geometry_learning_rates": original_geometry_learning_rates,
+            "means_lr": config.means_lr,
+            "means_lr_final": config.means_lr_final,
+            "scales_lr": config.scales_lr,
+            "quats_lr": config.quats_lr,
             "disable_refinement": bool(args.disable_refinement),
             "refine_start_iter": config.refine_start_iter,
             "refine_stop_iter": config.refine_stop_iter,

@@ -3,8 +3,10 @@
 > Competition status: the **static workspace reconstruction remains deferred /
 > non-formal** because no calibrated workspace capture passed its input gate.
 > The separate object-centric observed Gaussian is accepted for the demo and
-> now has a passing Genesis runtime binding. Do not promote MI300X generator
-> outputs or workspace experiments into formal result tables.
+> now has passing continuous-orbit and Genesis runtime bindings. The pinned
+> formal asset remains the anchor-view baseline; the geometry-frozen live-demo
+> candidate requires an explicit nonformal switch. Do not promote MI300X
+> generator outputs or workspace experiments into formal result tables.
 
 Build a static, calibrated Gaussian representation of the real handover
 workspace using VkSplat/Vulkan RADV. The competition deliverable is a visual
@@ -179,6 +181,41 @@ byte-identical because Vulkan floating-point atomic ordering can vary; bitwise
 checkpoint determinism is therefore not claimed. Generated branches remain
 disableable, nonformal, and subordinate to this real-only asset.
 
+## Continuous-view candidate and audit
+
+A 360-degree audit exposed an important distinction: the registered formal
+asset passes its declared four-anchor checks but produces doubled surfaces and
+tearing between anchors. It remains the default evidence asset, not the final
+continuous-view appearance.
+
+The current live-demo candidate starts from the same deterministic 30,000-point
+95 mm visual hull and four real Mercari views of the same doll, then freezes
+the Gaussian centers, scales, and quaternions while fitting DC color and
+opacity. Higher SH and refinement stay disabled. Run this nonformal preflight
+on the single declared Radeon host with external data paths supplied through
+the environment:
+
+```bash
+ONELOOP_OBJECT_DATASET=/path/to/observed_only_dataset \
+ONELOOP_CAMERA_STAGE=/path/to/canonical_camera_stage \
+./ops/run_radeon_c_object_geometry_frozen_preflight.sh
+```
+
+The accepted candidate PLY is then audited on the development APU over 72
+distinct angles plus a repeated 360-degree endpoint:
+
+```bash
+ONELOOP_OBSERVED_CORE_ROOT=/path/to/nonformal_candidate \
+ONELOOP_ORBIT_CANDIDATE_NONFORMAL=1 \
+./ops/run_amd_gaussian_orbit_audit.sh
+```
+
+Numeric acceptance requires a closed cycle, non-empty support, and no border
+contact. The generated MP4 and 12-angle contact sheet still require human
+review. The current result passes and is materially more coherent, but sparse
+four-view side-angle blur remains and no held-out-real quality metric is
+claimed.
+
 ## Accepted nonformal runtime binding
 
 The object Gaussian is not a collision body or a policy input. Genesis owns the
@@ -191,8 +228,10 @@ T_camera_object_opencv =
   inverse(T_world_camera_opengl · diag(1,-1,-1,1)) · T_world_object_canonical
 ```
 
-The binding validates all three content hashes and the upstream `formal=true`
-flag before renderer initialization. The `amd` execution remains
+The pinned-default binding validates all three content hashes and the upstream
+`formal=true` flag before renderer initialization. The explicit candidate path
+self-binds its three hashes and instead requires `formal=false` plus
+`eligible_for_heldout_real_metrics=false`. The `amd` execution remains
 `formal=false`; formal input provenance and formal execution provenance are
 separate claims. The following latest gates pass with generated fill disabled:
 
@@ -220,6 +259,22 @@ rejected architecture result. Earlier candidate-asset gates and static/
 occlusion runs that reused cached Genesis masks are superseded; only the run
 IDs above close the formal-asset integration gates. These are development
 results on the AMD APU, not formal Radeon measurements.
+
+For an operator-facing read-only demo, the explicit candidate flag keeps the
+pinned default intact. The presenter binds only to loopback; the leader process
+uses haptic monitor mode and never writes physical output:
+
+```bash
+ONELOOP_OBSERVED_CORE_ROOT=/path/to/nonformal_candidate \
+ONELOOP_LIVE_CANDIDATE_NONFORMAL=1 \
+./ops/run_amd_real2sim_live_demo.sh \
+  LEFT_PORT RIGHT_PORT LEFT_CALIBRATION_ID RIGHT_CALIBRATION_ID
+```
+
+The launcher defaults to an 8 Hz dual-camera Gaussian view for 30 minutes and
+opens the loopback presenter. Override `ONELOOP_LIVE_DURATION_S` for a bounded
+recording and set `ONELOOP_RECORD_VIDEO=1` when an MP4 evidence artifact is
+needed. Genesis remains authoritative at 120 Hz even if the renderer exits.
 
 The dated hand-off state, exact run IDs, hashes, acceptance decisions, HIL
 status, and remaining dynamic-integration gates are frozen in

@@ -8,10 +8,10 @@ each claim is labelled at its own boundary. The machine-readable companion is
 
 ## Current outcome
 
-The project now has the components required for a credible end-to-end demo.
-The Gaussian appearance path is pose-synchronous and isolated from the 120 Hz
-authoritative simulator; the remaining critical gate is calibrated physical
-haptic bring-up followed by the recorded demo:
+The project now has a measured end-to-end Real2Sim demo path. The Gaussian
+appearance process is pose-synchronous and isolated from the 120 Hz
+authoritative simulator. Physical force feedback remains a useful extension,
+but it is deferred and is no longer on the submission critical path:
 
 1. Two USB SO-101 leaders can drive two virtual SO-101 arms through the live
    Genesis bridge on the `amd` APU host.
@@ -23,8 +23,11 @@ haptic bring-up followed by the recorded demo:
    pendant. Its procedural Genesis representation is a stable physics/debug
    proxy, not a reconstructed appearance asset.
 4. A real-photo-only, canonical 30,000-Gaussian object appearance has now been
-   trained and rendered in registered jobs on `radeon-c` GPU0/gfx1100. This is
-   the content-addressed default visual asset; it makes no held-out-view claim.
+   trained and rendered in registered jobs on `radeon-c` GPU0/gfx1100. It
+   remains the content-addressed formal anchor-view baseline and makes no
+   held-out-view claim. A new continuous-orbit audit rejects it as the final
+   live-demo asset because intermediate angles show doubled surfaces and edge
+   tearing.
 5. MI300X SHARP and UniSHARP experiments produced useful pose, depth,
    appearance, and completion hypotheses. None of the generated branches has
    passed the release gate as metric truth.
@@ -33,12 +36,16 @@ haptic bring-up followed by the recorded demo:
    deliberate hard renderer-crash gate all pass against its exact hashes.
    Genesis Nyx is absent from the installed 1.3.1 package; pinned VkSplat/RADV
    is therefore the accepted nonformal renderer with a debug-mesh fallback.
+7. A second single-Radeon run freezes the deterministic 95 mm visual-hull
+   geometry and fits only observed-photo color/opacity. Its explicit nonformal
+   candidate passes a 72-frame continuous 360-degree audit and a 12-second
+   read-only dual-leader live gate with no Gaussian fallback.
 
-The next release milestone is therefore **not another generator or renderer
-experiment**. It is the calibrated `elbow_flex` single-joint haptic gate, then
-single-arm and dual-arm low-torque expansion, followed by a short handover
-recording. Physical output remains disabled until the operator re-attests that
-a reachable power cut/emergency stop is present.
+The next release milestone is a reproducible package of the real-photo input,
+geometry-frozen single-Radeon build, continuous-orbit review, and dual-leader
+live recording. Additional real held-out photographs are still required before
+novel-view quality metrics or formal promotion. The force-feedback branch is
+preserved but stays disabled and does not block this package.
 
 ## What is accepted now
 
@@ -196,6 +203,50 @@ or novel views. Two identically seeded preflights were numerically stable but
 not byte-identical because Vulkan floating-point atomic accumulation order is
 not deterministic, so bitwise checkpoint determinism is explicitly excluded.
 
+Continuous-orbit run
+`20260804T125613Z_184390_amd_gaussian_orbit_audit` is preserved as a negative
+result. It closes exactly at 360 degrees, but 49 of 73 frames touch the image
+boundary and visual review shows doubled faces/ears, tearing, and ghosted
+surfaces between the four observed anchors. The registered asset therefore
+remains valid for its declared anchor-view lineage and registration claims, but
+is rejected as the final continuous-view demo appearance.
+
+### Geometry-frozen continuous-view candidate
+
+The four Mercari photographs are views of the same Graffiti Mickey variant as
+the physical handover object. To prevent four-view optimization from moving
+the deterministic visual-hull shell into view-specific duplicate surfaces,
+run `20260804T130751Z_1956764_radeon_c_object_geometry_frozen_preflight` keeps
+Gaussian scales and quaternions fixed, holds center learning rates at a
+numerically safe `1e-12`, disables refinement and higher SH, and optimizes only
+observed-photo DC color and opacity. It uses the same real-only dataset hash
+`682b65e9…`, performs 2,000 steps in 10.355 s on `radeon-c` GPU0/gfx1100,
+peaks at 122,502,412 bytes reported Vulkan memory, and emits canonical PLY
+SHA-256 `dc4de9a0a3f4dadf62a4c03c2be939a9b178d284254c9e833a2e19941e41793b`.
+
+This run remains explicitly `formal=false`: it is an executed candidate, not
+a registry entry or held-out-quality claim. Two earlier failed attempts are
+preserved. The first exposed an incompatible canonicalizer CLI on the remote
+copy; the second proved that an exact zero center learning rate enters
+VkSplat's logarithmic schedule and creates non-finite positions. The accepted
+run uses the smallest constant positive rate and verifies all Gaussian fields
+are finite.
+
+On `amd`, continuous-orbit run
+`20260804T131459Z_193927_amd_gaussian_orbit_audit` renders 72 distinct 512-square
+angles plus the repeated endpoint. It has zero cycle-closure RGB MAE, zero
+border-contact frames, alpha support from 0.4390 to 0.6280, and mean per-frame
+VkSplat time 25.127 ms. Visual review accepts shell continuity and the major
+front/rear/ear features as materially better than the formal baseline, while
+retaining visible side-angle blur as a four-view limitation. It is ineligible
+for held-out-real metrics.
+
+A private-data audit sampled 96 images from both cameras across eight reviewed
+successful HIL episodes. It confirms the same doll and supplies task-domain
+rear/top/tag/workspace evidence. It does not supply calibrated camera poses or
+dense front-to-side coverage, so it is identity/domain evidence rather than
+metric training geometry or held-out evaluation.
+
 ### AMD runtime appearance capability
 
 Run `20260804T101510Z_167855_amd_gaussian_appearance_probe` verifies the three
@@ -249,6 +300,16 @@ renderer with `os._exit(86)` after three combined frames. The authoritative
 process still completes 1,200 steps at 119.999 Hz with zero watchdog events,
 300 successful state sends, and no physical output. Gate metrics SHA-256:
 `abc0536382b6b5fed3067d61044eda7ad4bd6b4400c74bc68c0fccb9014c106f`.
+
+The geometry-frozen candidate is connected only through an explicit
+`candidate_nonformal` switch; the pinned formal default is unchanged. Run
+`20260804T131754Z_194185_amd_decoupled_gaussian_live_gate` reads both physical
+leaders without motor output, executes authoritative Genesis control at
+119.9994 Hz, sends 360 ordered visual snapshots with no watchdog or send
+error, and renders 92 dual-camera frames at 7.6665 Hz. All 184 VkSplat camera
+renders succeed with zero fallback. A loopback-only browser presenter publishes
+all 92 frames and records 220 frame requests; the short MP4 is content-hashed.
+Both the consumer and leader publisher report `physical_output=false`.
 
 Earlier runs that rendered cached Genesis masks or coupled rendering into the
 control loop are retained as superseded negative evidence and must not be cited
@@ -318,6 +379,7 @@ is `9a2dac7e7c5b6380e96c016ee9d8d6893e0923007c7a4a62a64cfe749d8f2a63`.
 | Component | Current decision | Allowed role |
 | --- | --- | --- |
 | 30k canonical real-only VkSplat core | Accepted baseline | Default appearance and dynamic-binding input |
+| 30k geometry-frozen real-only candidate | Accepted nonformal demo candidate | Continuous orbit and live Real2Sim appearance; explicit opt-in only |
 | Procedural rigid proxy | Accepted | Genesis collision/debug rendering |
 | PBD plush-body proxy | Feasibility accepted, uncalibrated | Qualitative soft-body experiments only |
 | VGGT-Omega | Accepted nonformal initializer | Pose, depth and generated-geometry audit |
@@ -344,31 +406,27 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Remaining critical path
 
-1. Manually rotate `left/elbow_flex` from 93.538° into the read-only gate's
-   -94° through 84° range, preferably around 60° rather than on the boundary,
-   and rerun the corrected
-   read-only preflight until it passes.
-2. Re-attest the reachable physical emergency stop, clear the left elbow, and
-   run one 10-second `left/elbow_flex` test at the unchanged 30/1000 torque and
-   one-degree limits using the calibrated 0.6727447 effort scale.
-3. Accept that gate only if watchdog/reject counts remain zero, output disables
-   on exit, current/temperature/voltage remain inside bounds, and the operator
-   reports a useful but comfortable resistance.
-4. Generalize the already guarded renderer from one joint to one left arm, then
-   to both arms; repeat monitor-only and time-bounded low-torque gates at each
-   expansion. Do not increase the 30/1000 first-trial torque ceiling.
-5. Record a short approach–grasp–handover–release demo with manifests, hashes,
-   timing, safety state, and a terminal marker.
-6. Package the formal object lineage, nonformal HIL safety evidence, and demo
-   video as separate evidence layers; do not relabel the APU integration runs
-   as formal Radeon measurements.
-7. Capture additional real held-out views before claiming PSNR, SSIM, LPIPS,
-   silhouette IoU, or novel-view quality.
+1. Capture additional real views at inter-anchor angles and freeze them as a
+   held-out set before the next optimization run. Use them for silhouette and
+   photometric evaluation, not as hidden training views.
+2. Turn the geometry-frozen preflight into the registered formal candidate
+   command on `radeon-c`; rerun rather than relabel the existing nonformal job.
+3. Record the final short approach–grasp–handover–release demo with the explicit
+   candidate switch, manifest, hashes, timing, safety state, and terminal
+   marker. Keep leader access read-only for the submission-critical recording.
+4. Package three evidence layers separately: registered single-Radeon build,
+   nonformal continuous-orbit/live integration, and private HIL identity/domain
+   audit. Do not relabel `amd` timings as formal Radeon measurements.
+5. Improve presenter framing with an evidence-labelled object crop only if the
+   unchanged full camera views remain alongside it; do not replace the real
+   task-camera evidence with a beauty shot.
+6. Resume the calibrated haptic branch only after the visual submission path is
+   sealed. Any future motor-output run still requires a fresh estop/workspace
+   attestation and its existing bounded stages.
 
 ## Verification status
 
-The fresh full scaffold collects 182 tests and passes all available tests, with
-5 OpenCV-dependent tests skipped in the local environment;
-shell syntax, YAML/JSON parsing, and `git diff --check` also pass. These
-source-tree checks are not a substitute for the physical haptic gate or the
-recorded dual-arm handover demo.
+The fresh full scaffold collects 201 tests and passes 195, with 6 dependency-
+specific tests skipped in the local environment. Shell syntax, YAML/JSON
+parsing, and `git diff --check` also pass. These source-tree checks are not a
+substitute for held-out capture or the final recorded handover demo.

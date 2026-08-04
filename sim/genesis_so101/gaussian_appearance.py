@@ -591,3 +591,44 @@ def observed_core_asset(root: Path) -> ObservedCoreAsset:
         cameras_path=root / "cameras_observed.json",
         provenance_path=root / "provenance.json",
     )
+
+
+def nonformal_candidate_asset(root: Path) -> ObservedCoreAsset:
+    """Load a self-bound candidate without weakening the pinned formal asset.
+
+    Candidate use must be an explicit caller choice.  The three local hashes
+    bind the exact files for the current nonformal run, while provenance keeps
+    the asset out of held-out-real and formal evidence claims.
+    """
+
+    resolved = root.resolve()
+    ply = resolved / "appearance_observed_canonical.ply"
+    cameras = resolved / "cameras_observed.json"
+    provenance_path = resolved / "provenance.json"
+    missing = [
+        str(path)
+        for path in (ply, cameras, provenance_path)
+        if not path.is_file()
+    ]
+    if missing:
+        raise GaussianAppearanceError(f"candidate files are missing: {missing}")
+    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    if provenance.get("formal") is not False:
+        raise GaussianAppearanceError("candidate requires formal=false provenance")
+    if provenance.get("eligible_for_heldout_real_metrics") is not False:
+        raise GaussianAppearanceError(
+            "candidate must remain ineligible for held-out real metrics"
+        )
+    gaussian_count = provenance.get("gaussian_count")
+    if not isinstance(gaussian_count, int) or gaussian_count <= 0:
+        raise GaussianAppearanceError("candidate Gaussian count must be positive")
+    return ObservedCoreAsset(
+        ply_path=ply,
+        cameras_path=cameras,
+        provenance_path=provenance_path,
+        expected_ply_sha256=sha256_file(ply),
+        expected_cameras_sha256=sha256_file(cameras),
+        expected_provenance_sha256=sha256_file(provenance_path),
+        expected_gaussians=gaussian_count,
+        expected_formal=False,
+    )

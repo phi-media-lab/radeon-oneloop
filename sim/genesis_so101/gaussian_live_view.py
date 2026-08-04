@@ -20,8 +20,10 @@ from radeon_oneloop.contracts import CAMERA_KEYS
 from .gaussian_appearance import (
     SafeAppearanceBinding,
     VkSplatAppearanceRenderer,
+    nonformal_candidate_asset,
     observed_core_asset,
 )
+from .live_frame_presenter import LiveFrameHttpPresenter
 from .scene import build
 from .visual_state_protocol import (
     MAX_PACKET_BYTES,
@@ -93,6 +95,19 @@ def main() -> None:
     parser.add_argument("--render-hz", type=float, default=5.0)
     parser.add_argument("--seed", type=int, default=20260803)
     parser.add_argument("--record-video", action="store_true")
+    parser.add_argument("--present-http-host", default="127.0.0.1")
+    parser.add_argument(
+        "--present-http-port",
+        type=int,
+        default=0,
+        help="Loopback HTTP presenter port; zero disables the live presenter.",
+    )
+    parser.add_argument("--present-jpeg-quality", type=int, default=90)
+    parser.add_argument(
+        "--candidate-nonformal",
+        action="store_true",
+        help="Use a self-bound formal=false candidate instead of the pinned default.",
+    )
     parser.add_argument(
         "--fault-exit-after-frames",
         type=int,
@@ -108,6 +123,10 @@ def main() -> None:
         raise ValueError("render-hz must be between 1 and 30")
     if args.fault_exit_after_frames < 0:
         raise ValueError("fault-exit-after-frames must be non-negative")
+    if not 0 <= args.present_http_port <= 65535:
+        raise ValueError("present-http-port must be between 0 and 65535")
+    if not 50 <= args.present_jpeg_quality <= 100:
+        raise ValueError("present-jpeg-quality must be between 50 and 100")
     args.output.mkdir(parents=True, exist_ok=True)
     import imageio.v3 as iio
 
@@ -115,15 +134,21 @@ def main() -> None:
     task = None
     handles = None
     binding: SafeAppearanceBinding | None = None
+    presenter: LiveFrameHttpPresenter | None = None
     stop_requested = False
+    stop_signal: int | None = None
 
-    def request_stop(_signum: int, _frame: Any) -> None:
-        nonlocal stop_requested
+    def request_stop(signum: int, _frame: Any) -> None:
+        nonlocal stop_requested, stop_signal
         stop_requested = True
+        stop_signal = signum
 
     signal.signal(signal.SIGINT, request_stop)
     signal.signal(signal.SIGTERM, request_stop)
-    frames: list[np.ndarray] = []
+    frame_count = 0
+    first_frame: np.ndarray | None = None
+    final_frame: np.ndarray | None = None
+    video_frames: list[np.ndarray] | None = [] if args.record_video else None
     render_times_ms: list[float] = []
     snapshot_ages_ms: list[float] = []
     latest: VisualStatePacket | None = None
@@ -133,16 +158,31 @@ def main() -> None:
             seed=args.seed,
             show_viewer=False,
         )
-        asset = observed_core_asset(args.observed_core_root)
+        asset = (
+            nonformal_candidate_asset(args.observed_core_root)
+            if args.candidate_nonformal
+            else observed_core_asset(args.observed_core_root)
+        )
+        asset_audit = asset.validate()
         binding = SafeAppearanceBinding.create(
             lambda: VkSplatAppearanceRenderer(asset, args.vksplat_root)
         )
         task.set_appearance_binding(binding)
+        if args.present_http_port:
+            presenter = LiveFrameHttpPresenter(
+                args.present_http_host,
+                args.present_http_port,
+                jpeg_quality=args.present_jpeg_quality,
+            )
+            presenter.start()
         (args.output / "READY").write_text(
             json.dumps(
                 {
                     "status": "ready",
+                    "asset": asset_audit,
+                    "candidate_nonformal": args.candidate_nonformal,
                     "binding": binding.metrics(),
+                    "presenter": presenter.metrics() if presenter is not None else None,
                     "physical_output": False,
                 },
                 sort_keys=True,
@@ -181,16 +221,24 @@ def main() -> None:
             )
             front = np.asarray(observation[CAMERA_KEYS[0]], dtype=np.uint8)
             hand = np.asarray(observation[CAMERA_KEYS[1]], dtype=np.uint8)
-            frames.append(np.concatenate((front, hand), axis=1))
+            combined = np.concatenate((front, hand), axis=1)
+            frame_count += 1
+            if first_frame is None:
+                first_frame = combined.copy()
+            final_frame = combined.copy()
+            if video_frames is not None:
+                video_frames.append(combined.copy())
+            if presenter is not None:
+                presenter.publish(combined)
             if (
                 args.fault_exit_after_frames
-                and len(frames) == args.fault_exit_after_frames
+                and frame_count == args.fault_exit_after_frames
             ):
                 marker = {
                     "schema_version": "radeon_oneloop.renderer_fault_injection.v1",
                     "fault": "hard_process_exit",
                     "exit_code": 86,
-                    "frames_before_exit": len(frames),
+                    "frames_before_exit": frame_count,
                     "last_snapshot_sequence_id": latest.sequence_id,
                     "binding": task.appearance_diagnostics()["binding"],
                     "physical_output": False,
@@ -206,23 +254,23 @@ def main() -> None:
                 next_render = time.monotonic()
         elapsed_s = time.monotonic() - started
 
-        if not frames:
+        if frame_count == 0 or first_frame is None or final_frame is None:
             raise RuntimeError("live Gaussian renderer produced no frames")
-        iio.imwrite(args.output / "live_gaussian_first.png", frames[0])
-        iio.imwrite(args.output / "live_gaussian_final.png", frames[-1])
-        if args.record_video:
+        iio.imwrite(args.output / "live_gaussian_first.png", first_frame)
+        iio.imwrite(args.output / "live_gaussian_final.png", final_frame)
+        if video_frames is not None:
             iio.imwrite(
                 args.output / "live_gaussian.mp4",
-                np.stack(frames),
+                np.stack(video_frames),
                 fps=args.render_hz,
                 codec="libx264",
                 pixelformat="yuv420p",
             )
         diagnostics = task.appearance_diagnostics()
-        minimum_frames = max(int(args.duration_s * args.render_hz * 0.8), 1)
+        minimum_frames = max(int(elapsed_s * args.render_hz * 0.8), 1)
         accepted = bool(
-            len(frames) >= minimum_frames
-            and receiver.accepted >= int(args.duration_s * 20.0)
+            frame_count >= minimum_frames
+            and receiver.accepted >= max(int(elapsed_s * 20.0), 1)
             and receiver.rejected == 0
             and diagnostics["fallback_frames"] == 0
             and diagnostics["binding"]["latched_error"] is None
@@ -230,13 +278,19 @@ def main() -> None:
         report = {
             "schema_version": "radeon_oneloop.gaussian_live_view.v1",
             "formal": False,
+            "asset": asset_audit,
+            "candidate_nonformal": args.candidate_nonformal,
             "accepted": accepted,
             "duration_s": args.duration_s,
             "elapsed_s": elapsed_s,
+            "termination": {
+                "reason": "signal" if stop_signal is not None else "duration",
+                "signal": stop_signal,
+            },
             "render": {
                 "requested_hz": args.render_hz,
-                "frames": len(frames),
-                "effective_hz": len(frames) / elapsed_s,
+                "frames": frame_count,
+                "effective_hz": frame_count / elapsed_s,
                 "time_ms": {
                     "mean": statistics.fmean(render_times_ms),
                     "p95": float(np.percentile(render_times_ms, 95)),
@@ -255,6 +309,7 @@ def main() -> None:
                 },
             },
             "appearance": diagnostics,
+            "presenter": presenter.metrics() if presenter is not None else {"enabled": False},
             "architecture": {
                 "authoritative_control_process": False,
                 "state_input": "read_only_udp_snapshot",
@@ -272,6 +327,8 @@ def main() -> None:
             raise RuntimeError("decoupled live Gaussian view gate failed")
     finally:
         receiver.close()
+        if presenter is not None:
+            presenter.close()
         if binding is not None:
             binding.close()
         if handles is not None:
