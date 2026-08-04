@@ -169,9 +169,75 @@ ONELOOP_LEADER_MOVES_FREELY_CONFIRMED=1 \
 ./ops/seal_haptic_stage_receipt.sh SOURCE_RUN_DIR useful_comfortable
 ```
 
-Do not execute this command from automation without a fresh operator
-attestation that the power cut is reachable and the selected elbow joint is
-clear to resist motion.
+The next stage is a 30-second, strictly no-output mapping exercise. It requires
+the sealed single-joint receipt before either serial bus is opened, records the
+range of every leader channel, and accepts only when all six channels on the
+selected arm are deliberately exercised while the other arm stays quiet. The
+Genesis consumer must also run at at least 100 Hz with zero input clamping,
+zero watchdog events, bounded tracking error, and complete haptic-monitor
+transport. Appearance rendering is intentionally absent from this safety gate;
+the already-tested decoupled renderer remains the demo path.
+
+```bash
+./ops/run_amd_haptic_monitor_stage.sh \
+  LEFT_PORT RIGHT_PORT LEFT_ID RIGHT_ID left SINGLE_JOINT_RECEIPT_RUN_DIR
+```
+
+Even a machine-accepted monitor run cannot enable motors. The operator must
+confirm that the selected real leader drove the same-side virtual follower in
+the same direction and remained freely movable. A separate receipt binds that
+judgment and authorizes only the five-joint read-only preflight:
+
+```bash
+ONELOOP_LEADER_MOVES_FREELY_CONFIRMED=1 \
+./ops/seal_haptic_monitor_receipt.sh \
+  MONITOR_RUN_DIR correct_same_side_same_direction
+
+./ops/run_amd_haptic_arm_readonly_preflight.sh \
+  LEFT_PORT RIGHT_PORT LEFT_ID RIGHT_ID left MONITOR_RECEIPT_RUN_DIR
+```
+
+The arm preflight reads seven registers from each of the five non-gripper
+motors and checks torque-disabled state, position mode, electrical health, and
+bidirectional model-limit margin. It writes no register and uses a pure safety
+kernel to prove the candidate 20/1000 torque, 0.5-degree offset, and 100 ms
+watchdog envelope. A future physical single-arm runner must repeat this exact
+preflight in the same run after a fresh estop/workspace attestation; a standalone
+preflight result never authorizes physical output by itself.
+
+The first five-joint physical stage remains a synthetic, deterministic bench
+gate rather than a full live-contact demo. This isolates simultaneous bus
+writes, cross-joint behavior, shutdown, and operator comfort before Genesis
+contact dynamics are combined with two physical arms. It is limited to the five
+non-gripper motors on one selected arm, 20/1000 torque, a 0.5-degree configured
+offset (0.1 degree at the calibrated test effort), five seconds of output, and
+the 100 ms feedback watchdog. The runner requires fresh estop and clear-arm
+workspace environment attestations and repeats the five-joint read-only
+preflight in the same run:
+
+```bash
+ONELOOP_PHYSICAL_ESTOP_CONFIRMED=1 \
+ONELOOP_SELECTED_ARM_WORKSPACE_CLEAR_CONFIRMED=1 \
+./ops/run_amd_haptic_arm_bench.sh \
+  LEFT_PORT RIGHT_PORT LEFT_ID RIGHT_ID left MONITOR_RECEIPT_RUN_DIR
+```
+
+Machine acceptance still does not unlock dual-arm operation. The operator must
+report useful/comfortable resistance, no cross-joint instability, and free
+motion after shutdown in a separately hashed receipt. Only that receipt can
+authorize `dual_arm_monitor_only`:
+
+```bash
+ONELOOP_LEADER_MOVES_FREELY_CONFIRMED=1 \
+ONELOOP_NO_CROSS_JOINT_INSTABILITY_CONFIRMED=1 \
+./ops/seal_haptic_arm_stage_receipt.sh \
+  SINGLE_ARM_PHYSICAL_RUN_DIR useful_comfortable
+```
+
+Do not execute the physical bench command, or any future physical-arm command,
+from automation without a fresh operator attestation that the power cut is
+reachable and the selected workspace is clear to resist motion. The monitor
+and read-only preflight commands above never satisfy that attestation.
 
 The runner writes separate publisher/sender metrics and evaluates them with
 `haptic_bench_gate.py`. A `DONE` marker now requires at least 250 accepted

@@ -138,6 +138,8 @@ def main() -> None:
     parser.add_argument("--visual-state-host")
     parser.add_argument("--visual-state-port", type=int, default=58083)
     parser.add_argument("--visual-state-hz", type=float, default=30.0)
+    parser.add_argument("--ready-file", type=Path)
+    parser.add_argument("--start-delay-s", type=float, default=0.0)
     args = parser.parse_args()
     import imageio.v3 as iio
     if not 1 <= args.port <= 65535:
@@ -169,6 +171,10 @@ def main() -> None:
         raise ValueError("visual-state-port must be between 1 and 65535")
     if not 1.0 <= args.visual_state_hz <= args.sim_hz:
         raise ValueError("visual-state-hz must be between 1 and sim-hz")
+    if not 0.0 <= args.start_delay_s <= 30.0:
+        raise ValueError("start-delay-s must be between 0 and 30 seconds")
+    if args.ready_file is not None and args.ready_file.exists():
+        raise FileExistsError(f"ready-file already exists: {args.ready_file}")
 
     args.output.mkdir(parents=True, exist_ok=True)
     receiver = UdpLeaderReceiver(args.bind_host, args.port, source_host=args.source_host)
@@ -240,6 +246,28 @@ def main() -> None:
         interpolation_step = 0
         interpolation_steps = max(int(round(args.sim_hz / args.input_hz)), 1)
         task.reset(current.tolist())
+
+        if args.ready_file is not None:
+            args.ready_file.parent.mkdir(parents=True, exist_ok=True)
+            temporary_ready = args.ready_file.with_name(
+                args.ready_file.name + ".tmp"
+            )
+            temporary_ready.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "radeon_oneloop.live_teleop_ready.v1",
+                        "start_delay_s": args.start_delay_s,
+                        "physical_output_commands": False,
+                    },
+                    sort_keys=True,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            temporary_ready.replace(args.ready_file)
+        delay_deadline = time.monotonic() + args.start_delay_s
+        while not stop_requested and time.monotonic() < delay_deadline:
+            time.sleep(min(0.05, delay_deadline - time.monotonic()))
 
         render_interval = (
             max(int(round(args.sim_hz / args.render_hz)), 1)
@@ -393,6 +421,8 @@ def main() -> None:
                 "signal": stop_signal,
             },
             "build_seconds": build_seconds,
+            "operator_start_delay_s": args.start_delay_s,
+            "ready_file_emitted": args.ready_file is not None,
             "sim_hz_requested": args.sim_hz,
             "sim_hz_effective": steps / run_elapsed_s,
             "steps": steps,

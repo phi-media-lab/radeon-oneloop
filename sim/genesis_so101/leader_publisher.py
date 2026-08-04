@@ -12,8 +12,9 @@ import time
 from pathlib import Path
 from typing import Any
 
-from radeon_oneloop.contracts import ARM_JOINTS
+from radeon_oneloop.contracts import ACTION_NAMES, ARM_JOINTS
 
+from .haptic_arm_hardware import FeetechHapticArmRenderer, HapticArmConfig
 from .haptic_hardware import (
     BENCH_MOTORS,
     FeetechHapticBenchRenderer,
@@ -58,6 +59,46 @@ def _read_arm(leader: Any) -> tuple[float, ...]:
     return tuple(float(values[name]) for name in ARM_JOINTS)
 
 
+class ActionRangeTracker:
+    """Accumulate a compact, auditable range summary for the 12-DoF stream."""
+
+    def __init__(self) -> None:
+        self.minimum: list[float] | None = None
+        self.maximum: list[float] | None = None
+
+    def update(self, action: tuple[float, ...]) -> None:
+        if len(action) != len(ACTION_NAMES):
+            raise ValueError(f"action must contain {len(ACTION_NAMES)} values")
+        if self.minimum is None:
+            self.minimum = list(action)
+            self.maximum = list(action)
+            return
+        assert self.maximum is not None
+        for index, value in enumerate(action):
+            self.minimum[index] = min(self.minimum[index], value)
+            self.maximum[index] = max(self.maximum[index], value)
+
+    def as_dict(self) -> dict[str, object]:
+        if self.minimum is None or self.maximum is None:
+            return {
+                "action_names": list(ACTION_NAMES),
+                "minimum": None,
+                "maximum": None,
+                "span": None,
+            }
+        return {
+            "action_names": list(ACTION_NAMES),
+            "minimum": self.minimum,
+            "maximum": self.maximum,
+            "span": [
+                maximum - minimum
+                for minimum, maximum in zip(
+                    self.minimum, self.maximum, strict=True
+                )
+            ],
+        }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--left-port", required=True)
@@ -71,7 +112,7 @@ def main() -> None:
     parser.add_argument("--feedback-source-host")
     parser.add_argument(
         "--haptic-output-mode",
-        choices=("monitor", "bench-single-joint"),
+        choices=("monitor", "bench-single-joint", "physical-single-arm"),
         default="monitor",
     )
     parser.add_argument("--haptic-bench-side", choices=("left", "right"))
@@ -90,6 +131,11 @@ def main() -> None:
     )
     parser.add_argument("--print-every", type=int, default=30)
     parser.add_argument("--metrics-output", type=Path)
+    parser.add_argument(
+        "--action-range-start-file",
+        type=Path,
+        help="If set, collect action ranges only after this file exists.",
+    )
     parser.add_argument(
         "--dry-run", action="store_true", help="Read and validate without sending UDP."
     )
@@ -110,17 +156,29 @@ def main() -> None:
         raise ValueError("haptic-health-hz must be between 1 and 10")
     if not 0.01 <= args.haptic_simulated_effort_full_scale <= 10.0:
         raise ValueError("haptic simulated effort full scale must be in [0.01, 10]")
-    if args.haptic_output_mode == "bench-single-joint":
+    if args.haptic_output_mode in ("bench-single-joint", "physical-single-arm"):
         if args.feedback_bind_host is None:
-            raise ValueError("bench haptics require the feedback UDP listener")
-        if args.haptic_bench_side is None or args.haptic_bench_motor is None:
-            raise ValueError("bench haptics require one explicit side and motor")
+            raise ValueError("physical haptics require the feedback UDP listener")
+        if args.haptic_bench_side is None:
+            raise ValueError("physical haptics require one explicit side")
         if not args.physical_estop_confirmed:
-            raise ValueError("bench haptics require --physical-estop-confirmed")
+            raise ValueError("physical haptics require --physical-estop-confirmed")
         if not 0.0 < args.haptic_max_output_duration_s <= 10.0:
             raise ValueError("physical haptic output must be time-bounded to 10 seconds")
+    if args.haptic_output_mode == "bench-single-joint":
+        if args.haptic_bench_motor is None:
+            raise ValueError("bench haptics require one explicit motor")
         if not 0.0 < args.haptic_max_position_offset_deg <= 1.0:
             raise ValueError("first-bench position offset must be in (0, 1] degree")
+    if args.haptic_output_mode == "physical-single-arm":
+        if args.haptic_bench_motor is not None:
+            raise ValueError("single-arm haptics do not accept one bench motor")
+        if not 1 <= args.haptic_max_torque_limit_raw <= 20:
+            raise ValueError("single-arm torque limit must be in [1, 20]")
+        if not 0.0 < args.haptic_max_position_offset_deg <= 0.5:
+            raise ValueError("single-arm position offset must be in (0, 0.5] degree")
+        if not 0.0 < args.haptic_max_output_duration_s <= 5.0:
+            raise ValueError("first single-arm output must be bounded to 5 seconds")
 
     stop_requested = False
 
@@ -144,6 +202,9 @@ def main() -> None:
     samples = 0
     send_errors = 0
     read_times_ms: list[float] = []
+    action_range = ActionRangeTracker()
+    action_range_samples = 0
+    action_range_started_monotonic_ns: int | None = None
     feedback_accepted = 0
     feedback_rejected = 0
     feedback_last_sequence_id: int | None = None
@@ -155,7 +216,7 @@ def main() -> None:
     latest_health: dict[str, int] | None = None
     last_health_check_ns: int | None = None
     haptic_controller: SafeHapticController | None = None
-    haptic_renderer: FeetechHapticBenchRenderer | None = None
+    haptic_renderer: FeetechHapticBenchRenderer | FeetechHapticArmRenderer | None = None
     shutdown_error: str | None = None
     if args.haptic_output_mode == "bench-single-joint":
         bench_config = HapticBenchConfig(
@@ -175,6 +236,24 @@ def main() -> None:
         leader_index = 0 if bench_config.side == "left" else 1
         haptic_renderer = FeetechHapticBenchRenderer(
             leaders[leader_index].bus, bench_config
+        )
+    elif args.haptic_output_mode == "physical-single-arm":
+        arm_config = HapticArmConfig(
+            side=args.haptic_bench_side,
+            max_torque_limit_raw=args.haptic_max_torque_limit_raw,
+        )
+        haptic_controller = SafeHapticController(
+            HapticSafetyConfig(
+                max_torque_limit_raw=arm_config.max_torque_limit_raw,
+                max_position_offset_deg=args.haptic_max_position_offset_deg,
+                simulated_effort_full_scale=(
+                    args.haptic_simulated_effort_full_scale
+                ),
+            )
+        )
+        leader_index = 0 if arm_config.side == "left" else 1
+        haptic_renderer = FeetechHapticArmRenderer(
+            leaders[leader_index].bus, arm_config
         )
     started = time.monotonic()
     period_s = 1.0 / args.hz
@@ -197,6 +276,14 @@ def main() -> None:
             left = _read_arm(leaders[0])
             right = _read_arm(leaders[1])
             current_action = left + right
+            if (
+                args.action_range_start_file is None
+                or args.action_range_start_file.is_file()
+            ):
+                if action_range_started_monotonic_ns is None:
+                    action_range_started_monotonic_ns = time.monotonic_ns()
+                action_range.update(current_action)
+                action_range_samples += 1
             packet = LeaderActionPacket(
                 sequence_id=samples,
                 captured_monotonic_ns=time.monotonic_ns(),
@@ -333,6 +420,12 @@ def main() -> None:
             "mean": sum(read_times_ms) / len(read_times_ms) if read_times_ms else None,
             "max": max(read_times_ms) if read_times_ms else None,
         },
+        "action_range": {
+            **action_range.as_dict(),
+            "samples": action_range_samples,
+            "capture_start_gated": args.action_range_start_file is not None,
+            "capture_started": action_range_started_monotonic_ns is not None,
+        },
         "haptic_feedback": {
             "mode": (
                 args.haptic_output_mode
@@ -361,6 +454,20 @@ def main() -> None:
                     "max_output_duration_s": args.haptic_max_output_duration_s,
                 }
                 if args.haptic_output_mode == "bench-single-joint"
+                else None
+            ),
+            "arm_selection": (
+                {
+                    "side": args.haptic_bench_side,
+                    "motors": list(BENCH_MOTORS),
+                    "max_torque_limit_raw": args.haptic_max_torque_limit_raw,
+                    "max_position_offset_deg": args.haptic_max_position_offset_deg,
+                    "simulated_effort_full_scale": (
+                        args.haptic_simulated_effort_full_scale
+                    ),
+                    "max_output_duration_s": args.haptic_max_output_duration_s,
+                }
+                if args.haptic_output_mode == "physical-single-arm"
                 else None
             ),
             "output_armed_ever": physical_output_armed_ever,

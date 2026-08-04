@@ -95,6 +95,20 @@ Post-run operator perception is also fail-closed: a separate content-addressed
 receipt must bind the accepted gate, source hash index, `DONE` marker, a
 useful/comfortable verdict, and free leader motion after shutdown. That receipt
 can unlock only single-arm monitor mode, never physical single-arm output.
+The subsequent single-arm monitor stage is now executable but has not been run:
+it requires the receipt before opening either bus, records per-channel motion
+ranges, enforces one exercised arm plus one quiet arm, and accepts only a
+100-Hz-or-faster unclamped Genesis run with zero watchdog and zero physical
+output. Its own operator mapping receipt can unlock only a five-joint read-only
+preflight. That preflight checks all non-gripper motors at a candidate 20/1000
+torque and 0.5-degree envelope; the future physical runner must repeat it in the
+same run after a fresh estop/workspace attestation.
+The corresponding five-second single-arm physical runner, machine gate, and
+post-run operator receipt are implemented and software-tested but deliberately
+unexecuted. They use reliable per-motor writes and readback for arm/release/
+restore, batched bounded writes only in the 30 Hz loop, and allow the operator
+receipt to unlock only dual-arm monitor mode. No multi-motor physical claim is
+made until that staged real-hardware run is completed.
 
 ### Physics and debug object
 
@@ -311,7 +325,7 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Verification status
 
-The fresh full scaffold collects 149 tests and passes all available tests, with
+The fresh full scaffold collects 173 tests and passes all available tests, with
 5 OpenCV-dependent tests skipped in the local environment;
 shell syntax, YAML/JSON parsing, and `git diff --check` also pass. These
 source-tree checks are not a substitute for the physical haptic gate or the

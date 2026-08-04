@@ -52,11 +52,15 @@ haptic_feedback:
     stages:
       - single_joint_physical
       - single_arm_monitor_only
+      - single_arm_readonly_preflight
       - single_arm_physical
       - dual_arm_monitor_only
+      - dual_arm_readonly_preflight
       - dual_arm_physical
       - final_demo
     single_joint_operator_receipt_required: true
+    monitor_operator_receipt_required: true
+    same_run_readonly_preflight_before_each_physical_stage: true
     operator_identity_recorded: false
     current_authorized_stage: left_elbow_flex_readonly_preflight
 simulation:
