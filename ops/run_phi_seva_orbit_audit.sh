@@ -13,7 +13,7 @@ output_root=$3
 python_bin=$4
 runner_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 repo_root=$(cd "$runner_dir/.." && pwd)
-run_id="seva_orbit_audit_$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}"
+run_id=${ONELOOP_SEVA_AUDIT_RUN_ID:-"seva_orbit_audit_$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}"}
 run_dir="$output_root/$run_id"
 
 [[ -d "$seva_run_root" ]]
@@ -21,6 +21,7 @@ run_dir="$output_root/$run_id"
 [[ -d "$four_view_input_root" ]]
 [[ -x "$python_bin" ]]
 mkdir -p "$output_root"
+[[ "$run_id" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]
 [[ ! -e "$run_dir" ]]
 
 cd "$repo_root"

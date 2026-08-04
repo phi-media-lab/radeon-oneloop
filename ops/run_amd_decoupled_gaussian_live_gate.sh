@@ -33,6 +33,7 @@ show_genesis_viewer=${ONELOOP_SHOW_GENESIS_VIEWER:-0}
 record_video=${ONELOOP_RECORD_VIDEO:-0}
 candidate_nonformal=${ONELOOP_LIVE_CANDIDATE_NONFORMAL:-0}
 generated_fill_enabled=${ONELOOP_GENERATED_FILL_ENABLED:-0}
+final_task_recording=${ONELOOP_FINAL_TASK_RECORDING:-0}
 run_id="$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}_amd_decoupled_gaussian_live_gate"
 run_dir="$run_root/$run_id"
 consumer_dir="$run_dir/consumer"
@@ -51,6 +52,7 @@ renderer_dir="$run_dir/renderer"
 [[ "$record_video" == 0 || "$record_video" == 1 ]]
 [[ "$candidate_nonformal" == 0 || "$candidate_nonformal" == 1 ]]
 [[ "$generated_fill_enabled" == 0 || "$generated_fill_enabled" == 1 ]]
+[[ "$final_task_recording" == 0 || "$final_task_recording" == 1 ]]
 if [[ "$generated_fill_enabled" == 1 && "$candidate_nonformal" == 1 ]]; then
   printf '%s\n' 'layered preview and generic nonformal candidate modes are mutually exclusive' >&2
   exit 64
@@ -90,6 +92,8 @@ cleanup() {
         -print0 | sort -z | xargs -0 sha256sum >hashes.sha256)
       printf '{"status":"stopped_by_operator","exit_code":%d}\n' "$status" >"$run_dir/STOPPED"
     else
+      (cd "$run_dir" && find . -type f ! -name hashes.sha256 ! -name DONE ! -name STOPPED ! -name FAILED \
+        -print0 | sort -z | xargs -0 sha256sum >hashes.sha256)
       printf '{"status":"failed","exit_code":%d}\n' "$status" >"$run_dir/FAILED"
     fi
   fi
@@ -136,6 +140,7 @@ printf '%s\n' \
   'leader_bus_mode: read_only' \
   'physical_output: false' \
   "generated_fill_enabled: $generated_fill_enabled" \
+  "final_task_recording: $final_task_recording" \
   "fault_exit_after_frames: $fault_exit_after_frames" \
   "ply_sha256: $(sha256sum "$appearance_ply" | awk '{print $1}')" \
   >"$run_dir/manifest.yaml"
@@ -218,6 +223,9 @@ consumer_args=(
   --visual-state-port "$visual_port"
   --visual-state-hz 30
 )
+if [[ "$final_task_recording" == 1 ]]; then
+  consumer_args+=(--evaluate-handover)
+fi
 if [[ "$show_genesis_viewer" == 1 ]]; then
   consumer_args+=(--show-viewer)
 fi
@@ -266,7 +274,7 @@ fi
 "$rocm_python" - "$consumer_dir/metrics.json" "$renderer_dir/metrics.json" \
   "$run_dir/publisher.log" "$run_dir/gate.json" "$renderer_dir/FAULT_INJECTED.json" \
   "$fault_exit_after_frames" "$renderer_status" "$show_presenter" \
-  "$candidate_nonformal" "$generated_fill_enabled" <<'PY'
+  "$candidate_nonformal" "$generated_fill_enabled" "$final_task_recording" <<'PY'
 import json, sys
 from pathlib import Path
 
@@ -276,6 +284,7 @@ renderer_status = int(sys.argv[7])
 show_presenter = bool(int(sys.argv[8]))
 candidate_nonformal = bool(int(sys.argv[9]))
 generated_fill_enabled = bool(int(sys.argv[10]))
+final_task_recording = bool(int(sys.argv[11]))
 consumer = json.loads(consumer_path.read_text())
 publisher_text = publisher_path.read_text()
 decoder = json.JSONDecoder()
@@ -299,6 +308,21 @@ checks = {
     "visual_stream_send_errors_zero": consumer["visual_state_stream"]["send_errors"] == 0,
     "publisher_physical_output_false": publisher["physical_output_commands"] is False,
 }
+if final_task_recording:
+    action_range = publisher.get("action_range") or {}
+    span = action_range.get("span") or []
+    left_arm_motion = sum(float(value) >= 5.0 for value in span[:5])
+    right_arm_motion = sum(float(value) >= 5.0 for value in span[6:11])
+    checks.update({
+        "handover_task_accepted": consumer["handover_task"]["accepted"] is True,
+        "left_arm_motion_coverage": left_arm_motion >= 3,
+        "right_arm_motion_coverage": right_arm_motion >= 3,
+        "left_gripper_exercised": len(span) == 12 and float(span[5]) >= 10.0,
+        "right_gripper_exercised": len(span) == 12 and float(span[11]) >= 10.0,
+        "task_trace_physical_output_false": (
+            consumer["handover_task"]["physical_output_commands"] is False
+        ),
+    })
 if fault_frames:
     fault = json.loads(fault_path.read_text())
     checks.update({
@@ -346,6 +370,8 @@ report = {
     "appearance_successes": appearance_successes,
     "appearance_failures": appearance_failures,
     "generated_fill_enabled": generated_fill_enabled,
+    "final_task_recording": final_task_recording,
+    "handover_task": consumer["handover_task"] if final_task_recording else None,
     "physical_output": False,
 }
 output_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")

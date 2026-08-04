@@ -1,0 +1,17 @@
+schema_version: radeon_oneloop.amd_decoupled_gaussian_live_gate_run.v1
+formal: false
+host_role: amd_apu_nonformal_runtime_integration
+architecture: authoritative_control_plus_non_authoritative_renderer_process
+duration_s: 12
+requested_control_hz: 120
+requested_render_hz: 8
+show_presenter: 0
+presenter_url: http://127.0.0.1:58084/
+show_genesis_viewer: 0
+record_video: 1
+candidate_nonformal: 0
+leader_bus_mode: read_only
+physical_output: false
+generated_fill_enabled: 0
+fault_exit_after_frames: 0
+ply_sha256: 7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706

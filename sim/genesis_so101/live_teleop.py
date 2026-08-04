@@ -20,6 +20,7 @@ from .gaussian_appearance import (
     VkSplatAppearanceRenderer,
     observed_core_asset,
 )
+from .handover_task_gate import HandoverTaskTracker
 from .live_protocol import (
     MAX_PACKET_BYTES,
     HapticFeedbackPacket,
@@ -35,6 +36,8 @@ from .scene import (
     LEFT_BASE_POS,
     MODEL_FORWARD_UNIT,
     MODEL_LATERAL_UNIT,
+    OBJECT_START_POS,
+    OBJECT_TARGET_POS,
     RIGHT_BASE_POS,
     SHARED_BASE_EULER_DEG,
     build,
@@ -140,6 +143,7 @@ def main() -> None:
     parser.add_argument("--visual-state-hz", type=float, default=30.0)
     parser.add_argument("--ready-file", type=Path)
     parser.add_argument("--start-delay-s", type=float, default=0.0)
+    parser.add_argument("--evaluate-handover", action="store_true")
     args = parser.parse_args()
     import imageio.v3 as iio
     if not 1 <= args.port <= 65535:
@@ -207,7 +211,9 @@ def main() -> None:
     visual_state_sent = 0
     visual_state_send_errors = 0
     max_contact_force_n = [0.0, 0.0]
+    max_gripper_object_contact_force_n = [0.0, 0.0]
     max_joint_reaction_effort = 0.0
+    handover_tracker = HandoverTaskTracker(OBJECT_START_POS)
     stop_requested = False
     stop_signal: int | None = None
 
@@ -329,18 +335,19 @@ def main() -> None:
             observation = task.step(command.tolist(), render=render)
             step_times_ms.append((time.perf_counter() - step_started) * 1000.0)
             current = np.asarray(command, dtype=np.float64)
+            task_snapshot = None
             if (
                 visual_state_destination is not None
                 and steps % visual_state_interval == 0
             ):
-                snapshot = task.visual_state()
+                task_snapshot = task.visual_state()
                 visual_packet = VisualStatePacket(
                     sequence_id=visual_state_sent,
                     captured_monotonic_ns=time.monotonic_ns(),
                     captured_unix_ns=time.time_ns(),
-                    joint_positions_rad=snapshot["joint_positions_rad"],
-                    object_position_m=snapshot["object_position_m"],
-                    object_quaternion_wxyz=snapshot["object_quaternion_wxyz"],
+                    joint_positions_rad=task_snapshot["joint_positions_rad"],
+                    object_position_m=task_snapshot["object_position_m"],
+                    object_quaternion_wxyz=task_snapshot["object_quaternion_wxyz"],
                 )
                 try:
                     visual_state_socket.sendto(
@@ -352,7 +359,16 @@ def main() -> None:
                     # its UDP sink must not stop physics or haptic monitoring.
                     visual_state_send_errors += 1
             if feedback_destination is not None and steps % feedback_interval == 0:
-                efforts, contact_force_n = task.haptic_feedback()
+                efforts, contact_force_n, gripper_object_contact_force_n = (
+                    task.haptic_feedback_diagnostics()
+                )
+                if task_snapshot is None:
+                    task_snapshot = task.visual_state()
+                handover_tracker.update(
+                    sample_index=feedback_sent,
+                    object_position_m=task_snapshot["object_position_m"],
+                    contact_force_n=gripper_object_contact_force_n,
+                )
                 feedback_packet = HapticFeedbackPacket(
                     sequence_id=feedback_sent,
                     captured_monotonic_ns=time.monotonic_ns(),
@@ -375,6 +391,10 @@ def main() -> None:
                 for arm_index, value in enumerate(contact_force_n):
                     max_contact_force_n[arm_index] = max(
                         max_contact_force_n[arm_index], value
+                    )
+                for arm_index, value in enumerate(gripper_object_contact_force_n):
+                    max_gripper_object_contact_force_n[arm_index] = max(
+                        max_gripper_object_contact_force_n[arm_index], value
                     )
             if render:
                 front = np.asarray(observation[CAMERA_KEYS[0]], dtype=np.uint8)
@@ -458,6 +478,9 @@ def main() -> None:
                 "packets_sent": feedback_sent,
                 "send_errors": feedback_send_errors,
                 "max_contact_force_n": max_contact_force_n,
+                "max_gripper_object_contact_force_n": (
+                    max_gripper_object_contact_force_n
+                ),
                 "max_abs_joint_reaction_effort": max_joint_reaction_effort,
                 "physical_output_commands": False,
             },
@@ -484,6 +507,13 @@ def main() -> None:
                 "max_abs": float(np.max(tracking_error)),
             },
             "physical_output_commands": False,
+            "handover_task": {
+                "evaluation_enabled": args.evaluate_handover,
+                **handover_tracker.summary(
+                    target_position_m=OBJECT_TARGET_POS,
+                    target_tolerance_m=0.08,
+                ),
+            },
             "appearance": {
                 "mode": args.appearance_mode,
                 "generated_fill_enabled": False,

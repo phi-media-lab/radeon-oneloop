@@ -49,6 +49,10 @@ but it is deferred and is no longer on the submission critical path:
    observed-core/generated-fill separation and Genesis static-binding path.
    It passes the no-harm gate only as a default-off nonformal toggle; it does
    not replace the still access-gated SEVA primary branch.
+10. The final read-only handover recorder now evaluates task semantics rather
+    than runtime health alone. A preserved stationary-input trial proves that
+    it rejects missing arm/gripper motion and a missing left-grasp → dual-contact
+    → right-hold sequence even when control and rendering remain healthy.
 
 The next release milestone is a reproducible package of the real-photo input,
 geometry-frozen single-Radeon build, continuous-orbit review, and dual-leader
@@ -281,6 +285,21 @@ zero physical-output commands. All 12 leader channels were stationary, so the
 run proves integration only; it does not count as an approach, grasp, handover,
 release, or task-success recording.
 
+Final-task fail-closed run
+`20260804T213311Z_228906_amd_decoupled_gaussian_live_gate` exercises the new
+task recorder with stationary leaders. As expected it is marked `FAILED`:
+control remains at 119.999 Hz, rendering at 7.666 Hz, all 184 Gaussian renders
+succeed, and watchdog, stream, fallback, and physical-output counts remain
+zero, but neither arm/gripper motion coverage nor the ordered contact sequence
+passes. The task trace contains 360 no-contact samples, never reaches the
+handover target, and is not relabelled as a successful demo. Contacts are
+computed only between each gripper/finger pair and the target object; table,
+other-arm, and upstream-link contacts cannot satisfy the task sequence. Gate
+SHA-256 is
+`62253651ccc4fe2a283c8d1732e5ec82c9bd333b9e96e2fb881fd39d425c8b29`;
+the failed-run hash-index SHA-256 is
+`ed8031bbc5d586ace2b7c337730b2bcbadca35c9124e2930c95a0b3f31626b3d`.
+
 ### AMD runtime appearance capability
 
 Run `20260804T101510Z_167855_amd_gaussian_appearance_probe` verifies the three
@@ -478,11 +497,19 @@ superseded. The accepted review binds the orbit, aligned mesh, four-image
 manifest, and the two private HIL rear/top identity exemplars; generated hidden
 geometry remains non-metric and ineligible for collision or formal evidence.
 
-SEVA remains the preferred four-image-to-orbit stage. Its code and fixed camera
-contract are ready, but phi currently reports an invalid stored Hugging Face
-credential and no local v1.1 weights. No token is recorded in the repository
-or command logs. Hunyuan seed `10030` is a controlled fallback, not a
-replacement for the preferred geometry-free SEVA path.
+SEVA remains the preferred four-image-to-orbit stage. Its fixed-revision
+authorized installer, four-view generation, numeric audit, mandatory human
+review boundary, and accepted-review-only pseudo-view builder are now deployed
+on `phi-amd-work`. The installer accepts no token argument or environment
+token and uses only a credential entered interactively with the Hugging Face
+CLI. The current stored credential is invalid and no local v1.1 weights are
+present, so preserved runs `seva_model_install_20260804T212528Z_1432732` and
+`seva_primary_20260804T212528Z_1432725` fail closed with hash-index SHA-256
+`c611e07a1c8b4311fa9df2b81b8ee11e51e71e6dcd1ae3585ff0ff8bc4b3053b`
+and `015ca1e4a9279833245e66280fb600ccfba1bab43e5486b85f178394056a90db`.
+Both declare `credential_material_recorded=false`; no token is recorded in the
+repository or command logs. Hunyuan seed `10030` remains a controlled fallback,
+not a replacement for the preferred geometry-free SEVA path.
 
 ### 2026-08-05 layered fallback and Genesis gate
 
@@ -568,15 +595,18 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Remaining critical path
 
-1. Restore authorized SEVA v1.1 model access on `phi-amd-work`, run the bound
-   four-image/49-camera orbit, audit identity and continuity, then build the
-   observed-initialized frozen-geometry distillation dataset.
+1. Accept the gated SEVA v1.1 repository terms and authenticate interactively
+   on `phi-amd-work`; then run the prepared fixed-revision four-image/49-camera
+   pipeline to the mandatory human-review stop. Build the observed-initialized
+   frozen-geometry dataset only if the separately bound review accepts it.
 2. Capture additional real views at inter-anchor angles and freeze them as a
    held-out set before the next optimization run. Use them for silhouette and
    photometric evaluation, not as hidden training views.
-3. Record the final short approach–grasp–handover–release demo with the explicit
-   candidate switch, manifest, hashes, timing, safety state, and terminal
-   marker. Keep leader access read-only for the submission-critical recording.
+3. Record the final short approach–left grasp–dual contact–right hold/release
+   demo with the exact formal asset. The implemented gate also requires motion
+   on at least three joints per arm, both grippers exercised, 12 cm object
+   transfer, target tolerance, no table-envelope drop, hashes, timing, safety
+   state, and a terminal marker. Leader access remains read-only.
 4. Package three evidence layers separately: registered single-Radeon build,
    nonformal continuous-orbit/live integration, and private HIL identity/domain
    audit. Do not relabel `amd` timings as formal Radeon measurements.
@@ -589,7 +619,7 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Verification status
 
-The fresh full scaffold runs 249 tests and passes 236, with 13 dependency-
+The fresh full scaffold runs 262 tests and passes 249, with 13 dependency-
 specific tests skipped in the local environment. Shell syntax, YAML/JSON
 parsing, and `git diff --check` also pass. These source-tree checks are not a
 substitute for held-out capture or the final recorded handover demo.

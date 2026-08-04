@@ -1,0 +1,1085 @@
+{
+  "accepted_numeric": true,
+  "asset": {
+    "camera_count": 4,
+    "formal": true,
+    "gaussian_count": 30000,
+    "hashes": {
+      "cameras": "050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26",
+      "ply": "7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706",
+      "provenance": "c2c95e0f7b5e51ffb5e9aeda7ecdc45229d75b4adf8683b09e6319c638795528"
+    },
+    "provenance_class": "observed_core_candidate"
+  },
+  "eligible_for_heldout_real_metrics": false,
+  "formal": false,
+  "frames": [
+    {
+      "alpha_bbox_xyxy": [
+        41,
+        40,
+        471,
+        482
+      ],
+      "alpha_support_fraction": 0.57177734375,
+      "azimuth_deg": 0.0,
+      "index": 0,
+      "path": "frames/orbit_000.png",
+      "render_ms": 22.376583016011864,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        42,
+        39,
+        469,
+        483
+      ],
+      "alpha_support_fraction": 0.5775337219238281,
+      "azimuth_deg": 5.0,
+      "index": 1,
+      "path": "frames/orbit_001.png",
+      "render_ms": 24.519257014617324,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        41,
+        38,
+        472,
+        483
+      ],
+      "alpha_support_fraction": 0.5850944519042969,
+      "azimuth_deg": 10.0,
+      "index": 2,
+      "path": "frames/orbit_002.png",
+      "render_ms": 26.3124110060744,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        41,
+        36,
+        477,
+        484
+      ],
+      "alpha_support_fraction": 0.5908050537109375,
+      "azimuth_deg": 15.0,
+      "index": 3,
+      "path": "frames/orbit_003.png",
+      "render_ms": 25.090218987315893,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        36,
+        35,
+        480,
+        484
+      ],
+      "alpha_support_fraction": 0.5980987548828125,
+      "azimuth_deg": 20.0,
+      "index": 4,
+      "path": "frames/orbit_004.png",
+      "render_ms": 24.626006023027003,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        32,
+        34,
+        481,
+        485
+      ],
+      "alpha_support_fraction": 0.6071128845214844,
+      "azimuth_deg": 25.0,
+      "index": 5,
+      "path": "frames/orbit_005.png",
+      "render_ms": 25.645601039286703,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        30,
+        32,
+        487,
+        485
+      ],
+      "alpha_support_fraction": 0.6136817932128906,
+      "azimuth_deg": 30.0,
+      "index": 6,
+      "path": "frames/orbit_006.png",
+      "render_ms": 25.71336698019877,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        30,
+        31,
+        493,
+        485
+      ],
+      "alpha_support_fraction": 0.6166915893554688,
+      "azimuth_deg": 35.0,
+      "index": 7,
+      "path": "frames/orbit_007.png",
+      "render_ms": 26.10315300989896,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        32,
+        29,
+        497,
+        485
+      ],
+      "alpha_support_fraction": 0.6163825988769531,
+      "azimuth_deg": 40.0,
+      "index": 8,
+      "path": "frames/orbit_008.png",
+      "render_ms": 25.00739600509405,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        35,
+        28,
+        500,
+        485
+      ],
+      "alpha_support_fraction": 0.6124229431152344,
+      "azimuth_deg": 45.0,
+      "index": 9,
+      "path": "frames/orbit_009.png",
+      "render_ms": 25.329593976493925,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        39,
+        27,
+        501,
+        485
+      ],
+      "alpha_support_fraction": 0.6048660278320312,
+      "azimuth_deg": 50.0,
+      "index": 10,
+      "path": "frames/orbit_010.png",
+      "render_ms": 24.114343977998942,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        43,
+        26,
+        502,
+        485
+      ],
+      "alpha_support_fraction": 0.5937614440917969,
+      "azimuth_deg": 55.0,
+      "index": 11,
+      "path": "frames/orbit_011.png",
+      "render_ms": 24.203671026043594,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        49,
+        25,
+        500,
+        485
+      ],
+      "alpha_support_fraction": 0.5791549682617188,
+      "azimuth_deg": 60.0,
+      "index": 12,
+      "path": "frames/orbit_012.png",
+      "render_ms": 24.718959000892937,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        55,
+        24,
+        497,
+        484
+      ],
+      "alpha_support_fraction": 0.5619659423828125,
+      "azimuth_deg": 65.0,
+      "index": 13,
+      "path": "frames/orbit_013.png",
+      "render_ms": 25.069110037293285,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        63,
+        23,
+        492,
+        484
+      ],
+      "alpha_support_fraction": 0.5430183410644531,
+      "azimuth_deg": 70.0,
+      "index": 14,
+      "path": "frames/orbit_014.png",
+      "render_ms": 24.946731980890036,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        71,
+        22,
+        484,
+        484
+      ],
+      "alpha_support_fraction": 0.5235786437988281,
+      "azimuth_deg": 75.0,
+      "index": 15,
+      "path": "frames/orbit_015.png",
+      "render_ms": 25.333411991596222,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        74,
+        21,
+        475,
+        483
+      ],
+      "alpha_support_fraction": 0.5076408386230469,
+      "azimuth_deg": 80.0,
+      "index": 16,
+      "path": "frames/orbit_016.png",
+      "render_ms": 25.23143100552261,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        68,
+        21,
+        464,
+        482
+      ],
+      "alpha_support_fraction": 0.4951171875,
+      "azimuth_deg": 85.0,
+      "index": 17,
+      "path": "frames/orbit_017.png",
+      "render_ms": 24.170279037207365,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        60,
+        21,
+        450,
+        481
+      ],
+      "alpha_support_fraction": 0.4863853454589844,
+      "azimuth_deg": 90.0,
+      "index": 18,
+      "path": "frames/orbit_018.png",
+      "render_ms": 25.85608302615583,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        50,
+        20,
+        442,
+        481
+      ],
+      "alpha_support_fraction": 0.4912452697753906,
+      "azimuth_deg": 95.0,
+      "index": 19,
+      "path": "frames/orbit_019.png",
+      "render_ms": 24.188011011574417,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        38,
+        20,
+        437,
+        480
+      ],
+      "alpha_support_fraction": 0.49918365478515625,
+      "azimuth_deg": 100.0,
+      "index": 20,
+      "path": "frames/orbit_020.png",
+      "render_ms": 25.07631399203092,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        28,
+        20,
+        433,
+        480
+      ],
+      "alpha_support_fraction": 0.5085525512695312,
+      "azimuth_deg": 105.0,
+      "index": 21,
+      "path": "frames/orbit_021.png",
+      "render_ms": 25.10598802473396,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        21,
+        20,
+        443,
+        480
+      ],
+      "alpha_support_fraction": 0.5290107727050781,
+      "azimuth_deg": 110.0,
+      "index": 22,
+      "path": "frames/orbit_022.png",
+      "render_ms": 25.86594200693071,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        15,
+        21,
+        453,
+        480
+      ],
+      "alpha_support_fraction": 0.5524673461914062,
+      "azimuth_deg": 115.0,
+      "index": 23,
+      "path": "frames/orbit_023.png",
+      "render_ms": 25.279772002249956,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        11,
+        21,
+        462,
+        480
+      ],
+      "alpha_support_fraction": 0.5735664367675781,
+      "azimuth_deg": 120.0,
+      "index": 24,
+      "path": "frames/orbit_024.png",
+      "render_ms": 24.375189968850464,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        10,
+        22,
+        470,
+        480
+      ],
+      "alpha_support_fraction": 0.5910911560058594,
+      "azimuth_deg": 125.0,
+      "index": 25,
+      "path": "frames/orbit_025.png",
+      "render_ms": 24.994932988192886,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        10,
+        22,
+        477,
+        480
+      ],
+      "alpha_support_fraction": 0.6052169799804688,
+      "azimuth_deg": 130.0,
+      "index": 26,
+      "path": "frames/orbit_026.png",
+      "render_ms": 25.166211009491235,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        12,
+        23,
+        482,
+        479
+      ],
+      "alpha_support_fraction": 0.616058349609375,
+      "azimuth_deg": 135.0,
+      "index": 27,
+      "path": "frames/orbit_027.png",
+      "render_ms": 26.33492404129356,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        14,
+        24,
+        486,
+        479
+      ],
+      "alpha_support_fraction": 0.6236000061035156,
+      "azimuth_deg": 140.0,
+      "index": 28,
+      "path": "frames/orbit_028.png",
+      "render_ms": 24.822141975164413,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        18,
+        25,
+        489,
+        479
+      ],
+      "alpha_support_fraction": 0.6276321411132812,
+      "azimuth_deg": 145.0,
+      "index": 29,
+      "path": "frames/orbit_029.png",
+      "render_ms": 27.512424043379724,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        24,
+        26,
+        489,
+        479
+      ],
+      "alpha_support_fraction": 0.6280059814453125,
+      "azimuth_deg": 150.0,
+      "index": 30,
+      "path": "frames/orbit_030.png",
+      "render_ms": 22.396642016246915,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        30,
+        28,
+        488,
+        479
+      ],
+      "alpha_support_fraction": 0.6247100830078125,
+      "azimuth_deg": 155.0,
+      "index": 31,
+      "path": "frames/orbit_031.png",
+      "render_ms": 24.385550001170486,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        37,
+        29,
+        486,
+        479
+      ],
+      "alpha_support_fraction": 0.6183700561523438,
+      "azimuth_deg": 160.0,
+      "index": 32,
+      "path": "frames/orbit_032.png",
+      "render_ms": 24.804237997159362,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        41,
+        30,
+        484,
+        479
+      ],
+      "alpha_support_fraction": 0.6132659912109375,
+      "azimuth_deg": 165.0,
+      "index": 33,
+      "path": "frames/orbit_033.png",
+      "render_ms": 25.575762963853776,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        41,
+        31,
+        481,
+        479
+      ],
+      "alpha_support_fraction": 0.6091041564941406,
+      "azimuth_deg": 170.0,
+      "index": 34,
+      "path": "frames/orbit_034.png",
+      "render_ms": 25.44719399884343,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        35,
+        33,
+        478,
+        478
+      ],
+      "alpha_support_fraction": 0.6030502319335938,
+      "azimuth_deg": 175.0,
+      "index": 35,
+      "path": "frames/orbit_035.png",
+      "render_ms": 25.43374797096476,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        31,
+        34,
+        478,
+        478
+      ],
+      "alpha_support_fraction": 0.5980300903320312,
+      "azimuth_deg": 180.0,
+      "index": 36,
+      "path": "frames/orbit_036.png",
+      "render_ms": 25.17851401353255,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        29,
+        36,
+        476,
+        479
+      ],
+      "alpha_support_fraction": 0.598785400390625,
+      "azimuth_deg": 185.0,
+      "index": 37,
+      "path": "frames/orbit_037.png",
+      "render_ms": 25.372845004312694,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        24,
+        37,
+        473,
+        479
+      ],
+      "alpha_support_fraction": 0.5981369018554688,
+      "azimuth_deg": 190.0,
+      "index": 38,
+      "path": "frames/orbit_038.png",
+      "render_ms": 26.32201003143564,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        18,
+        38,
+        469,
+        479
+      ],
+      "alpha_support_fraction": 0.5964469909667969,
+      "azimuth_deg": 195.0,
+      "index": 39,
+      "path": "frames/orbit_039.png",
+      "render_ms": 24.60473799146712,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        13,
+        40,
+        469,
+        480
+      ],
+      "alpha_support_fraction": 0.5997505187988281,
+      "azimuth_deg": 200.0,
+      "index": 40,
+      "path": "frames/orbit_040.png",
+      "render_ms": 25.43664403492585,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        11,
+        41,
+        469,
+        480
+      ],
+      "alpha_support_fraction": 0.6038131713867188,
+      "azimuth_deg": 205.0,
+      "index": 41,
+      "path": "frames/orbit_041.png",
+      "render_ms": 25.22818703437224,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        9,
+        42,
+        469,
+        481
+      ],
+      "alpha_support_fraction": 0.6065597534179688,
+      "azimuth_deg": 210.0,
+      "index": 42,
+      "path": "frames/orbit_042.png",
+      "render_ms": 25.383466039784253,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        9,
+        44,
+        472,
+        481
+      ],
+      "alpha_support_fraction": 0.6064949035644531,
+      "azimuth_deg": 215.0,
+      "index": 43,
+      "path": "frames/orbit_043.png",
+      "render_ms": 26.037491974420846,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        10,
+        44,
+        476,
+        481
+      ],
+      "alpha_support_fraction": 0.6029701232910156,
+      "azimuth_deg": 220.0,
+      "index": 44,
+      "path": "frames/orbit_044.png",
+      "render_ms": 25.315620005130768,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        14,
+        42,
+        479,
+        481
+      ],
+      "alpha_support_fraction": 0.5965576171875,
+      "azimuth_deg": 225.0,
+      "index": 45,
+      "path": "frames/orbit_045.png",
+      "render_ms": 25.208271050360054,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        19,
+        41,
+        480,
+        481
+      ],
+      "alpha_support_fraction": 0.5865898132324219,
+      "azimuth_deg": 230.0,
+      "index": 46,
+      "path": "frames/orbit_046.png",
+      "render_ms": 25.101100967731327,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        25,
+        39,
+        480,
+        481
+      ],
+      "alpha_support_fraction": 0.5735626220703125,
+      "azimuth_deg": 235.0,
+      "index": 47,
+      "path": "frames/orbit_047.png",
+      "render_ms": 25.642968015745282,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        33,
+        38,
+        478,
+        481
+      ],
+      "alpha_support_fraction": 0.5574111938476562,
+      "azimuth_deg": 240.0,
+      "index": 48,
+      "path": "frames/orbit_048.png",
+      "render_ms": 24.231593997683376,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        42,
+        37,
+        474,
+        480
+      ],
+      "alpha_support_fraction": 0.5388755798339844,
+      "azimuth_deg": 245.0,
+      "index": 49,
+      "path": "frames/orbit_049.png",
+      "render_ms": 25.178844982292503,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        52,
+        36,
+        470,
+        480
+      ],
+      "alpha_support_fraction": 0.5187873840332031,
+      "azimuth_deg": 250.0,
+      "index": 50,
+      "path": "frames/orbit_050.png",
+      "render_ms": 24.61380499880761,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        63,
+        36,
+        465,
+        479
+      ],
+      "alpha_support_fraction": 0.49787139892578125,
+      "azimuth_deg": 255.0,
+      "index": 51,
+      "path": "frames/orbit_051.png",
+      "render_ms": 25.537732988595963,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        69,
+        36,
+        458,
+        479
+      ],
+      "alpha_support_fraction": 0.4767417907714844,
+      "azimuth_deg": 260.0,
+      "index": 52,
+      "path": "frames/orbit_052.png",
+      "render_ms": 24.699945002794266,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        73,
+        36,
+        450,
+        479
+      ],
+      "alpha_support_fraction": 0.45334625244140625,
+      "azimuth_deg": 265.0,
+      "index": 53,
+      "path": "frames/orbit_053.png",
+      "render_ms": 25.41820000624284,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        78,
+        36,
+        440,
+        479
+      ],
+      "alpha_support_fraction": 0.439056396484375,
+      "azimuth_deg": 270.0,
+      "index": 54,
+      "path": "frames/orbit_054.png",
+      "render_ms": 24.584942031651735,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        66,
+        36,
+        436,
+        480
+      ],
+      "alpha_support_fraction": 0.4550361633300781,
+      "azimuth_deg": 275.0,
+      "index": 55,
+      "path": "frames/orbit_055.png",
+      "render_ms": 24.52826499938965,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        54,
+        37,
+        441,
+        480
+      ],
+      "alpha_support_fraction": 0.47750091552734375,
+      "azimuth_deg": 280.0,
+      "index": 56,
+      "path": "frames/orbit_056.png",
+      "render_ms": 24.651586019899696,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        43,
+        38,
+        447,
+        480
+      ],
+      "alpha_support_fraction": 0.49958038330078125,
+      "azimuth_deg": 285.0,
+      "index": 57,
+      "path": "frames/orbit_057.png",
+      "render_ms": 24.65537202078849,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        35,
+        39,
+        457,
+        481
+      ],
+      "alpha_support_fraction": 0.5236129760742188,
+      "azimuth_deg": 290.0,
+      "index": 58,
+      "path": "frames/orbit_058.png",
+      "render_ms": 25.148379034362733,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        29,
+        40,
+        466,
+        481
+      ],
+      "alpha_support_fraction": 0.546966552734375,
+      "azimuth_deg": 295.0,
+      "index": 59,
+      "path": "frames/orbit_059.png",
+      "render_ms": 25.4563819617033,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        25,
+        42,
+        475,
+        481
+      ],
+      "alpha_support_fraction": 0.5682220458984375,
+      "azimuth_deg": 300.0,
+      "index": 60,
+      "path": "frames/orbit_060.png",
+      "render_ms": 25.458366028033197,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        22,
+        43,
+        483,
+        481
+      ],
+      "alpha_support_fraction": 0.5868339538574219,
+      "azimuth_deg": 305.0,
+      "index": 61,
+      "path": "frames/orbit_061.png",
+      "render_ms": 24.233147967606783,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        21,
+        45,
+        490,
+        481
+      ],
+      "alpha_support_fraction": 0.6023406982421875,
+      "azimuth_deg": 310.0,
+      "index": 62,
+      "path": "frames/orbit_062.png",
+      "render_ms": 25.906159018632025,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        22,
+        47,
+        495,
+        481
+      ],
+      "alpha_support_fraction": 0.6144790649414062,
+      "azimuth_deg": 315.0,
+      "index": 63,
+      "path": "frames/orbit_063.png",
+      "render_ms": 25.524699012748897,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        24,
+        49,
+        499,
+        480
+      ],
+      "alpha_support_fraction": 0.62274169921875,
+      "azimuth_deg": 320.0,
+      "index": 64,
+      "path": "frames/orbit_064.png",
+      "render_ms": 24.948508013039827,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        26,
+        48,
+        501,
+        480
+      ],
+      "alpha_support_fraction": 0.6271553039550781,
+      "azimuth_deg": 325.0,
+      "index": 65,
+      "path": "frames/orbit_065.png",
+      "render_ms": 25.78137698583305,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        29,
+        47,
+        501,
+        480
+      ],
+      "alpha_support_fraction": 0.6278343200683594,
+      "azimuth_deg": 330.0,
+      "index": 66,
+      "path": "frames/orbit_066.png",
+      "render_ms": 24.991949030663818,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        32,
+        46,
+        499,
+        480
+      ],
+      "alpha_support_fraction": 0.6248741149902344,
+      "azimuth_deg": 335.0,
+      "index": 67,
+      "path": "frames/orbit_067.png",
+      "render_ms": 24.125307973008603,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        32,
+        45,
+        497,
+        481
+      ],
+      "alpha_support_fraction": 0.6182899475097656,
+      "azimuth_deg": 340.0,
+      "index": 68,
+      "path": "frames/orbit_068.png",
+      "render_ms": 25.556797976605594,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        33,
+        44,
+        492,
+        481
+      ],
+      "alpha_support_fraction": 0.608673095703125,
+      "azimuth_deg": 345.0,
+      "index": 69,
+      "path": "frames/orbit_069.png",
+      "render_ms": 25.79577302094549,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        36,
+        43,
+        486,
+        482
+      ],
+      "alpha_support_fraction": 0.5966110229492188,
+      "azimuth_deg": 350.0,
+      "index": 70,
+      "path": "frames/orbit_070.png",
+      "render_ms": 25.371544004883617,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        40,
+        42,
+        479,
+        482
+      ],
+      "alpha_support_fraction": 0.5824012756347656,
+      "azimuth_deg": 355.0,
+      "index": 71,
+      "path": "frames/orbit_071.png",
+      "render_ms": 25.474185007624328,
+      "touches_border": false
+    },
+    {
+      "alpha_bbox_xyxy": [
+        41,
+        40,
+        471,
+        482
+      ],
+      "alpha_support_fraction": 0.57177734375,
+      "azimuth_deg": 360.0,
+      "index": 72,
+      "path": "frames/orbit_072.png",
+      "render_ms": 25.08005202980712,
+      "touches_border": false
+    }
+  ],
+  "not_proven": [
+    "held-out real-view quality",
+    "photometric accuracy",
+    "task success"
+  ],
+  "orbit": {
+    "adjacent_rgb_mae": {
+      "max": 0.0634147419649012,
+      "mean": 0.05552362699654108,
+      "p95": 0.06250518331340715
+    },
+    "alpha_support_fraction": {
+      "max": 0.6280059814453125,
+      "mean": 0.5726567098539169,
+      "min": 0.439056396484375
+    },
+    "azimuth_end_deg": 360.0,
+    "azimuth_start_deg": 0.0,
+    "border_contact_frames": 0,
+    "cycle_closure_rgb_mae": 0.0,
+    "distance_m": 0.3,
+    "fps": 24.0,
+    "frames_without_duplicate_endpoint": 72,
+    "image_size_wh": [
+      512,
+      512
+    ]
+  },
+  "outputs": {
+    "contact_sheet": "orbit_contact_sheet.png",
+    "video": "orbit_360.mp4"
+  },
+  "physical_output": false,
+  "render_ms": {
+    "max": 27.512424043379724,
+    "mean": 25.108457046994708,
+    "p50": 25.17851401353255,
+    "p95": 26.186856208369132
+  },
+  "schema_version": "radeon_oneloop.gaussian_orbit_audit.v1",
+  "visual_review_required": true,
+  "vksplat_memory": {
+    "current_bytes": 16318752,
+    "peak_bytes": 16318752
+  }
+}

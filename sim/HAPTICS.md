@@ -144,6 +144,16 @@ Its exact continuous-orbit gate
 `20260804T205940Z_218151_amd_decoupled_gaussian_live_gate` now also pass with
 zero physical-output commands. The live gate used stationary leader inputs and
 therefore does not replace the operator-driven task recording.
+The final task wrapper remains on this same monitor-only boundary: it enables
+no haptic motor mode and adds motion, gripper, contact-sequence, transfer,
+target, and no-drop checks. Contact phases use only gripper/finger-to-object
+forces, excluding table, opposite-arm, and upstream-link contacts. Stationary
+negative run `20260804T213311Z_228906_amd_decoupled_gaussian_live_gate`
+preserves 120 Hz
+control and healthy Gaussian rendering but is correctly marked `FAILED` for
+missing operator motion and handover. This is the expected prerequisite before
+asking the operator for the short physical-leader recording; it authorizes no
+force-feedback stage.
 The latest normal and fault-injected integration gates are
 `20260804T101926Z_173198_amd_decoupled_gaussian_live_gate` and
 `20260804T102041Z_176664_amd_decoupled_gaussian_live_gate`; both retain

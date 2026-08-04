@@ -95,6 +95,18 @@ class GaussianContractTests(unittest.TestCase):
         self.assertIn("--formal", runner)
         self.assertIn('"generated_fill_enabled": False', runner)
 
+    def test_final_handover_recording_is_readonly_and_task_gated(self):
+        runner = Path("ops/run_amd_final_handover_recording.sh").read_text()
+        gate = Path("ops/run_amd_decoupled_gaussian_live_gate.sh").read_text()
+        self.assertIn("ONELOOP_FINAL_TASK_RECORDING=1", runner)
+        self.assertIn("ONELOOP_GENERATED_FILL_ENABLED=0", runner)
+        self.assertIn("ONELOOP_LIVE_CANDIDATE_NONFORMAL=0", runner)
+        self.assertIn('"handover_task_accepted"', gate)
+        self.assertIn('"publisher_physical_output_false"', gate)
+        consumer = Path("sim/genesis_so101/live_teleop.py").read_text()
+        self.assertIn("haptic_feedback_diagnostics", consumer)
+        self.assertIn("gripper_object_contact_force_n", consumer)
+
     def test_geometry_freeze_zeroes_only_center_and_shape_rates(self):
         class Config:
             means_lr = 1.6e-4

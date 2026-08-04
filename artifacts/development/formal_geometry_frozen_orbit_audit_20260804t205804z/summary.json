@@ -1,0 +1,46 @@
+{
+  "accepted": true,
+  "asset": {
+    "camera_count": 4,
+    "formal": true,
+    "gaussian_count": 30000,
+    "hashes": {
+      "cameras": "050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26",
+      "ply": "7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706",
+      "provenance": "c2c95e0f7b5e51ffb5e9aeda7ecdc45229d75b4adf8683b09e6319c638795528"
+    },
+    "provenance_class": "observed_core_candidate"
+  },
+  "formal": false,
+  "heldout_quality_claim": false,
+  "mode": "gaussian_orbit_audit",
+  "numeric": {
+    "alpha_support_fraction": {
+      "max": 0.6280059814453125,
+      "mean": 0.5726567098539169,
+      "min": 0.439056396484375
+    },
+    "border_contact_frames": 0,
+    "cycle_closure_rgb_mae": 0.0,
+    "frames_without_duplicate_endpoint": 72,
+    "render_ms": {
+      "max": 27.512424043379724,
+      "mean": 25.108457046994708,
+      "p50": 25.17851401353255,
+      "p95": 26.186856208369132
+    }
+  },
+  "physical_output": false,
+  "schema_version": "radeon_oneloop.development_evidence_summary.v1",
+  "source_files_sha256": {
+    "DONE": "a28163a0a96dea359f01587fa21b178cf07b1761c430ac8bcbc275248d0b9a63",
+    "artifacts/metrics.json": "8d4da82b5781c8f2ebff7c9cff58153c65f66705f9b36374df10455e82a5c199",
+    "artifacts/orbit_360.mp4": "9037e9a2ec48ce171b6d092f59865420a59d3d2de0fe9aa470b70ea74aed97df",
+    "artifacts/orbit_contact_sheet.png": "6f29b71f469680be1fdb76a7ed2ad629244541a09bbdd59e854a11cd3b44da12",
+    "hashes.sha256": "dbccb4ee60589fac44cbb31c20ca255da3b97d4b1cd17296999519a89b038559",
+    "manifest.yaml": "b2be1a607a3fb2e63fcc4f3ad6fe8f7c84991c5901dfa012779a2a68d7085386"
+  },
+  "source_run_id": "20260804T205804Z_217937_amd_gaussian_orbit_audit",
+  "task_success_evaluated": false,
+  "visual_review": "accepted_shell_continuity_with_four_view_side_blur_and_stretch_limit"
+}

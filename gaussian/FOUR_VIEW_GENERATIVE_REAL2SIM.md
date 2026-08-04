@@ -68,6 +68,24 @@ the model revision, checkpoint hash, command, environment, per-frame output,
 video, runtime, and terminal status. All output frames are generated Tier-G
 evidence even where they coincide with an observed azimuth.
 
+The executable `phi-amd-work` path deliberately uses the interactive
+Hugging Face CLI credential only; tokens are never accepted as arguments or
+environment variables:
+
+```bash
+hf auth login
+
+./ops/run_phi_seva_until_review.sh \
+  FOUR_VIEW_INPUT PIPELINE_RUN_ROOT SEVA_CHECKOUT LOCAL_MODEL_ROOT \
+  MODEL_INSTALL_RUN_ROOT SEVA_PYTHON
+```
+
+The installer pins model revision
+`e538e251c1009e9a41cf8b7fee5f21332a1960de`, records file hashes, and fails
+before inference if authorization or either required model file is missing.
+The pipeline writes `REVIEW_REQUIRED.json` and stops after the 49-frame numeric
+audit; successful generation is not automatic approval.
+
 ### G2: SEVA-to-Gaussian distillation
 
 Audit all 49 generated frames before training. The dataset repeats the four
@@ -76,6 +94,21 @@ to one, excludes generated copies of the four anchor azimuths, initializes all
 30,000 centers from the observed-mask visual hull, and freezes means, scales,
 quaternions, refinement, and higher SH. Generated imagery can fit appearance;
 it cannot create or move observed geometry.
+
+After the reviewer creates a hash-bound accepted review with
+`gaussian.record_seva_orbit_review`, the downstream dataset has one guarded
+entry point:
+
+```bash
+./ops/run_phi_seva_after_review.sh \
+  UNTIL_REVIEW_PIPELINE ACCEPTED_REVIEW_JSON OBSERVED_INITIALIZATION \
+  PSEUDOVIEW_DATASET_ROOT SEVA_PYTHON
+```
+
+This wrapper re-resolves generation and audit paths from the review request,
+requires `accepted_low_confidence_pseudoviews`, checks that the review binds the
+same audit metrics hash, and only then invokes the pseudo-view COLMAP builder.
+Rejected reviews and mismatched pipeline paths fail closed.
 
 ### G3: independent Hunyuan mesh-first A/B
 

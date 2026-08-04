@@ -1,0 +1,140 @@
+{
+  "accepted": true,
+  "asset": {
+    "camera_count": 4,
+    "formal": true,
+    "gaussian_count": 30000,
+    "hashes": {
+      "cameras": "050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26",
+      "ply": "7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706",
+      "provenance": "c2c95e0f7b5e51ffb5e9aeda7ecdc45229d75b4adf8683b09e6319c638795528"
+    },
+    "provenance_class": "observed_core_candidate"
+  },
+  "control": {
+    "packets": {
+      "accepted": 545,
+      "first_sequence_id": 184,
+      "last_sequence_id": 1049,
+      "rebased": 1,
+      "rejected": 0
+    },
+    "physical_output_commands": false,
+    "watchdog": {
+      "active_at_end": false,
+      "events": 0,
+      "timeout_ms": 250.0
+    }
+  },
+  "formal": false,
+  "gate": {
+    "accepted": true,
+    "appearance_failures": 0,
+    "appearance_successes": 186,
+    "checks": {
+      "control_effective_hz_at_least_110": true,
+      "control_physical_output_false": true,
+      "control_watchdog_events_zero": true,
+      "publisher_physical_output_false": true,
+      "renderer_accepted": true,
+      "renderer_asset_mode_matches_request": true,
+      "renderer_fallback_frames_zero": true,
+      "renderer_layered_mode_matches_request": true,
+      "visual_stream_send_errors_zero": true
+    },
+    "control_effective_hz": 119.99944517238015,
+    "formal": false,
+    "generated_fill_enabled": false,
+    "mode": "normal_decoupled_live_gate",
+    "physical_output": false,
+    "render_effective_hz": 7.667070936015435,
+    "schema_version": "radeon_oneloop.decoupled_gaussian_live_gate.v1"
+  },
+  "mode": "decoupled_gaussian_live_gate",
+  "publisher": {
+    "action_names": [
+      "left_shoulder_pan.pos",
+      "left_shoulder_lift.pos",
+      "left_elbow_flex.pos",
+      "left_wrist_flex.pos",
+      "left_wrist_roll.pos",
+      "left_gripper.pos",
+      "right_shoulder_pan.pos",
+      "right_shoulder_lift.pos",
+      "right_elbow_flex.pos",
+      "right_wrist_flex.pos",
+      "right_wrist_roll.pos",
+      "right_gripper.pos"
+    ],
+    "capture_start_gated": false,
+    "capture_started": true,
+    "haptic_output_commands": 0,
+    "physical_output_commands": false,
+    "samples": 1111,
+    "span": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "renderer": {
+    "appearance": {
+      "binding": {
+        "attempts": 186,
+        "backend": "vksplat_radv",
+        "failures": 0,
+        "fallback": "genesis_debug_mesh",
+        "latched_error": null,
+        "successes": 186
+      },
+      "composited_frames": 186,
+      "enabled": true,
+      "fallback_frames": 0,
+      "gaussian_alpha_clipped_fraction": {
+        "max": 0.27238454288407166,
+        "mean": 0.2585941116859857
+      },
+      "object_segmentation_index": 17,
+      "render_ms": {
+        "max": 27.8828619630076,
+        "mean": 24.088130872045713,
+        "p95": 26.27873874735087
+      }
+    },
+    "render": {
+      "effective_hz": 7.667070936015435,
+      "frames": 93,
+      "requested_hz": 8.0,
+      "time_ms": {
+        "max": 617.0913209789433,
+        "mean": 102.30586131263564,
+        "p95": 109.78437339654192
+      }
+    }
+  },
+  "schema_version": "radeon_oneloop.development_evidence_summary.v1",
+  "source_files_sha256": {
+    "DONE": "0ede8c091a660ffd4115ac7b6568d13d8f20a5f69c5d588033fe0ea971fdff4e",
+    "consumer/metrics.json": "3b47a01fb49abbdd26052dc3bb2dc7b8faf9412abe944eed248489caf4f554d1",
+    "gate.json": "8047fc7632a389831e00f89ec6693e8b4e87d5f48b7fdaf14ebd7c223e99fb7a",
+    "hashes.sha256": "7bf55d5bfdcfe47ae0b01c215afd1d9da5c065220aa2fa06b4c8c0d465a2e345",
+    "manifest.yaml": "fc7797d2efc2861ef37e6e4d18b2f3acdb44ce6f3d1958a9c46316b09dce7748",
+    "publisher.log": "ab26710f3f17c9b1475efcf613ce0c38325b0b2038ea5fcd1484001d63eb00de",
+    "renderer/READY": "bfb31a7a9a0ed6784bcdaf4e723906387f5c34502da093aaced85e6dce3ef9ab",
+    "renderer/live_gaussian.mp4": "2e679509db46cffefb4255281b37ce06f64dcdf629f9974b378e2fe6d96b5360",
+    "renderer/live_gaussian_final.png": "bc683b739c5e168cd93d185a972fb108d5df4246f55464ebe8661af23c506759",
+    "renderer/live_gaussian_first.png": "670cc2e35cd030d68e567371471d96e782fb72187e7786d7b3318e223885a2b8",
+    "renderer/metrics.json": "770995b6ae7e4eb230090135e46a94c559534c412ce542bb42e9899f3e27b072"
+  },
+  "source_run_id": "20260804T205940Z_218151_amd_decoupled_gaussian_live_gate",
+  "task_success_evaluated": false
+}

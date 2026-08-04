@@ -157,7 +157,7 @@ def record_run(args: argparse.Namespace) -> dict[str, Any]:
             "weight_bytes": weight_path.stat().st_size,
             "weight_sha256": sha256_file(weight_path),
             "config_sha256": sha256_file(config_path),
-            "resolution": "fixed_revision_anonymous_download_then_local_load",
+            "resolution": "fixed_revision_authorized_download_then_local_load",
             "seva_commit": commit,
             "seva_worktree_dirty": bool(git_status),
             "license_boundary": "Stable_Virtual_Camera_noncommercial_output_terms_apply",

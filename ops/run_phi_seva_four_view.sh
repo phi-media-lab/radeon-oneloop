@@ -16,11 +16,12 @@ seed=${ONELOOP_SEVA_SEED:-10027}
 model_revision=${ONELOOP_SEVA_MODEL_REVISION:-e538e251c1009e9a41cf8b7fee5f21332a1960de}
 runner_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 repo_root=$(cd "$runner_dir/.." && pwd)
-run_id="seva_four_view_$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}_seed${seed}"
+run_id=${ONELOOP_SEVA_RUN_ID:-"seva_four_view_$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}_seed${seed}"}
 run_dir="$output_root/$run_id"
 source_output="$seva_root/work_dirs/demo/img2trajvid/$run_id/graffiti_mickey_four_view"
 
 mkdir -p "$output_root"
+[[ "$run_id" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]
 [[ ! -e "$run_dir" ]]
 [[ ! -e "$source_output" ]]
 mkdir -p "$run_dir/inference"
@@ -44,6 +45,10 @@ value = {
 }
 Path(path).write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 PY
+    (
+      cd "$run_dir"
+      find . -type f ! -name hashes.sha256 -print0 | sort -z | xargs -0 sha256sum >hashes.sha256
+    )
   fi
   exit "$status"
 }

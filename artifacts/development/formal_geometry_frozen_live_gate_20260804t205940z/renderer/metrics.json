@@ -1,0 +1,79 @@
+{
+  "accepted": true,
+  "appearance": {
+    "binding": {
+      "attempts": 186,
+      "backend": "vksplat_radv",
+      "failures": 0,
+      "fallback": "genesis_debug_mesh",
+      "latched_error": null,
+      "successes": 186
+    },
+    "composited_frames": 186,
+    "enabled": true,
+    "fallback_frames": 0,
+    "gaussian_alpha_clipped_fraction": {
+      "max": 0.27238454288407166,
+      "mean": 0.2585941116859857
+    },
+    "object_segmentation_index": 17,
+    "render_ms": {
+      "max": 27.8828619630076,
+      "mean": 24.088130872045713,
+      "p95": 26.27873874735087
+    }
+  },
+  "architecture": {
+    "authoritative_control_process": false,
+    "intermediate_snapshots_may_drop": true,
+    "renderer_failure_can_stop_control": false,
+    "state_input": "read_only_udp_snapshot"
+  },
+  "asset": {
+    "camera_count": 4,
+    "formal": true,
+    "gaussian_count": 30000,
+    "hashes": {
+      "cameras": "050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26",
+      "ply": "7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706",
+      "provenance": "c2c95e0f7b5e51ffb5e9aeda7ecdc45229d75b4adf8683b09e6319c638795528"
+    },
+    "provenance_class": "observed_core_candidate"
+  },
+  "candidate_nonformal": false,
+  "duration_s": 12.0,
+  "elapsed_s": 12.129795168992132,
+  "formal": false,
+  "generated_fill_enabled": false,
+  "layered_preview": false,
+  "physical_output": false,
+  "presenter": {
+    "enabled": false
+  },
+  "render": {
+    "effective_hz": 7.667070936015435,
+    "frames": 93,
+    "requested_hz": 8.0,
+    "time_ms": {
+      "max": 617.0913209789433,
+      "mean": 102.30586131263564,
+      "p95": 109.78437339654192
+    }
+  },
+  "schema_version": "radeon_oneloop.gaussian_live_view.v1",
+  "snapshots": {
+    "accepted": 360,
+    "age_ms": {
+      "max": 624.660914,
+      "mean": 127.80199536559141,
+      "p95": 145.85254279999998
+    },
+    "last_sequence_id": 359,
+    "rejected": 0,
+    "sequence_gaps": 0
+  },
+  "termination": {
+    "reason": "duration",
+    "signal": null
+  }
+}

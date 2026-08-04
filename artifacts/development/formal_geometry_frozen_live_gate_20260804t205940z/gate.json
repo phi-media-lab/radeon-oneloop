@@ -1,0 +1,23 @@
+{
+  "accepted": true,
+  "appearance_failures": 0,
+  "appearance_successes": 186,
+  "checks": {
+    "control_effective_hz_at_least_110": true,
+    "control_physical_output_false": true,
+    "control_watchdog_events_zero": true,
+    "publisher_physical_output_false": true,
+    "renderer_accepted": true,
+    "renderer_asset_mode_matches_request": true,
+    "renderer_fallback_frames_zero": true,
+    "renderer_layered_mode_matches_request": true,
+    "visual_stream_send_errors_zero": true
+  },
+  "control_effective_hz": 119.99944517238015,
+  "formal": false,
+  "generated_fill_enabled": false,
+  "mode": "normal_decoupled_live_gate",
+  "physical_output": false,
+  "render_effective_hz": 7.667070936015435,
+  "schema_version": "radeon_oneloop.decoupled_gaussian_live_gate.v1"
+}

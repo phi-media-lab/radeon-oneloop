@@ -397,6 +397,31 @@ opens the loopback presenter. Override `ONELOOP_LIVE_DURATION_S` for a bounded
 recording and set `ONELOOP_RECORD_VIDEO=1` when an MP4 evidence artifact is
 needed. Genesis remains authoritative at 120 Hz even if the renderer exits.
 
+The submission-critical task recording uses the exact hash-verified formal
+asset and a stricter wrapper:
+
+```bash
+ONELOOP_OBSERVED_CORE_ROOT=/path/to/exact_formal_asset \
+ONELOOP_LIVE_DURATION_S=120 \
+./ops/run_amd_final_handover_recording.sh \
+  LEFT_PORT RIGHT_PORT LEFT_CALIBRATION_ID RIGHT_CALIBRATION_ID
+```
+
+It is still leader-read-only and forces `physical_output=false`. Acceptance
+requires healthy control/rendering plus ordered left grasp, persistent dual
+contact, left release while the right holds, at least 12 cm object transfer,
+arrival within 8 cm of the target, no drop below the table envelope, motion on
+at least three non-gripper joints per arm, and both grippers exercised. Run
+`20260804T213311Z_228906_amd_decoupled_gaussian_live_gate` intentionally used
+stationary leaders and is preserved as a failed negative control, proving that
+runtime health alone cannot satisfy this task gate.
+
+The preferred SEVA completion branch now has fixed-revision authorized install,
+run-to-review, and accepted-review-only dataset wrappers. See
+[`FOUR_VIEW_GENERATIVE_REAL2SIM.md`](FOUR_VIEW_GENERATIVE_REAL2SIM.md) for the
+commands and the explicit human-review boundary. The current `phi-amd-work`
+credential remains invalid and no SEVA model file has been promoted.
+
 The dated hand-off state, exact run IDs, hashes, acceptance decisions, HIL
 status, and remaining dynamic-integration gates are frozen in
 [`../reports/progress_snapshot_2026-08-04.md`](../reports/progress_snapshot_2026-08-04.md)

@@ -1,0 +1,9 @@
+schema_version: radeon_oneloop.amd_gaussian_orbit_audit_run.v1
+formal: false
+host_role: amd_apu_nonformal_visual_audit
+frames: 72
+image_size_wh: [512, 512]
+physical_output: false
+eligible_for_heldout_real_metrics: false
+candidate_nonformal: 0
+ply_sha256: 7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706

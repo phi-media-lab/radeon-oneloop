@@ -1,0 +1,175 @@
+{
+  "schema_version": "radeon_oneloop.genesis_live_teleop.v1",
+  "formal": false,
+  "backend": "3",
+  "device": "cuda:0",
+  "bind": "127.0.0.1:58081",
+  "source": [
+    "127.0.0.1",
+    58082
+  ],
+  "duration_s": 12.0,
+  "run_elapsed_s": 12.000055483018514,
+  "termination": {
+    "reason": "duration",
+    "signal": null
+  },
+  "build_seconds": 25.002856125996914,
+  "operator_start_delay_s": 0.0,
+  "ready_file_emitted": false,
+  "sim_hz_requested": 120.0,
+  "sim_hz_effective": 119.99944517238015,
+  "steps": 1440,
+  "scene_layout": {
+    "left_base_pos_m": [
+      0.2,
+      0.0,
+      0.425
+    ],
+    "right_base_pos_m": [
+      -0.2,
+      0.0,
+      0.425
+    ],
+    "base_separation_m": 0.4,
+    "model_forward_unit": [
+      0.0,
+      -1.0,
+      0.0
+    ],
+    "model_lateral_unit": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "arrangement": "side_by_side_parallel",
+    "shared_base_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "packets": {
+    "accepted": 545,
+    "rejected": 0,
+    "rebased": 1,
+    "first_sequence_id": 184,
+    "last_sequence_id": 1049
+  },
+  "watchdog": {
+    "timeout_ms": 250.0,
+    "events": 0,
+    "active_at_end": false
+  },
+  "haptic_feedback": {
+    "enabled": true,
+    "destination": "127.0.0.1:58082",
+    "requested_hz": 30.0,
+    "packets_sent": 360,
+    "send_errors": 0,
+    "max_contact_force_n": [
+      0.0,
+      0.0
+    ],
+    "max_abs_joint_reaction_effort": 0.0,
+    "physical_output_commands": false
+  },
+  "rendered_frames": 0,
+  "step_ms": {
+    "mean": 6.212743468293208,
+    "p50": 6.125362473540008,
+    "p95": 10.217003469006157,
+    "p99": 11.386547027505001
+  },
+  "input_clamping": {
+    "processed_packets_with_clamping": 361,
+    "processed_values_clamped": 1444,
+    "max_abs_delta": 3.714285714285708
+  },
+  "solver_limit_saturation": {
+    "gripper_saturation_count": [
+      0,
+      0
+    ],
+    "gripper_max_excursion_deg": [
+      0.0,
+      0.0
+    ],
+    "gripper_hard_tolerance_deg": 5.0
+  },
+  "last_received_action": [
+    0.967032967032967,
+    -102.85714285714286,
+    93.27472527472527,
+    62.32967032967033,
+    -6.5054945054945055,
+    0.7949125596184419,
+    18.54945054945055,
+    -102.85714285714286,
+    93.71428571428571,
+    59.78021978021978,
+    -3.5164835164835164,
+    1.3392857142857142
+  ],
+  "final_applied_action": [
+    0.967032967032967,
+    -100.0,
+    90.0,
+    62.32967032967033,
+    -6.5054945054945055,
+    0.7949125596184419,
+    18.54945054945055,
+    -100.0,
+    90.0,
+    59.78021978021978,
+    -3.5164835164835164,
+    1.3392857142857142
+  ],
+  "final_observation_state": [
+    0.9670331478118896,
+    -100.0001220703125,
+    90.00733184814453,
+    62.560359954833984,
+    -6.505494594573975,
+    0.7908049821853638,
+    18.549449920654297,
+    -100.00006103515625,
+    90.00740051269531,
+    60.023956298828125,
+    -3.516479015350342,
+    1.3346456289291382
+  ],
+  "tracking_error": {
+    "mean_abs": 0.041507889388172355,
+    "max_abs": 0.243736518608344
+  },
+  "physical_output_commands": false,
+  "appearance": {
+    "mode": "debug-mesh",
+    "generated_fill_enabled": false,
+    "diagnostics": {
+      "enabled": false,
+      "object_segmentation_index": null,
+      "composited_frames": 0,
+      "fallback_frames": 0,
+      "render_ms": {
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "gaussian_alpha_clipped_fraction": {
+        "mean": null,
+        "max": null
+      },
+      "binding": null
+    }
+  },
+  "visual_state_stream": {
+    "enabled": true,
+    "destination": "127.0.0.1:58083",
+    "requested_hz": 30.0,
+    "packets_sent": 360,
+    "send_errors": 0,
+    "authoritative_for_control": false
+  }
+}

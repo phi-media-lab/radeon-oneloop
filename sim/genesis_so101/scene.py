@@ -46,6 +46,34 @@ OBJECT_TARGET_POS = (-0.10, -0.26, 0.47)
 SIM_GRIPPER_SOLVER_TOLERANCE_RAD = math.radians(5.0)
 
 
+def contact_pair_force_total(
+    geom_a: np.ndarray,
+    geom_b: np.ndarray,
+    forces: np.ndarray,
+    first_geom_range: tuple[int, int],
+    second_geom_range: tuple[int, int],
+) -> float:
+    """Sum contact-force magnitudes only between two entity geometry ranges."""
+
+    geom_a = np.asarray(geom_a).reshape(-1)
+    geom_b = np.asarray(geom_b).reshape(-1)
+    forces = np.asarray(forces, dtype=np.float64).reshape(-1, 3)
+    if len(geom_a) != len(geom_b) or len(geom_a) != len(forces):
+        raise ValueError("contact geometry and force arrays must have equal lengths")
+    first_start, first_end = first_geom_range
+    second_start, second_end = second_geom_range
+    if first_start >= first_end or second_start >= second_end:
+        raise ValueError("contact geometry ranges must be non-empty")
+    a_first = (geom_a >= first_start) & (geom_a < first_end)
+    b_first = (geom_b >= first_start) & (geom_b < first_end)
+    a_second = (geom_a >= second_start) & (geom_a < second_end)
+    b_second = (geom_b >= second_start) & (geom_b < second_end)
+    selected = (a_first & b_second) | (b_first & a_second)
+    if not np.any(selected):
+        return 0.0
+    return float(np.linalg.norm(forces[selected], axis=1).sum())
+
+
 def relative_transform(parent_world: Any, child_world: Any) -> np.ndarray:
     """Return the child pose in parent coordinates for two world transforms."""
     parent = np.asarray(parent_world, dtype=np.float64)
@@ -72,6 +100,16 @@ class SceneHandles:
 class SO101HandoverTask:
     def __init__(self, handles: SceneHandles):
         self.handles = handles
+        self._gripper_geom_ranges = tuple(
+            tuple(
+                (link.geom_start, link.geom_end)
+                for link in (
+                    arm.get_link("gripper"),
+                    arm.get_link("moving_jaw_so101_v1"),
+                )
+            )
+            for arm in (handles.left, handles.right)
+        )
         self._gripper_saturation_count = [0, 0]
         self._gripper_max_excursion_rad = [0.0, 0.0]
         self._appearance_binding: SafeAppearanceBinding | None = None
@@ -265,13 +303,16 @@ class SO101HandoverTask:
             "object_quaternion_wxyz": tuple(float(value) for value in quaternion),
         }
 
-    def haptic_feedback(self) -> tuple[tuple[float, ...], tuple[float, float]]:
-        """Return contact-gated simulated joint reaction efforts and force totals.
+    def haptic_feedback_diagnostics(
+        self,
+    ) -> tuple[tuple[float, ...], tuple[float, float], tuple[float, float]]:
+        """Return efforts, all external forces, and gripper-object forces.
 
         All external contacts are reflected, including the target, table, and
         opposite arm; self-collisions are excluded. The fixed bases are placed
         clear of the tabletop, so ordinary support does not create a standing
-        feedback signal.
+        feedback signal. The third result is stricter and includes only contact
+        between either gripper/finger pair and the handover object.
         """
 
         # Pull the scene contact manifold once. Repeating entity.get_contacts()
@@ -294,6 +335,20 @@ class SO101HandoverTask:
 
         left_force = external_force_total(self.handles.left)
         right_force = external_force_total(self.handles.right)
+        object_range = (self.handles.object.geom_start, self.handles.object.geom_end)
+        gripper_object_force = tuple(
+            sum(
+                contact_pair_force_total(
+                    geom_a,
+                    geom_b,
+                    forces,
+                    gripper_range,
+                    object_range,
+                )
+                for gripper_range in arm_ranges
+            )
+            for arm_ranges in self._gripper_geom_ranges
+        )
         left_effort = np.zeros(6, dtype=np.float64)
         right_effort = np.zeros(6, dtype=np.float64)
         if left_force > 1e-6:
@@ -305,7 +360,17 @@ class SO101HandoverTask:
                 self.handles.right.get_dofs_control_force()
             ).reshape(-1)
         efforts = tuple(float(value) for value in np.concatenate((left_effort, right_effort)))
-        return efforts, (left_force, right_force)
+        return (
+            efforts,
+            (left_force, right_force),
+            gripper_object_force,
+        )
+
+    def haptic_feedback(self) -> tuple[tuple[float, ...], tuple[float, float]]:
+        """Return the existing all-external-contact haptic transport contract."""
+
+        efforts, external_force, _ = self.haptic_feedback_diagnostics()
+        return efforts, external_force
 
     def success(self) -> bool:
         position = self._array(self.handles.object.get_pos()).reshape(-1)
