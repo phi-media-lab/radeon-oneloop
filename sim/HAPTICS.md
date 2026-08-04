@@ -81,6 +81,9 @@ mechanically safe to resist motion.
    expected 0.2-degree offset at 30/1000 and fails zero after a 101 ms
    synthetic timeout. Manually place the elbow at or below 84° and repeat this
    gate before physical output.
+   Repeat `20260804T112411Z_180658_amd_haptic_readonly_preflight` confirms the
+   position is still 93.538° and fails only the same margin check, with zero
+   writes, zero torque-enable commands, and both serial devices free afterward.
 6. **Pending, physical:** use `left/elbow_flex` and an explicit candidate
    `simulated_effort_full_scale=0.6727447137236594`. This is
    `p95_effort / max_normalized_effort`, so p95 contact reaches the existing

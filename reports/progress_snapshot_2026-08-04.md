@@ -86,6 +86,13 @@ All other checks pass: torque disabled, position mode, current 0, temperature
 101 ms watchdog fail-zero. It still issued zero register writes and no torque
 command. Failed-run metrics SHA-256:
 `1a55238d339b7d5f039c064e7f6cac9c7f91698025a66eaf8a8f41aa859eee9a`.
+Latest repeat `20260804T112411Z_180658_amd_haptic_readonly_preflight`
+reconfirms the unchanged 93.538° position and the same single failed check.
+Its metrics SHA-256 is
+`11d61a61dde86b3e1e8025d0971f0f0613ab83152b600e0795ea37f9de99e590`
+and its hash-index SHA-256 is
+`bb6beeccdb14cb6ab3719ffd69946baaba63f5bac336d0712c90d3ac02e2b005`;
+both serial devices were free after exit.
 The operator must manually move the elbow to 84° or lower, rerun the read-only
 gate, and then provide a fresh estop/clear-workspace attestation.
 The physical bench runner now enforces this sequence itself: it executes the
@@ -310,7 +317,8 @@ on `radeon-c` GPU0 may populate formal result tables.
 ## Remaining critical path
 
 1. Manually rotate `left/elbow_flex` from 93.538° into the read-only gate's
-   -94° through 84° range, preferably near the middle, and rerun the corrected
+   -94° through 84° range, preferably around 60° rather than on the boundary,
+   and rerun the corrected
    read-only preflight until it passes.
 2. Re-attest the reachable physical emergency stop, clear the left elbow, and
    run one 10-second `left/elbow_flex` test at the unchanged 30/1000 torque and

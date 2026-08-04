@@ -497,6 +497,27 @@ artifacts:
     status: failed_requires_manual_elbow_reposition
     formal: false
 
+  - id: amd_haptic_readonly_preflight_joint_margin_repeat
+    kind: dual_leader_readonly_health_command_envelope_and_joint_margin_gate
+    host_role: amd
+    run_id: 20260804T112411Z_180658_amd_haptic_readonly_preflight
+    selection: left_elbow_flex
+    selected_motor_torque_enabled: false
+    selected_motor_operating_mode: position
+    selected_position_deg: 93.53846153846153
+    accepted_position_range_deg: [-94.0, 84.0]
+    required_bidirectional_model_margin_deg: 5.0
+    electrical_health_passed: true
+    command_envelope_passed: true
+    joint_margin_passed: false
+    serial_register_writes: 0
+    torque_enable_commands: 0
+    physical_output_commands: false
+    metrics_sha256: 11d61a61dde86b3e1e8025d0971f0f0613ab83152b600e0795ea37f9de99e590
+    hashes_manifest_sha256: bb6beeccdb14cb6ab3719ffd69946baaba63f5bac336d0712c90d3ac02e2b005
+    status: failed_repeat_confirms_manual_elbow_reposition_required
+    formal: false
+
 validation:
   scaffold_tests_collected: 182
   scaffold_tests_passed: 177
