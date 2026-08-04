@@ -85,6 +85,13 @@ class HapticArmHardwareTests(unittest.TestCase):
         with self.assertRaises(HapticHardwareError):
             renderer.arm((0.0,) * 12, physical_estop_confirmed=False)
 
+    def test_close_before_arm_is_strictly_read_only(self):
+        bus = FakeBus()
+        renderer = FeetechHapticArmRenderer(bus, HapticArmConfig(side="left"))
+        renderer.close()
+        self.assertEqual(bus.events, [])
+        self.assertFalse(renderer.release_attempted)
+
     def test_batch_output_is_bounded_then_close_reliably_releases(self):
         bus = FakeBus()
         renderer = FeetechHapticArmRenderer(bus, HapticArmConfig(side="left"))

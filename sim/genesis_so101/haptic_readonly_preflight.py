@@ -19,7 +19,11 @@ from typing import Any, Sequence
 
 from .haptic_hardware import BENCH_MOTORS, HapticBenchConfig
 from .haptic_safety import HapticSafetyConfig, SafeHapticController
-from .leader_publisher import _connect_read_only, _make_leader, _read_arm
+from .leader_hardware import (
+    connect_read_only as _connect_read_only,
+    make_leader as _make_leader,
+    read_arm as _read_arm,
+)
 from .live_protocol import (
     HapticFeedbackPacket,
     SO101_MODEL_ACTION_MAX,

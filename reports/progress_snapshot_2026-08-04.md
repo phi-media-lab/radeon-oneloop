@@ -93,11 +93,39 @@ Its metrics SHA-256 is
 and its hash-index SHA-256 is
 `bb6beeccdb14cb6ab3719ffd69946baaba63f5bac336d0712c90d3ac02e2b005`;
 both serial devices were free after exit.
-The operator must manually move the elbow to 84° or lower, rerun the read-only
-gate, and then provide a fresh estop/clear-workspace attestation.
-The physical bench runner now enforces this sequence itself: it executes the
-same read-only gate first and does not start the motor-capable publisher on any
-preflight failure. Final bench acceptance also binds that same-run preflight.
+A torque-free live watcher subsequently observed the calibrated elbow moving
+continuously from 96.791° to 61.187°, inside the accepted range, with no register
+writes or torque command. After the watcher disconnected and the operator
+released the light arm, gravity returned it to 96.615°; standalone run
+`20260804T113715Z_180829_amd_haptic_readonly_preflight` therefore failed only
+the same margin check. Its metrics SHA-256 is
+`825f54fc721440d80fedad977fb4976899e72f9637d0dbf07b01f022d811fb8f`.
+This proves that the calibration is valid and isolates the remaining failure to
+the process handoff between manual positioning and motor arming.
+
+The current single-joint physical bench runner now removes that handoff by
+reusing the existing HIL intervention semantics in the already-open publisher.
+After fresh estop and clear-workspace attestations, it waits torque-free until
+the selected `elbow_flex` remains inside its bidirectional margin for 0.4
+seconds with no more than 2 degrees of span. In that same serial process it then
+reads the motor's seven health/mode registers, freezes a zero-write preflight
+boundary, and only starts the synthetic feedback sender after a ready marker.
+The first feedback packet causes a final current-pose check and immediate
+low-torque arming; no Python process restart occurs for gravity to exploit. The
+final bench gate now requires this same-process intervention evidence in
+addition to the prior envelope, health, transport, watchdog, and fail-zero
+evidence. The same state machine is also wired to the later five-joint runner,
+where it requires all five selected joints and all 35 registers.
+
+Deployment probe `runs/haptic_intervention_dryrun/zero_output_v2_ldTD4d` exercised
+the refactored calibrated dual-leader read path on `amd` for 60 samples at
+29.898 Hz with zero send errors, zero output commands, and
+`physical_output_commands=false`; both
+serial devices were free after exit. Metrics SHA-256:
+`18ccabeb9e403258c3e6ef2cd6e7a2c72cc70617ca6770b864dab34ad8367c1f`.
+The intervention implementation is software-tested and deployed but has not
+yet issued a physical command.
+
 Post-run operator perception is also fail-closed: a separate content-addressed
 receipt must bind the accepted gate, source hash index, `DONE` marker, a
 useful/comfortable verdict, and free leader motion after shutdown. That receipt
@@ -108,8 +136,8 @@ ranges, enforces one exercised arm plus one quiet arm, and accepts only a
 100-Hz-or-faster unclamped Genesis run with zero watchdog and zero physical
 output. Its own operator mapping receipt can unlock only a five-joint read-only
 preflight. That preflight checks all non-gripper motors at a candidate 20/1000
-torque and 0.5-degree envelope; the future physical runner must repeat it in the
-same run after a fresh estop/workspace attestation.
+torque and 0.5-degree envelope; the physical runner repeats the checks at the
+same-process intervention boundary after a fresh estop/workspace attestation.
 The corresponding five-second single-arm physical runner, machine gate, and
 post-run operator receipt are implemented and software-tested but deliberately
 unexecuted. They use reliable per-motor writes and readback for arm/release/

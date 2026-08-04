@@ -222,6 +222,10 @@ class FeetechHapticArmRenderer:
 
     def close(self) -> None:
         original = dict(self._original_torque_limits)
+        if not self._armed and not original:
+            # Intervention waiting is strictly read-only. If arming never
+            # started there is nothing to release or restore.
+            return
         self.emergency_release()
         for motor in BENCH_MOTORS:
             if self._read_raw("Torque_Enable", motor) != 0:

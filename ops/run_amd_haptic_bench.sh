@@ -17,6 +17,7 @@ python_bin=${ONELOOP_LEROBOT_PYTHON:-/home/amd/.miniforge3/envs/vlash/bin/python
 feedback_port=${ONELOOP_HAPTIC_PORT:-58082}
 run_root=${ONELOOP_LIVE_RUN_ROOT:-$repo_root/runs}
 physical_estop_confirmed=${ONELOOP_PHYSICAL_ESTOP_CONFIRMED:-0}
+workspace_clear=${ONELOOP_SELECTED_ARM_WORKSPACE_CLEAR_CONFIRMED:-0}
 haptic_simulated_effort_full_scale=${ONELOOP_HAPTIC_SIMULATED_EFFORT_FULL_SCALE:-3.35}
 haptic_bench_reaction_effort=${ONELOOP_HAPTIC_BENCH_REACTION_EFFORT:-3.35}
 run_id="$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}_amd_haptic_bench"
@@ -31,6 +32,7 @@ run_dir="$run_root/$run_id"
    "$motor" == elbow_flex || "$motor" == wrist_flex || \
    "$motor" == wrist_roll ]]
 [[ "$physical_estop_confirmed" == 1 ]]
+[[ "$workspace_clear" == 1 ]]
 for device in "$left_port" "$right_port"; do
   if fuser "$device" >/dev/null 2>&1; then
     printf 'serial device is busy: %s\n' "$device" >&2
@@ -41,6 +43,17 @@ mkdir -p "$run_dir"
 
 publisher_pid=
 sender_pid=
+write_hashes() {
+  local files=("$run_dir/manifest.yaml")
+  local name
+  for name in intervention_ready.json preflight_metrics.json publisher.log \
+    sender.log publisher_metrics.json sender_metrics.json gate.json; do
+    if [[ -f "$run_dir/$name" ]]; then
+      files+=("$run_dir/$name")
+    fi
+  done
+  sha256sum "${files[@]}" >"$run_dir/hashes.sha256"
+}
 cleanup() {
   status=$?
   if [[ -n "$sender_pid" ]]; then
@@ -52,14 +65,7 @@ cleanup() {
     wait "$publisher_pid" 2>/dev/null || true
   fi
   if [[ $status -ne 0 && ! -e "$run_dir/DONE" ]]; then
-    files=("$run_dir/manifest.yaml")
-    for path in preflight_stdout.log preflight_stderr.log preflight_metrics.json \
-      publisher.log sender.log publisher_metrics.json sender_metrics.json gate.json; do
-      if [[ -f "$run_dir/$path" ]]; then
-        files+=("$run_dir/$path")
-      fi
-    done
-    sha256sum "${files[@]}" >"$run_dir/hashes.sha256"
+    write_hashes
     touch "$run_dir/FAILED"
   fi
   exit "$status"
@@ -84,27 +90,18 @@ printf '%s\n' \
   'max_output_duration_s: 10' \
   'watchdog_ms: 100' \
   'same_run_readonly_preflight_required: true' \
+  'same_process_intervention_transition: true' \
+  'intervention_stable_duration_s: 0.4' \
+  'intervention_max_span_deg: 2.0' \
+  'intervention_timeout_s: 90' \
+  'operator_estop_attestation_received: true' \
+  'operator_workspace_clear_attestation_received: true' \
   >"$run_dir/manifest.yaml"
 
-# This process contains no write path. A failed electrical, command-envelope,
-# or bidirectional joint-margin check exits before the physical publisher is
-# started.
-timeout --signal=TERM --kill-after=3 20 \
-  "$python_bin" -m sim.genesis_so101.haptic_readonly_preflight \
-  --left-port "$left_port" \
-  --right-port "$right_port" \
-  --left-id "$left_id" \
-  --right-id "$right_id" \
-  --side "$side" \
-  --motor "$motor" \
-  --simulated-effort-full-scale "$haptic_simulated_effort_full_scale" \
-  --reaction-effort "$haptic_bench_reaction_effort" \
-  --max-torque-limit-raw 30 \
-  --max-position-offset-deg 1.0 \
-  --output "$run_dir/preflight_metrics.json" \
-  >"$run_dir/preflight_stdout.log" 2>"$run_dir/preflight_stderr.log"
-
-timeout --signal=TERM --kill-after=3 25 \
+# The same publisher connection waits torque-free for a stable safe position,
+# records a zero-write register boundary, and arms only after feedback starts.
+# This removes the gravity-sensitive preflight-to-publisher process handoff.
+timeout --signal=TERM --kill-after=3 115 \
   "$python_bin" -m sim.genesis_so101.leader_publisher \
   --left-port "$left_port" \
   --right-port "$right_port" \
@@ -121,8 +118,15 @@ timeout --signal=TERM --kill-after=3 25 \
   --haptic-max-torque-limit-raw 30 \
   --haptic-max-position-offset-deg 1.0 \
   --haptic-simulated-effort-full-scale "$haptic_simulated_effort_full_scale" \
+  --haptic-test-reaction-effort "$haptic_bench_reaction_effort" \
   --haptic-max-output-duration-s 10 \
   --physical-estop-confirmed \
+  --intervention-assisted-arm \
+  --intervention-stable-duration-s 0.4 \
+  --intervention-max-span-deg 2.0 \
+  --intervention-timeout-s 90 \
+  --intervention-ready-file "$run_dir/intervention_ready.json" \
+  --intervention-preflight-output "$run_dir/preflight_metrics.json" \
   --hz 30 \
   --duration-s 0 \
   --print-every 0 \
@@ -130,7 +134,15 @@ timeout --signal=TERM --kill-after=3 25 \
   >"$run_dir/publisher.log" 2>&1 &
 publisher_pid=$!
 
-sleep 1
+while [[ ! -f "$run_dir/intervention_ready.json" ]]; do
+  if ! kill -0 "$publisher_pid" 2>/dev/null; then
+    wait "$publisher_pid"
+    publisher_pid=
+    exit 1
+  fi
+  sleep 0.1
+done
+
 "$python_bin" -m sim.genesis_so101.haptic_bench_sender \
   --host 127.0.0.1 \
   --port "$feedback_port" \
@@ -159,17 +171,7 @@ sender_pid=
   --full-scale "$haptic_simulated_effort_full_scale" \
   --reaction-effort "$haptic_bench_reaction_effort"
 
-sha256sum \
-  "$run_dir/manifest.yaml" \
-  "$run_dir/preflight_stdout.log" \
-  "$run_dir/preflight_stderr.log" \
-  "$run_dir/preflight_metrics.json" \
-  "$run_dir/publisher.log" \
-  "$run_dir/sender.log" \
-  "$run_dir/publisher_metrics.json" \
-  "$run_dir/sender_metrics.json" \
-  "$run_dir/gate.json" \
-  >"$run_dir/hashes.sha256"
+write_hashes
 sha256sum -c "$run_dir/hashes.sha256" >/dev/null
 touch "$run_dir/DONE"
 trap - EXIT INT TERM

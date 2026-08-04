@@ -47,7 +47,8 @@ write_hashes() {
   local files=("$run_dir/manifest.yaml")
   local name
   for name in authorization.json preflight_stdout.log preflight_stderr.log \
-    preflight_metrics.json publisher.log sender.log publisher_metrics.json \
+    intervention_ready.json preflight_metrics.json publisher.log sender.log \
+    publisher_metrics.json \
     sender_metrics.json gate.json; do
     if [[ -f "$run_dir/$name" ]]; then
       files+=("$run_dir/$name")
@@ -92,6 +93,10 @@ printf '%s\n' \
   'max_output_duration_s: 5' \
   'watchdog_ms: 100' \
   'same_run_readonly_preflight_required: true' \
+  'same_process_intervention_transition: true' \
+  'intervention_stable_duration_s: 0.4' \
+  'intervention_max_span_deg: 2.0' \
+  'intervention_timeout_s: 90' \
   'operator_estop_attestation_received: true' \
   'operator_workspace_clear_attestation_received: true' \
   'physical_output_commands: true' \
@@ -104,23 +109,12 @@ printf '%s\n' \
   --target-stage single_arm_readonly_preflight \
   --output "$run_dir/authorization.json"
 
-# Re-read all five motors immediately before the physical publisher. Any
-# posture or electrical failure exits before a register write is possible.
-timeout --signal=TERM --kill-after=3 30 \
-  "$python_bin" -m sim.genesis_so101.haptic_arm_readonly_preflight \
-  --left-port "$left_port" \
-  --right-port "$right_port" \
-  --left-id "$left_id" \
-  --right-id "$right_id" \
-  --side "$side" \
-  --simulated-effort-full-scale "$full_scale" \
-  --reaction-effort "$reaction_effort" \
-  --max-torque-limit-raw 20 \
-  --max-position-offset-deg 0.5 \
-  --output "$run_dir/preflight_metrics.json" \
-  >"$run_dir/preflight_stdout.log" 2>"$run_dir/preflight_stderr.log"
-
-timeout --signal=TERM --kill-after=3 20 \
+# The publisher keeps the same read-only serial connection while the operator
+# places the light arm in a safe pose. After 0.4 s of stable margin it signals
+# this wrapper to start feedback, re-reads all five motors, records the
+# preflight boundary, and arms immediately without a gravity-sensitive process
+# handoff.
+timeout --signal=TERM --kill-after=3 105 \
   "$python_bin" -m sim.genesis_so101.leader_publisher \
   --left-port "$left_port" \
   --right-port "$right_port" \
@@ -136,8 +130,15 @@ timeout --signal=TERM --kill-after=3 20 \
   --haptic-max-torque-limit-raw 20 \
   --haptic-max-position-offset-deg 0.5 \
   --haptic-simulated-effort-full-scale "$full_scale" \
+  --haptic-test-reaction-effort "$reaction_effort" \
   --haptic-max-output-duration-s 5 \
   --physical-estop-confirmed \
+  --intervention-assisted-arm \
+  --intervention-stable-duration-s 0.4 \
+  --intervention-max-span-deg 2.0 \
+  --intervention-timeout-s 90 \
+  --intervention-ready-file "$run_dir/intervention_ready.json" \
+  --intervention-preflight-output "$run_dir/preflight_metrics.json" \
   --hz 30 \
   --duration-s 0 \
   --print-every 0 \
@@ -145,7 +146,15 @@ timeout --signal=TERM --kill-after=3 20 \
   >"$run_dir/publisher.log" 2>&1 &
 publisher_pid=$!
 
-sleep 1
+while [[ ! -f "$run_dir/intervention_ready.json" ]]; do
+  if ! kill -0 "$publisher_pid" 2>/dev/null; then
+    wait "$publisher_pid"
+    publisher_pid=
+    exit 1
+  fi
+  sleep 0.1
+done
+
 "$python_bin" -m sim.genesis_so101.haptic_arm_bench_sender \
   --host 127.0.0.1 \
   --port "$feedback_port" \

@@ -68,7 +68,7 @@ mechanically safe to resist motion.
    hit. P95 reaction effort ranked `elbow_flex` (0.13455), `shoulder_pan`
    (0.06421), then the remaining joints. `wrist_roll` was only 0.00066, which
    explains the weak earlier trials.
-5. **Pending manual reposition, hardware read-only:** the first read-only run
+5. **Passed electrical checks; positional transition redesigned:** the first read-only run
    `20260804T103609Z_180178_amd_haptic_readonly_preflight` passed electrical
    health and command-envelope checks but did not enforce a joint-limit margin;
    it is superseded. Corrected run
@@ -79,18 +79,22 @@ mechanically safe to resist motion.
    commands. Electrical state remains healthy: torque disabled, position mode,
    current 0, 34 °C, 7.3 V, and status 0. The pure command kernel reaches the
    expected 0.2-degree offset at 30/1000 and fails zero after a 101 ms
-   synthetic timeout. Manually place the elbow at or below 84° and repeat this
-   gate before physical output.
+   synthetic timeout.
    Repeat `20260804T112411Z_180658_amd_haptic_readonly_preflight` confirms the
    position is still 93.538° and fails only the same margin check, with zero
    writes, zero torque-enable commands, and both serial devices free afterward.
-6. **Pending, physical:** use `left/elbow_flex` and an explicit candidate
+   A later read-only live watcher observed the operator move the calibrated
+   elbow safely to 61.187°, proving the calibration and direction are valid.
+   Once the watcher disconnected, the light torque-free arm returned under
+   gravity to 96.615°. The remaining issue is therefore the two-process handoff,
+   not calibration or an unsafe electrical state.
+6. **Pending, physical, intervention-assisted:** use `left/elbow_flex` and an explicit candidate
    `simulated_effort_full_scale=0.6727447137236594`. This is
    `p95_effort / max_normalized_effort`, so p95 contact reaches the existing
-   0.20 normalized ceiling. It does not increase the 30/1000 torque limit,
-   one-degree pre-normalization offset, or ten-second duration. The default
-   remains 3.35 until this test passes current, thermal, watchdog, shutdown,
-   and subjective-resistance gates.
+   0.20 normalized ceiling. This single-joint run retains the already-tested
+   30/1000 torque ceiling, one-degree configured offset, ten-second duration,
+   and 100 ms watchdog. The default scale remains 3.35 until this test passes
+   current, thermal, watchdog, shutdown, and subjective-resistance gates.
 7. Expand only in this order: one calibrated joint, one arm, both arms. Add a
    monitor-only gate before physical output at each expansion. Increase only
    after a measured force/current calibration. The current
@@ -120,9 +124,12 @@ The latest normal and fault-injected integration gates are
 events. This ordering prevents an asset/coordinate defect or a renderer crash
 from first being discovered while an operator-facing motor is energized.
 
-The hardware read-only electrical checks pass, but physical step 6 remains
-blocked by the failed joint-margin check and then requires a fresh operator
-attestation. A previous command-line confirmation is not reusable:
+The hardware read-only electrical checks pass. The standalone margin failure is
+preserved as negative evidence, but the intervention-assisted runner now waits
+for the selected joint to enter the safe range instead of treating a
+gravity-returned resting pose as a terminal process failure. Physical step 6
+still requires a fresh operator attestation; a previous command-line
+confirmation is not reusable:
 the operator must freshly attest that the physical power cut/emergency stop is
 immediately reachable and that the left `elbow_flex` sweep region is clear.
 
@@ -145,18 +152,25 @@ than new defaults:
 
 ```bash
 ONELOOP_PHYSICAL_ESTOP_CONFIRMED=1 \
+ONELOOP_SELECTED_ARM_WORKSPACE_CLEAR_CONFIRMED=1 \
 ONELOOP_HAPTIC_SIMULATED_EFFORT_FULL_SCALE=0.6727447137236594 \
 ONELOOP_HAPTIC_BENCH_REACTION_EFFORT=0.1345489427447319 \
 ./ops/run_amd_haptic_bench.sh LEFT_PORT RIGHT_PORT LEFT_ID RIGHT_ID \
   left elbow_flex
 ```
 
-The bench wrapper cannot jump directly to motor output: it first runs the
-read-only electrical, command-envelope, and bidirectional joint-margin gate in
-the same evidence directory. The physical publisher is not started unless
-that preflight exits successfully, and `haptic_bench_gate.py` independently
-requires the exact preflight selection and calibration in the final `DONE`
-decision.
+The bench wrapper cannot jump directly to motor output. It opens the publisher
+read-only and waits up to 90 seconds for `elbow_flex` to remain inside its
+bidirectional margin for 0.4 seconds with at most 2 degrees of span. Without
+closing that serial connection, it then reads the selected motor's seven
+health/mode registers, writes a zero-output preflight boundary, and starts the
+synthetic feedback sender. The first feedback packet rechecks the current pose
+and arms at that pose, eliminating the gravity-sensitive process handoff. The
+startup attestation plus stable pose is the simplified equivalent of the older
+global-Space HIL takeover; the isolated bench has no policy queue to clear.
+`haptic_bench_gate.py` requires this same-process intervention evidence, exact
+selection/calibration, transport, bounded output, health, and fail-zero shutdown
+before writing `DONE`.
 
 After a machine-accepted physical run, progression still remains locked until
 the operator reports both useful/comfortable resistance and free leader motion
@@ -200,13 +214,12 @@ ONELOOP_LEADER_MOVES_FREELY_CONFIRMED=1 \
   LEFT_PORT RIGHT_PORT LEFT_ID RIGHT_ID left MONITOR_RECEIPT_RUN_DIR
 ```
 
-The arm preflight reads seven registers from each of the five non-gripper
+The standalone arm preflight reads seven registers from each of the five non-gripper
 motors and checks torque-disabled state, position mode, electrical health, and
 bidirectional model-limit margin. It writes no register and uses a pure safety
 kernel to prove the candidate 20/1000 torque, 0.5-degree offset, and 100 ms
-watchdog envelope. A future physical single-arm runner must repeat this exact
-preflight in the same run after a fresh estop/workspace attestation; a standalone
-preflight result never authorizes physical output by itself.
+watchdog envelope. A standalone result never authorizes physical output by
+itself.
 
 The first five-joint physical stage remains a synthetic, deterministic bench
 gate rather than a full live-contact demo. This isolates simultaneous bus
@@ -215,8 +228,17 @@ contact dynamics are combined with two physical arms. It is limited to the five
 non-gripper motors on one selected arm, 20/1000 torque, a 0.5-degree configured
 offset (0.1 degree at the calibrated test effort), five seconds of output, and
 the 100 ms feedback watchdog. The runner requires fresh estop and clear-arm
-workspace environment attestations and repeats the five-joint read-only
-preflight in the same run:
+workspace environment attestations. It then reuses the earlier HIL intervention
+semantics in a smaller state machine: the already-open publisher remains
+read-only while the operator places the selected light arm inside every joint's
+bidirectional margin; all five joints must remain there for 0.4 seconds with at
+most 2 degrees of span. The same process then reads all 35 health/mode registers,
+writes the preflight evidence boundary, and starts synthetic feedback. It arms
+at the current pose without closing the serial connection, so gravity cannot
+invalidate a separately launched preflight. The startup attestation plus stable
+safe pose replaces the old global-Space trigger; there is no policy queue in
+this isolated bench stage to clear. Any timeout, unsafe pose, register failure,
+missing feedback, or 100 ms feedback gap exits through fail-zero shutdown:
 
 ```bash
 ONELOOP_PHYSICAL_ESTOP_CONFIRMED=1 \

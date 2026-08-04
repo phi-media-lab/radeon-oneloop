@@ -29,6 +29,7 @@ def evaluate_arm_bench(
     preflight_checks = preflight.get("checks") or {}
     preflight_selection = preflight.get("selection") or {}
     preflight_envelope = preflight.get("command_envelope") or {}
+    intervention = preflight.get("intervention") or {}
     required_preflight_checks = (
         "dual_arm_action_finite",
         "all_selected_motors_present",
@@ -102,6 +103,24 @@ def evaluate_arm_bench(
             and preflight.get("physical_output_commands") is False
             and int(preflight.get("serial_register_writes", -1)) == 0
             and int(preflight.get("torque_enable_commands", -1)) == 0
+        ),
+        "same_process_intervention_transition": (
+            preflight.get("same_process_transition") is True
+            and preflight.get("bus_access")
+            == "same_process_read_only_intervention_transition"
+            and intervention.get("schema_version")
+            == "radeon_oneloop.haptic_intervention_gate.v1"
+            and intervention.get("mode") == "same_process_stable_safe_pose"
+            and intervention.get("side") == expected_side
+            and intervention.get("motors") == list(BENCH_MOTORS)
+            and intervention.get("trigger")
+            == "operator_attestation_plus_stable_safe_pose"
+            and intervention.get("candidate_ready") is True
+            and float(intervention.get("hold_required_s", 0.0)) >= 0.1
+            and float(intervention.get("stable_duration_s", 0.0))
+            >= float(intervention.get("hold_required_s", math.inf))
+            and float(intervention.get("max_span_limit_deg", math.inf)) <= 2.0
+            and intervention.get("serial_connection_preserved_for_arm") is True
         ),
         "publisher_schema_selection_and_rate": (
             publisher.get("schema_version")

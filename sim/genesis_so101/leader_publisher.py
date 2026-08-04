@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import signal
 import socket
 import sys
@@ -12,18 +13,32 @@ import time
 from pathlib import Path
 from typing import Any
 
-from radeon_oneloop.contracts import ACTION_NAMES, ARM_JOINTS
+from radeon_oneloop.contracts import ACTION_NAMES
 
 from .haptic_arm_hardware import FeetechHapticArmRenderer, HapticArmConfig
+from .haptic_arm_readonly_preflight import (
+    arm_command_envelope,
+    evaluate_arm_hardware_snapshot,
+)
 from .haptic_hardware import (
     BENCH_MOTORS,
     FeetechHapticBenchRenderer,
     HapticBenchConfig,
     HapticHardwareError,
 )
+from .haptic_intervention import StableSafePoseConfig, StableSafePoseGate
+from .haptic_readonly_preflight import (
+    READ_ONLY_REGISTERS,
+    command_envelope as single_joint_command_envelope,
+    evaluate_hardware_snapshot as evaluate_single_joint_hardware_snapshot,
+    read_register_snapshot,
+)
 from .haptic_safety import HapticSafetyConfig, SafeHapticController
+from .leader_hardware import connect_read_only, make_leader, read_arm
 from .live_protocol import (
     MAX_PACKET_BYTES,
+    SO101_MODEL_ACTION_MAX,
+    SO101_MODEL_ACTION_MIN,
     LeaderActionPacket,
     LiveProtocolError,
     decode_haptic_packet,
@@ -31,32 +46,19 @@ from .live_protocol import (
 )
 
 
-def _make_leader(port: str, arm_id: str) -> Any:
-    from lerobot.teleoperators.so101_leader import SO101Leader, SO101LeaderConfig
+# Preserve the private names for compatibility with earlier local tooling.
+_make_leader = make_leader
+_connect_read_only = connect_read_only
+_read_arm = read_arm
 
-    return SO101Leader(
-        SO101LeaderConfig(port=port, id=arm_id, use_degrees=True)
+
+def _write_json_atomic(path: Path, payload: dict[str, object]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    temporary.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-
-
-def _connect_read_only(leader: Any) -> None:
-    if not leader.calibration:
-        raise RuntimeError(
-            f"missing calibration for {leader.id}: {leader.calibration_fpath}"
-        )
-    # Deliberately bypass SO101Leader.connect(): that method configures motor
-    # registers. A leader bridge only needs to open the bus and read positions.
-    leader.bus.connect()
-    if not leader.bus.is_calibrated:
-        raise RuntimeError(
-            f"motor calibration does not match {leader.calibration_fpath}; "
-            "refusing to write calibration from the live reader"
-        )
-
-
-def _read_arm(leader: Any) -> tuple[float, ...]:
-    values = leader.get_action()
-    return tuple(float(values[name]) for name in ARM_JOINTS)
+    temporary.replace(path)
 
 
 class ActionRangeTracker:
@@ -99,6 +101,118 @@ class ActionRangeTracker:
         }
 
 
+def _build_same_process_preflight(
+    *,
+    output_mode: str,
+    side: str,
+    motor: str | None,
+    selected_bus: Any,
+    action: tuple[float, ...],
+    intervention_gate: StableSafePoseGate,
+    now_ns: int,
+    elapsed_s: float,
+    simulated_effort_full_scale: float,
+    reaction_effort: float,
+    max_torque_limit_raw: int,
+    max_position_offset_deg: float,
+) -> dict[str, object]:
+    common: dict[str, object] = {
+        "formal": False,
+        "action": list(action),
+        "elapsed_s": elapsed_s,
+        "bus_access": "same_process_read_only_intervention_transition",
+        "leader_position_values_read": 12,
+        "serial_register_writes": 0,
+        "torque_enable_commands": 0,
+        "physical_output_commands": False,
+        "operator_estop_attestation": "received_by_guarded_runner",
+        "same_process_transition": True,
+        "intervention": intervention_gate.as_dict(now_ns=now_ns),
+        "not_authorized": ["dual_arm_haptics"],
+    }
+    if output_mode == "bench-single-joint":
+        if motor is None:
+            raise HapticHardwareError("single-joint intervention requires a motor")
+        registers = read_register_snapshot(selected_bus, motor)
+        envelope = single_joint_command_envelope(
+            side=side,
+            motor=motor,
+            simulated_effort_full_scale=simulated_effort_full_scale,
+            reaction_effort=reaction_effort,
+            max_torque_limit_raw=max_torque_limit_raw,
+            max_position_offset_deg=max_position_offset_deg,
+        )
+        checks = evaluate_single_joint_hardware_snapshot(
+            action=action,
+            registers=registers,
+            envelope=envelope,
+        )
+        selected = int(envelope["selected_action_index"])
+        model_limit_margin_deg = 5.0
+        return {
+            **common,
+            "schema_version": "radeon_oneloop.haptic_readonly_preflight.v1",
+            "accepted": all(checks.values()),
+            "checks": checks,
+            "selection": {"side": side, "motor": motor},
+            "registers": registers,
+            "selected_position_gate": {
+                "position_deg": float(action[selected]),
+                "model_min_deg": SO101_MODEL_ACTION_MIN[selected],
+                "model_max_deg": SO101_MODEL_ACTION_MAX[selected],
+                "required_bidirectional_margin_deg": model_limit_margin_deg,
+                "candidate_max_abs_offset_deg": max_position_offset_deg,
+                "accepted_position_range_deg": [
+                    SO101_MODEL_ACTION_MIN[selected]
+                    + model_limit_margin_deg
+                    + max_position_offset_deg,
+                    SO101_MODEL_ACTION_MAX[selected]
+                    - model_limit_margin_deg
+                    - max_position_offset_deg,
+                ],
+            },
+            "command_envelope": envelope,
+            "selected_register_reads": len(READ_ONLY_REGISTERS),
+            "not_authorized": [
+                "single_arm_haptics",
+                "dual_arm_haptics",
+            ],
+        }
+    if output_mode != "physical-single-arm":
+        raise HapticHardwareError(
+            f"unsupported intervention output mode: {output_mode}"
+        )
+    registers_by_motor = {
+        selected_motor: read_register_snapshot(selected_bus, selected_motor)
+        for selected_motor in BENCH_MOTORS
+    }
+    envelope = arm_command_envelope(
+        side=side,
+        simulated_effort_full_scale=simulated_effort_full_scale,
+        reaction_effort=reaction_effort,
+        max_torque_limit_raw=max_torque_limit_raw,
+        max_position_offset_deg=max_position_offset_deg,
+    )
+    checks, position_gates = evaluate_arm_hardware_snapshot(
+        action=action,
+        side=side,
+        registers_by_motor=registers_by_motor,
+        envelope=envelope,
+    )
+    return {
+        **common,
+        "schema_version": "radeon_oneloop.haptic_arm_readonly_preflight.v1",
+        "stage": "single_arm_readonly_preflight",
+        "accepted": all(checks.values()),
+        "checks": checks,
+        "selection": {"side": side, "motors": list(BENCH_MOTORS)},
+        "registers_by_motor": registers_by_motor,
+        "position_gates_by_motor": position_gates,
+        "command_envelope": envelope,
+        "selected_register_reads": len(READ_ONLY_REGISTERS) * len(BENCH_MOTORS),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--left-port", required=True)
@@ -125,6 +239,13 @@ def main() -> None:
     parser.add_argument("--haptic-max-output-duration-s", type=float, default=10.0)
     parser.add_argument("--haptic-health-hz", type=float, default=5.0)
     parser.add_argument("--physical-estop-confirmed", action="store_true")
+    parser.add_argument("--intervention-assisted-arm", action="store_true")
+    parser.add_argument("--intervention-stable-duration-s", type=float, default=0.4)
+    parser.add_argument("--intervention-max-span-deg", type=float, default=2.0)
+    parser.add_argument("--intervention-timeout-s", type=float, default=90.0)
+    parser.add_argument("--intervention-ready-file", type=Path)
+    parser.add_argument("--intervention-preflight-output", type=Path)
+    parser.add_argument("--haptic-test-reaction-effort", type=float)
     parser.add_argument("--hz", type=float, default=30.0)
     parser.add_argument(
         "--duration-s", type=float, default=0.0, help="Zero streams until interrupted."
@@ -179,6 +300,36 @@ def main() -> None:
             raise ValueError("single-arm position offset must be in (0, 0.5] degree")
         if not 0.0 < args.haptic_max_output_duration_s <= 5.0:
             raise ValueError("first single-arm output must be bounded to 5 seconds")
+    intervention_paths = (
+        args.intervention_ready_file,
+        args.intervention_preflight_output,
+    )
+    if args.intervention_assisted_arm:
+        if args.haptic_output_mode not in (
+            "bench-single-joint",
+            "physical-single-arm",
+        ):
+            raise ValueError(
+                "intervention-assisted arming requires a physical haptic mode"
+            )
+        if any(path is None for path in intervention_paths):
+            raise ValueError(
+                "intervention-assisted arming requires ready and preflight outputs"
+            )
+        if args.haptic_test_reaction_effort is None or not (
+            0.0 < abs(args.haptic_test_reaction_effort) <= 3.35
+        ):
+            raise ValueError(
+                "intervention-assisted arming requires a bounded test reaction effort"
+            )
+        if not 5.0 <= args.intervention_timeout_s <= 120.0:
+            raise ValueError("intervention timeout must be in [5, 120] seconds")
+        if any(path.exists() for path in intervention_paths if path is not None):
+            raise ValueError("intervention output paths must not already exist")
+    elif any(path is not None for path in intervention_paths):
+        raise ValueError(
+            "intervention output paths require --intervention-assisted-arm"
+        )
 
     stop_requested = False
 
@@ -217,6 +368,9 @@ def main() -> None:
     last_health_check_ns: int | None = None
     haptic_controller: SafeHapticController | None = None
     haptic_renderer: FeetechHapticBenchRenderer | FeetechHapticArmRenderer | None = None
+    intervention_gate: StableSafePoseGate | None = None
+    intervention_candidate_announced = False
+    intervention_preflight: dict[str, object] | None = None
     shutdown_error: str | None = None
     if args.haptic_output_mode == "bench-single-joint":
         bench_config = HapticBenchConfig(
@@ -237,6 +391,16 @@ def main() -> None:
         haptic_renderer = FeetechHapticBenchRenderer(
             leaders[leader_index].bus, bench_config
         )
+        if args.intervention_assisted_arm:
+            intervention_gate = StableSafePoseGate(
+                StableSafePoseConfig(
+                    side=bench_config.side,
+                    motors=(bench_config.motor,),
+                    hold_s=args.intervention_stable_duration_s,
+                    max_span_deg=args.intervention_max_span_deg,
+                    max_position_offset_deg=args.haptic_max_position_offset_deg,
+                )
+            )
     elif args.haptic_output_mode == "physical-single-arm":
         arm_config = HapticArmConfig(
             side=args.haptic_bench_side,
@@ -255,6 +419,16 @@ def main() -> None:
         haptic_renderer = FeetechHapticArmRenderer(
             leaders[leader_index].bus, arm_config
         )
+        if args.intervention_assisted_arm:
+            intervention_gate = StableSafePoseGate(
+                StableSafePoseConfig(
+                    side=arm_config.side,
+                    motors=BENCH_MOTORS,
+                    hold_s=args.intervention_stable_duration_s,
+                    max_span_deg=args.intervention_max_span_deg,
+                    max_position_offset_deg=args.haptic_max_position_offset_deg,
+                )
+            )
     started = time.monotonic()
     period_s = 1.0 / args.hz
     next_tick = started
@@ -276,6 +450,37 @@ def main() -> None:
             left = _read_arm(leaders[0])
             right = _read_arm(leaders[1])
             current_action = left + right
+            now_ns = time.monotonic_ns()
+            intervention_candidate_ready = True
+            if (
+                intervention_gate is not None
+                and haptic_renderer is not None
+                and not haptic_renderer.armed
+            ):
+                intervention_candidate_ready = intervention_gate.update(
+                    current_action, now_ns=now_ns
+                )
+                if time.monotonic() - started >= args.intervention_timeout_s:
+                    raise HapticHardwareError(
+                        "timed out before same-process intervention arming"
+                    )
+                if (
+                    intervention_candidate_ready
+                    and not intervention_candidate_announced
+                ):
+                    assert args.intervention_ready_file is not None
+                    _write_json_atomic(
+                        args.intervention_ready_file,
+                        {
+                            "schema_version": (
+                                "radeon_oneloop.haptic_intervention_ready.v1"
+                            ),
+                            "candidate_ready": True,
+                            "physical_output_commands": False,
+                            "intervention": intervention_gate.as_dict(now_ns=now_ns),
+                        },
+                    )
+                    intervention_candidate_announced = True
             if (
                 args.action_range_start_file is None
                 or args.action_range_start_file.is_file()
@@ -345,6 +550,46 @@ def main() -> None:
                     if latest_feedback is not None:
                         assert latest_feedback_arrival_ns is not None
                         if not haptic_renderer.armed:
+                            if not intervention_candidate_ready:
+                                # Feedback cannot arm the bus until the operator's
+                                # pose is currently safe and stable in this process.
+                                latest_feedback = None
+                                continue
+                            if intervention_gate is not None:
+                                assert args.haptic_test_reaction_effort is not None
+                                assert args.intervention_preflight_output is not None
+                                intervention_preflight = (
+                                    _build_same_process_preflight(
+                                        output_mode=args.haptic_output_mode,
+                                        side=args.haptic_bench_side,
+                                        motor=args.haptic_bench_motor,
+                                        selected_bus=leaders[leader_index].bus,
+                                        action=current_action,
+                                        intervention_gate=intervention_gate,
+                                        now_ns=now_ns,
+                                        elapsed_s=time.monotonic() - started,
+                                        simulated_effort_full_scale=(
+                                            args.haptic_simulated_effort_full_scale
+                                        ),
+                                        reaction_effort=(
+                                            args.haptic_test_reaction_effort
+                                        ),
+                                        max_torque_limit_raw=(
+                                            args.haptic_max_torque_limit_raw
+                                        ),
+                                        max_position_offset_deg=(
+                                            args.haptic_max_position_offset_deg
+                                        ),
+                                    )
+                                )
+                                _write_json_atomic(
+                                    args.intervention_preflight_output,
+                                    intervention_preflight,
+                                )
+                                if not intervention_preflight["accepted"]:
+                                    raise HapticHardwareError(
+                                        "same-process intervention preflight failed"
+                                    )
                             haptic_controller.arm(
                                 physical_estop_confirmed=args.physical_estop_confirmed
                             )
@@ -468,6 +713,11 @@ def main() -> None:
                     "max_output_duration_s": args.haptic_max_output_duration_s,
                 }
                 if args.haptic_output_mode == "physical-single-arm"
+                else None
+            ),
+            "intervention": (
+                intervention_preflight.get("intervention")
+                if intervention_preflight is not None
                 else None
             ),
             "output_armed_ever": physical_output_armed_ever,

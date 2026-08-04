@@ -21,6 +21,20 @@ def evidence():
         "serial_register_writes": 0,
         "torque_enable_commands": 0,
         "physical_output_commands": False,
+        "same_process_transition": True,
+        "bus_access": "same_process_read_only_intervention_transition",
+        "intervention": {
+            "schema_version": "radeon_oneloop.haptic_intervention_gate.v1",
+            "mode": "same_process_stable_safe_pose",
+            "side": "left",
+            "motors": ["elbow_flex"],
+            "trigger": "operator_attestation_plus_stable_safe_pose",
+            "candidate_ready": True,
+            "hold_required_s": 0.4,
+            "stable_duration_s": 0.42,
+            "max_span_limit_deg": 2.0,
+            "serial_connection_preserved_for_arm": True,
+        },
     }
     publisher = {
         "schema_version": "radeon_oneloop.leader_publisher.v1",
@@ -108,6 +122,15 @@ class HapticBenchGateTests(unittest.TestCase):
         result = self.evaluate(publisher, sender, preflight)
         self.assertFalse(result["accepted"])
         self.assertFalse(result["checks"]["preflight_fail_closed_ready"])
+
+    def test_rejects_stale_two_process_preflight(self):
+        publisher, sender, preflight = evidence()
+        preflight["same_process_transition"] = False
+        result = self.evaluate(publisher, sender, preflight)
+        self.assertFalse(result["accepted"])
+        self.assertFalse(
+            result["checks"]["same_process_intervention_transition"]
+        )
 
 
 if __name__ == "__main__":

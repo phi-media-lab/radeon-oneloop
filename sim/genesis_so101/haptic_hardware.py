@@ -188,6 +188,10 @@ class FeetechHapticBenchRenderer:
 
     def close(self) -> None:
         original = self._original_torque_limit
+        if not self._armed and original is None:
+            # Intervention waiting is strictly read-only. If arming never
+            # started there is nothing to release or restore.
+            return
         self.emergency_release()
         # A normal close is an evidence path, not merely a best effort: verify
         # that torque is disabled and its limit is zero before restoring SRAM.
