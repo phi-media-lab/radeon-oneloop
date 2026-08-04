@@ -77,6 +77,14 @@ class GaussianContractTests(unittest.TestCase):
         self.assertNotIn("/root/radeon-oneloop-data", runner)
         self.assertIn("--formal", runner)
 
+    def test_formal_geometry_frozen_runner_preserves_observed_only_boundary(self):
+        runner = Path("ops/run_formal_object_geometry_frozen_train.sh").read_text()
+        self.assertIn("ONELOOP_OBJECT_DATASET:?", runner)
+        self.assertNotIn("/root/radeon-oneloop-data", runner)
+        self.assertIn("--freeze-geometry", runner)
+        self.assertIn("--formal", runner)
+        self.assertIn('"generated_fill_enabled": False', runner)
+
     def test_geometry_freeze_zeroes_only_center_and_shape_rates(self):
         class Config:
             means_lr = 1.6e-4
