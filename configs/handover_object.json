@@ -1,0 +1,57 @@
+{
+  "schema_version": "radeon_oneloop.handover_object.v2",
+  "identity": {
+    "asset_name": "miniso_disney_fun_crash_graffiti_mickey_v1",
+    "class": "hybrid_vinyl_plush_pendant",
+    "brand": "MINISO",
+    "license": "Disney Mickey Mouse",
+    "series": "Mickey Fun Crash Series",
+    "variant": "Graffiti Mickey",
+    "exact_sku_status": "user_confirmed_and_cross_checked",
+    "dataset_task_label": "sock-ball",
+    "notes": "The historical task label describes the round grasp target, not the retail identity. The object combines a compressible white plush body with rigid vinyl face, ears, hands, shoes, eyes and nose."
+  },
+  "evidence": {
+    "dataset_repo_id": "fbsh96/so101_handover_hil_rlready_batch1_batch2_20260506",
+    "public_reference_manifest": "data/graffiti_mickey_reference_sources.json",
+    "reference_manifest_sha256": "c497aafb4a51a1f7f437678a62a10e64b94f0c5a56d91f10e5191b63a974d910",
+    "reference_images": 1034,
+    "episodes": [17, 18, 20, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36],
+    "cameras": ["front_cam", "hand_cam"],
+    "metric_scale_status": "user_confirmed_product_specification_metric_anchor",
+    "nominal_overall_height_m": 0.095,
+    "overall_height_uncertainty_m": 0.005,
+    "scale_method": "9.5 cm product specification confirmed by the user and cross-checked against SO-101 gripper and tabletop views; a later direct measurement may tighten the uncertainty but is not a reconstruction input gate"
+  },
+  "geometry": {
+    "coordinate_convention": "front=+Y, up=+Z, viewer-left=+X for a camera located on +Y and looking toward the origin",
+    "soft_body_semi_axes_m": [0.042, 0.038, 0.039],
+    "surface_irregularity_fraction": 0.012,
+    "latitude_segments": 24,
+    "longitude_segments": 48,
+    "standard_ear_layout": {
+      "viewer_left": "black_with_pink_graffiti",
+      "viewer_right": "cyan_blue"
+    },
+    "flexible_accessories": ["MICKEY satin strap", "Mickey-head keyring"],
+    "simulation_visual_excludes": ["satin strap", "keyring"],
+    "display_visual_includes": ["satin strap", "Mickey-head keyring"]
+  },
+  "physical_prior": {
+    "nominal_mass_kg": 0.04,
+    "mass_status": "estimated_not_measured",
+    "static_friction": 0.8,
+    "kinetic_friction": 0.65,
+    "restitution": 0.02,
+    "partition_status": "whole-object mass is assigned to the realtime rigid proxy; PBD models the plush body only and remains qualitative"
+  },
+  "pbd_soft_proxy": {
+    "stretch_compliance": 2e-07,
+    "bending_compliance": 2e-06,
+    "volume_compliance": 1e-07,
+    "stretch_relaxation": 0.2,
+    "bending_relaxation": 0.15,
+    "volume_relaxation": 0.2,
+    "particle_size_m": 0.006
+  }
+}

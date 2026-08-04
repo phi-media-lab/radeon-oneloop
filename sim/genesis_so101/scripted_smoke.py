@@ -16,7 +16,16 @@ import torch
 
 from radeon_oneloop.contracts import CAMERA_KEYS, IMAGE_SHAPE_HWC
 
-from .scene import HOME_ACTION, build
+from .scene import (
+    ARM_BASE_SEPARATION_M,
+    HOME_ACTION,
+    LEFT_BASE_POS,
+    MODEL_FORWARD_UNIT,
+    MODEL_LATERAL_UNIT,
+    RIGHT_BASE_POS,
+    SHARED_BASE_EULER_DEG,
+    build,
+)
 
 
 def main() -> None:
@@ -44,6 +53,9 @@ def main() -> None:
     started = time.perf_counter()
     task, handles = build(args.asset_root.resolve(), seed=args.seed, show_viewer=False)
     build_seconds = time.perf_counter() - started
+    initial_inter_arm_contacts = int(
+        handles.left.get_contacts(with_entity=handles.right)["geom_a"].shape[0]
+    )
     step_times = []
     rendered = None
     video_frames: list[np.ndarray] = []
@@ -60,7 +72,7 @@ def main() -> None:
         joint = (step // 140) % 5
         offset = 8.0 * math.sin(2.0 * math.pi * (step % 140) / 140.0)
         action[joint] += offset
-        action[6 + joint] -= offset
+        action[6 + joint] += offset
         begin = time.perf_counter()
         observation = task.step(
             action,
@@ -102,6 +114,20 @@ def main() -> None:
         "torch_device": torch.cuda.get_device_name(0),
         "gcn_arch": str(getattr(props, "gcnArchName", "")),
         "steps": args.steps,
+        "scene_layout": {
+            "left_base_pos_m": list(LEFT_BASE_POS),
+            "right_base_pos_m": list(RIGHT_BASE_POS),
+            "base_separation_m": ARM_BASE_SEPARATION_M,
+            "model_forward_unit": list(MODEL_FORWARD_UNIT),
+            "model_lateral_unit": list(MODEL_LATERAL_UNIT),
+            "arrangement": "side_by_side_parallel",
+            "shared_base_euler_deg": list(SHARED_BASE_EULER_DEG),
+            "initial_inter_arm_contacts": initial_inter_arm_contacts,
+            "final_inter_arm_contacts": int(
+                handles.left.get_contacts(with_entity=handles.right)["geom_a"].shape[0]
+            ),
+        },
+        "solver_limit_saturation": task.solver_limit_diagnostics(),
         "build_seconds": build_seconds,
         "step_ms": {
             "mean": 1000.0 * float(np.mean(step_times)),

@@ -1,0 +1,127 @@
+{
+  "schema_version": "radeon_oneloop.reference_sources.v1",
+  "identity": {
+    "asset_name": "miniso_disney_fun_crash_graffiti_mickey_v1",
+    "brand": "MINISO",
+    "license": "Disney Mickey Mouse",
+    "series": "Mickey Fun Crash Series",
+    "variant": "Graffiti Mickey",
+    "product_type_en": "vinyl plush pendant / keychain blind box",
+    "product_type_zh": "搪胶毛绒盲盒挂件",
+    "status": "user_confirmed_and_cross_checked"
+  },
+  "retrieved_at": "2026-08-04",
+  "redistribution": {
+    "source_images_public_repository": false,
+    "policy": "Only URLs, observations, and SHA-256 hashes are public. Marketplace, retailer, community, and HIL pixels remain in a private sibling data directory."
+  },
+  "metric_evidence": {
+    "pendant_height_m": {
+      "value": 0.095,
+      "uncertainty_m": 0.005,
+      "status": "retailer_claim_not_directly_measured",
+      "sources": [
+        "https://www.aliexpress.com/item/1005008849045745.html",
+        "https://www.google.com/search?q=%22Mickey+Fun+Crash%22+dimensions"
+      ]
+    },
+    "box_height_m": {
+      "value": 0.105,
+      "status": "marketplace_listing_claim",
+      "source": "https://www.mercari.com/us/item/m33743436660/"
+    },
+    "box_length_m": {
+      "value": 0.095,
+      "status": "marketplace_listing_claim",
+      "source": "https://www.mercari.com/us/item/m33743436660/"
+    }
+  },
+  "sources": [
+    {
+      "id": "mercari_user_confirmed_m24995712441",
+      "url": "https://www.mercari.com/us/item/m24995712441/",
+      "role": "user-confirmed exact-variant identity and accessory detail",
+      "exact_variant": true,
+      "views": [
+        {"label": "front_top", "sha256": "0710b1ac7e40bb32a87049fa9a8bea73fd3affa59a2f3c76166fb0e4ec840b94"},
+        {"label": "top_keyring", "sha256": "886b419ebf8966d2702ab6ea7677a80904fec6aa2fe2e47fbe4a46b7bca17467"},
+        {"label": "rear_tag", "sha256": "98a4e1edf99508a7bdcdf0f12a34f38f23807805f096b8dc666f7b4ecb28ea70"}
+      ]
+    },
+    {
+      "id": "mercari_four_view_m60402675889",
+      "url": "https://www.mercari.com/us/item/m60402675889/",
+      "role": "continuous four-view geometry reference of the standard variant",
+      "exact_variant": true,
+      "views": [
+        {"label": "front", "sha256": "fe5dfe6eb5d01c9be2fc349cad5b4a0cf1d0ec6fec165453133d8ee7a4f36674"},
+        {"label": "right", "sha256": "2c4d8cb6b87bae341f646ea50fbc56b4e8363e50a1965c10b356bb20a9e09537"},
+        {"label": "rear", "sha256": "89122368fcd5855868829af78c0d62ebafb936f18a87e91c91cacc034ae3e263"},
+        {"label": "left", "sha256": "cab0c63c824c6c72b957f95855bf250f088f304b9948a3db1020f873f5c14a4f"}
+      ]
+    },
+    {
+      "id": "stc_series",
+      "url": "https://stctoys.com/products/miniso-disney-mickey-fun-crash-series-blind-box",
+      "role": "series naming, product construction, standard appearance, and lineup",
+      "exact_variant": false,
+      "claims": ["搪胶毛绒盲盒挂件", "8 regular variants plus 1 hidden variant"],
+      "views": [
+        {"label": "graffiti_promo_front", "sha256": "d4339dff4e3675d89b31367c263d9e633563e84b118e633c2f159b958d3efde3"},
+        {"label": "full_lineup", "sha256": "6527c9f213268e884362ed6b53d824bab450c0ba7423751db13df49e48ec49c5"}
+      ]
+    },
+    {
+      "id": "pine_centre_series",
+      "url": "https://pinecentre.com/buy/product/miniso-x-disney-mickey-mouse-fun-crash-series-plush-keychain-blind-box-1pc-showcase-c27a7d",
+      "role": "independent series and feature cross-check",
+      "exact_variant": false,
+      "claims": ["official Disney x MINISO collaboration", "moving eyes", "Mickey-head keyring", "palm-sized"]
+    },
+    {
+      "id": "mercari_packaging_m31210859832",
+      "url": "https://www.mercari.com/us/item/m31210859832/",
+      "role": "exact-variant box-front cross-check",
+      "exact_variant": true,
+      "views": [
+        {"label": "graffiti_box_front", "sha256": "0acfc7d0fd618d80c2c40c55feeda15c8c934a5199f86f4fdfa68dfbf8cc428e"}
+      ]
+    },
+    {
+      "id": "reddit_manufacturing_error",
+      "url": "https://www.reddit.com/r/MINISO/comments/1mvqc7t/mickey_fun_crash_graffiti/",
+      "role": "standard-ear orientation cross-check; one photographed unit is explicitly reported as a manufacturing error",
+      "exact_variant": true,
+      "views": [
+        {"label": "manufacturing_error_front", "sha256": "2c7c923acadf34afc21ff37c9cff17b098f71e8c571a79ded9e1f2cc6a80a373"},
+        {"label": "standard_card_front", "sha256": "dd66e34d8979b9484b21dfd8831c21ceebfac95a198ecfaa354b4f2164ba0932"}
+      ]
+    },
+    {
+      "id": "historical_hil_batch",
+      "url": "https://huggingface.co/datasets/fbsh96/so101_handover_hil_rlready_batch1_batch2_20260506",
+      "role": "task-domain scale, deformation, grasp, and rear/side appearance",
+      "exact_variant": true,
+      "private_dense_manifest_sha256": "26e1c6534b7e95b70430d4c2d93325327c805779777cb7ea1ca0da869346ef87",
+      "reference_images": 1020,
+      "views": [
+        {"label": "rear_close", "sha256": "45e7aeddd3ba3cb9b9fa71fbb6620bd8aaf12dbe42220ef34ea76cae3275fe64"},
+        {"label": "front_scene", "sha256": "8a5f1b592069b83879d2f8838f26505e4ec602bb637d1540b511fc6633751b7b"}
+      ]
+    }
+  ],
+  "angle_coverage": {
+    "front": "strong",
+    "left": "strong",
+    "right": "strong",
+    "rear": "strong",
+    "top": "strong",
+    "bottom": "partial; inferred from front shoes, side profile, rear seam, and task video",
+    "in_hand_deformation": "strong from historical HIL batch"
+  },
+  "standard_variant_orientation_front_view": {
+    "viewer_left_ear": "black vinyl with pink paint-drip graphic and colored dots",
+    "viewer_right_ear": "cyan-blue vinyl",
+    "note": "The Reddit unit with two graffiti ears is a reported manufacturing error and must not define the standard asset."
+  }
+}

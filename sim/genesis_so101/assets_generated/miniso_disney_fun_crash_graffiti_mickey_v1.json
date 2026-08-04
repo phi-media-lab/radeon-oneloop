@@ -1,0 +1,171 @@
+{
+  "asset_name": "miniso_disney_fun_crash_graffiti_mickey_v1",
+  "collision": {
+    "analytic_ellipsoid_volume_m3": 0.00026072705750672414,
+    "extents_m": [
+      0.084,
+      0.076,
+      0.07801921562966267
+    ],
+    "mesh": "miniso_disney_fun_crash_graffiti_mickey_v1_collision.obj",
+    "mesh_volume_m3": 0.0002588827195318638,
+    "sha256": "8bea640b0222b2dbbf5e20c249608c35fce8dbedbdef2fc4315979a47f8c404d",
+    "triangles": 2208,
+    "vertices": 1106,
+    "watertight_topology_expected": true
+  },
+  "config_sha256": "e8c63810f3b473f3ca7c983d921499f91b6131f442d3ef44ec4578ac952c3710",
+  "coordinate_convention": {
+    "front": "+Y",
+    "up": "+Z",
+    "viewer_left": "+X"
+  },
+  "display_visual": {
+    "extents_m": [
+      0.086,
+      0.09304589303208204,
+      0.1493991495841847
+    ],
+    "mesh": "miniso_disney_fun_crash_graffiti_mickey_v1_display.obj",
+    "parts": [
+      "plush_body",
+      "black_face_surround",
+      "pink_face_left_lobe",
+      "pink_face_right_lobe",
+      "pink_face_muzzle",
+      "left_eye",
+      "right_eye",
+      "left_pupil",
+      "right_pupil",
+      "nose",
+      "viewer_left_ear",
+      "viewer_right_ear",
+      "left_hand",
+      "right_hand",
+      "left_shoe",
+      "right_shoe",
+      "graffiti_patch",
+      "graffiti_drip_1",
+      "graffiti_drip_2",
+      "cyan_sprinkle",
+      "yellow_sprinkle",
+      "left_finger_mark_0",
+      "left_finger_mark_1",
+      "left_finger_mark_2",
+      "right_finger_mark_0",
+      "right_finger_mark_1",
+      "right_finger_mark_2",
+      "mickey_strap",
+      "keyring_head",
+      "keyring_left_ear",
+      "keyring_right_ear"
+    ],
+    "sha256": "66115aa279d02c3803695d39a0aee9400813e9bba3473188f9598017a1067f8b",
+    "triangles": 24044,
+    "vertices": 12078
+  },
+  "exact_sku_status": "user_confirmed_and_cross_checked",
+  "material_library": {
+    "file": "miniso_disney_fun_crash_graffiti_mickey_v1.mtl",
+    "sha256": "7743dce7918fcfc3b1963c2fa8dab39754f6e657c8a5b97ad7683f1135147229"
+  },
+  "materials": {
+    "ear_blue": [
+      0.08,
+      0.66,
+      0.82
+    ],
+    "eye_gray": [
+      0.73,
+      0.74,
+      0.72
+    ],
+    "face_pink": [
+      0.91,
+      0.64,
+      0.66
+    ],
+    "graffiti_pink": [
+      0.93,
+      0.27,
+      0.55
+    ],
+    "plush_white": [
+      0.94,
+      0.94,
+      0.9
+    ],
+    "shoe_yellow": [
+      0.97,
+      0.72,
+      0.04
+    ],
+    "sprinkle_cyan": [
+      0.05,
+      0.72,
+      0.88
+    ],
+    "sprinkle_yellow": [
+      0.94,
+      0.81,
+      0.13
+    ],
+    "vinyl_black": [
+      0.025,
+      0.025,
+      0.025
+    ]
+  },
+  "nominal_mass_kg": 0.04,
+  "nominal_overall_height_m": 0.095,
+  "overall_height_uncertainty_m": 0.005,
+  "realtime_profile": "rigid convexification of the accessory-free hybrid visual mesh",
+  "reference_manifest_sha256": "c497aafb4a51a1f7f437678a62a10e64b94f0c5a56d91f10e5191b63a974d910",
+  "rigid_density_kg_m3": 153.41714198177687,
+  "schema_version": "radeon_oneloop.generated_handover_asset.v2",
+  "sim_visual": {
+    "accessories_omitted": [
+      "satin strap",
+      "Mickey-head keyring"
+    ],
+    "extents_m": [
+      0.086,
+      0.09304589303208204,
+      0.0975991495841847
+    ],
+    "mesh": "miniso_disney_fun_crash_graffiti_mickey_v1_sim_visual.obj",
+    "parts": [
+      "plush_body",
+      "black_face_surround",
+      "pink_face_left_lobe",
+      "pink_face_right_lobe",
+      "pink_face_muzzle",
+      "left_eye",
+      "right_eye",
+      "left_pupil",
+      "right_pupil",
+      "nose",
+      "viewer_left_ear",
+      "viewer_right_ear",
+      "left_hand",
+      "right_hand",
+      "left_shoe",
+      "right_shoe",
+      "graffiti_patch",
+      "graffiti_drip_1",
+      "graffiti_drip_2",
+      "cyan_sprinkle",
+      "yellow_sprinkle",
+      "left_finger_mark_0",
+      "left_finger_mark_1",
+      "left_finger_mark_2",
+      "right_finger_mark_0",
+      "right_finger_mark_1",
+      "right_finger_mark_2"
+    ],
+    "sha256": "59184e336677ac80f9d154f46b668db2208e36620c5fc6fb83cacd6e47dd2876",
+    "triangles": 22752,
+    "vertices": 11430
+  },
+  "soft_profile": "plush-body-only Genesis PBD.Elastic proxy; vinyl parts are excluded and material parameters remain qualitative"
+}

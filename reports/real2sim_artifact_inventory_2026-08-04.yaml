@@ -1,0 +1,468 @@
+schema_version: radeon_oneloop.real2sim_artifact_inventory.v1
+snapshot_date: "2026-08-04"
+formal: false
+scope: graffiti_mickey_real2sim_and_dual_leader_hil
+privacy:
+  secrets_recorded: false
+  private_dataset_paths_recorded: false
+  locator_policy: host_role_plus_run_id_and_content_hash
+
+release_decision:
+  default_appearance_id: formal_observed_core_canonical_30k
+  default_physics_id: graffiti_mickey_rigid_proxy
+  generated_fill_enabled_by_default: false
+  next_gate: calibrated_left_elbow_flex_physical_haptic_bench
+
+artifacts:
+  - id: m1_reviewed_orbitfix
+    kind: normalized_real_view_bundle
+    host_role: phi-amd-work
+    run_id: m1_reviewed_orbitfix_20260804T043427Z
+    manifest_sha256: 62e5bc9e6d1d88cc499eaf617a7de4bea9bf2041cbb42543299468516c9202a4
+    status: accepted_input
+    formal: false
+
+  - id: vggt_omega_metric_pose
+    kind: metric_pose_and_depth_initializer
+    host_role: phi-amd-work
+    run_id: vggt_omega_m1_20260804T043910Z_1367312
+    manifest_sha256: 3f90c6841392e5c1e8885df7d27ddde4e450f86afee136bb114bc0f8873cbf04
+    visual_audit_id: vggt_omega_m1_20260804T043910Z_spatial_visual
+    visual_audit_manifest_sha256: 851e8b5a60b4d695d1513cc381ff7f3be255a5f1d44a4b1dc233ec90fccfb461
+    status: accepted_nonformal_initializer
+    formal: false
+
+  - id: observed_core_front_source
+    kind: real_only_vksplat_training_run
+    host_role: radeon-f
+    run_id: vksplat_object_sparse_static_20260804T051811Z_48167
+    source_ply_gaussians: 30000
+    source_ply_sha256: 793aacd0511326f85c7d6768eb70f885de1182438c5109c948aa34bc679a7441
+    status: accepted_source_for_canonicalization
+    heldout_real_evidence: false
+    formal: false
+
+  - id: observed_core_right_qa
+    kind: real_only_vksplat_training_run
+    host_role: radeon-f
+    run_id: vksplat_object_sparse_static_20260804T051822Z_48348
+    status: accepted_duplicate_training_view_qa
+    heldout_real_evidence: false
+    formal: false
+
+  - id: observed_core_rear_qa
+    kind: real_only_vksplat_training_run
+    host_role: radeon-f
+    run_id: vksplat_object_sparse_static_20260804T051833Z_48529
+    status: accepted_duplicate_training_view_qa
+    heldout_real_evidence: false
+    formal: false
+
+  - id: observed_core_left_qa
+    kind: real_only_vksplat_training_run
+    host_role: radeon-f
+    run_id: vksplat_object_sparse_static_20260804T051844Z_48710
+    status: accepted_duplicate_training_view_qa
+    heldout_real_evidence: false
+    formal: false
+
+  - id: observed_core_canonical_30k
+    kind: canonical_gaussian_appearance
+    host_role: radeon-f
+    parent_id: observed_core_front_source
+    dataparser_inverse_scale: 0.16799968853758088
+    gaussian_count: 30000
+    ply_sha256: ad30184dd9b39fdc211404538e70c0544d2c418b1af2003ae6f07353c5471183
+    render_run_id: vksplat_generated_fill_render_20260804T073735Z_56009
+    visual_audit_id: canonicalized_vksplat_20260804T073735Z_visual
+    visual_audit_manifest_sha256: 45c6a2bdda6eaf404e548b3e5b570232edf624b44d2a50512f1880f2e62eaae0
+    status: superseded_nonformal_candidate
+    heldout_real_evidence: false
+    formal: false
+
+  - id: formal_observed_core_dataset
+    kind: observed_only_metric_vksplat_dataset
+    host_role: radeon-c
+    source_manifest_sha256: 62e5bc9e6d1d88cc499eaf617a7de4bea9bf2041cbb42543299468516c9202a4
+    dataset_manifest_sha256: 04900c1a3afc0f2f5e73ce0e34042e91a10c469a9c0b255e3157e7985e9b660e
+    dataset_sha256: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    cameras_sha256: 050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26
+    observed_train_views: 4
+    duplicate_validation_views: 1
+    cpu_visual_hull_resolution: 160
+    cpu_visual_hull_surface_points: 47796
+    training_initial_points: 30000
+    generated_views: false
+    generated_geometry: false
+    learned_depth: false
+    secondary_accelerator_artifacts: false
+    redistribution: false
+    status: accepted_formal_input
+    formal: true
+
+  - id: formal_observed_core_train_30k
+    kind: registered_radeon_vksplat_training
+    host_role: radeon-c
+    run_id: 20260804T095251Z_gaussian_train_84d468b_20260804
+    parent_id: formal_observed_core_dataset
+    git_commit: 84d468bb5ca6f08bcbf071e9880c712fa24619a6
+    gpu_uid: "0x153f7d55778ab659"
+    gfx_target: gfx1100
+    vksplat_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+    config_sha256: fbd34be2d3a8159a7401673927ff3808393bfb7fa16a6ead692184b633b75ffe
+    dataset_sha256: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    steps: 2000
+    gaussian_count: 30000
+    elapsed_s: 18.202907040249556
+    peak_vram_bytes: 123231612
+    trained_ply_sha256: d95edcb66edd5fd3f6fe3fda4686dfe718ce867507a9c4db0fa6dde88a2cfcc5
+    run_manifest_sha256: d27440b792f96f5f522a58e34ce091d97239595b1ffe86a1b5605130bd9ffb00
+    metrics_sha256: 6c8cd274c80acbd67b00d721ae4d202b57847585cab0ee50ef6c891ad3fa36fd
+    heldout_real_evidence: false
+    bitwise_checkpoint_determinism_claim: false
+    redistribution: false
+    status: accepted_registered_formal_training
+    formal: true
+
+  - id: formal_observed_core_canonical_30k
+    kind: registered_radeon_metric_canonical_gaussian_and_anchor_render
+    host_role: radeon-c
+    run_id: 20260804T095859Z_gaussian_render_c8bd111_20260804
+    parent_id: formal_observed_core_train_30k
+    git_commit: c8bd1113d1305e3251b9d9bd9f9de5e0abcc21fe
+    gpu_uid: "0x153f7d55778ab659"
+    gfx_target: gfx1100
+    vksplat_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+    config_sha256: a109d1cb5a3a645f96ac1181d35a26818a3407db444138e9411aa01135d5ad3a
+    dataset_sha256: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    parent_checkpoint_sha256: d95edcb66edd5fd3f6fe3fda4686dfe718ce867507a9c4db0fa6dde88a2cfcc5
+    gaussian_count: 30000
+    canonical_ply_sha256: 0e26b6c4f993a7052fb471ad84a1a98180b262c868a4b179ce19b294b288bd1a
+    cameras_sha256: 050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26
+    provenance_sha256: 80efa4f5a98070395844205afa663ee8ca2975eda21e720c3cf785dcfd52bd02
+    rendered_views: 4
+    image_size_wh: [1024, 1024]
+    elapsed_render_s: 1.201083963
+    peak_vram_bytes: 35649308
+    run_manifest_sha256: a74191f3560cdc6d9f4a9843db874c6e5a5fb7c2c9feb214243f3510dcc66e5d
+    metrics_sha256: 7bfe11f61b17c2e9398da0bd43f8f1fecaa7360f1f575e5bd445ac67481dca33
+    render_manifest_sha256: 052ee380389523c2a456c041c58a801424fcb59c11c17fe07d8a382e33f9e117
+    heldout_real_evidence: false
+    generated_fill_enabled: false
+    redistribution: false
+    status: accepted_default_formal_appearance
+    formal: true
+
+  - id: amd_formal_observed_core_runtime_probe
+    kind: vksplat_radv_runtime_capability_and_asset_integrity_probe
+    host_role: amd
+    run_id: 20260804T101510Z_167855_amd_gaussian_appearance_probe
+    parent_id: formal_observed_core_canonical_30k
+    upstream_asset_formal: true
+    vksplat_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+    vksplat_checkout_state: pinned_commit_with_nonformal_local_presenter_extensions
+    genesis_version: 1.3.1
+    genesis_nyx_light_field_available: false
+    fallback_renderer: genesis_debug_mesh
+    image_size_wh: [1024, 1024]
+    canonical_ply_sha256: 0e26b6c4f993a7052fb471ad84a1a98180b262c868a4b179ce19b294b288bd1a
+    cameras_sha256: 050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26
+    provenance_sha256: 80efa4f5a98070395844205afa663ee8ca2975eda21e720c3cf785dcfd52bd02
+    render_ms_first_probe: 81.17175899678841
+    current_vulkan_memory_bytes: 35649312
+    peak_vulkan_memory_bytes: 35649312
+    metrics_sha256: dbd6b1cf2e7f84d16246827dad5091c632f7998b87fb13765ee7c1e5c941428a
+    hashes_manifest_sha256: 0936ff1ed373acfb99e2cad91dc0e48b1b0dd38438b4a837e282ba2c16f8fad5
+    status: accepted_nonformal_static_renderer_capability
+    formal: false
+
+  - id: amd_formal_gaussian_static_binding
+    kind: genesis_pose_to_vksplat_static_registration_gate
+    host_role: amd
+    run_id: 20260804T101807Z_169784_amd_gaussian_static_gate
+    parent_id: formal_observed_core_canonical_30k
+    supersedes_cached_mask_runs: true
+    pose_camera_renders: 8
+    successful_renders: 8
+    fallback_renders: 0
+    center_trim_percent_per_tail: 0.01
+    center_trim_count_per_tail: 3
+    robust_gaussian_height_mm: 95.2685968
+    full_center_height_mm: 96.3091515
+    metric_anchor_height_mm: 95.0
+    height_error_mm: 0.2685968
+    height_tolerance_mm: 2.85
+    mean_vksplat_render_ms: 22.4791
+    p95_vksplat_render_ms: 24.3585
+    metrics_sha256: 101ebe541a109c18f35eb9625b6605f9dc72e42401cd2f306c69bd2d86c4fa46
+    hashes_manifest_sha256: c7ba1dce5bc7629d07143873f6879600f55c893aa3274df2a314632e00277c96
+    status: accepted_nonformal_static_registration
+    formal: false
+
+  - id: amd_formal_gaussian_occlusion
+    kind: genesis_depth_segmentation_gaussian_composite_gate
+    host_role: amd
+    run_id: 20260804T101848Z_171506_amd_gaussian_occlusion_gate
+    parent_id: formal_observed_core_canonical_30k
+    supersedes_cached_mask_runs: true
+    cases: [gripper_foreground, tabletop_contact]
+    gripper_gaussian_support_pixels: 1400
+    gripper_occluded_pixels: 45
+    tabletop_gaussian_support_pixels: 1176
+    tabletop_occluded_pixels: 192
+    non_object_rgb_max_error: 0
+    valid_depth_fraction: 1.0
+    metrics_sha256: bcede577ec84453d5b8648b1cffcfdd1b5a8949aee4f249eee66bf8ba129b79d
+    hashes_manifest_sha256: 27e1dabca81927445d520d409f5eb74cab7f2b2ccb2dcd8e8a50e2965e4192d9
+    status: accepted_nonformal_depth_occlusion
+    formal: false
+
+  - id: amd_formal_gaussian_live_decoupled
+    kind: authoritative_control_non_authoritative_renderer_gate
+    host_role: amd
+    run_id: 20260804T101926Z_173198_amd_decoupled_gaussian_live_gate
+    parent_id: formal_observed_core_canonical_30k
+    duration_s: 10.000
+    control_steps: 1200
+    control_effective_hz: 119.999337
+    control_watchdog_events: 0
+    state_snapshots_sent: 300
+    renderer_combined_frames: 48
+    renderer_combined_hz: 4.799626
+    appearance_camera_renders: 96
+    appearance_fallbacks: 0
+    mean_per_camera_vksplat_ms: 23.9884
+    physical_output_commands: false
+    gate_metrics_sha256: fe0f272245ad42023937acc120cb4d58c99f1e622243fe460b7654de2b1432d8
+    control_metrics_sha256: 43eae4f4c1ef9b0ee884eb76dc6a5be53a4e5cbd9f8feb78ccffcd75d6e16078
+    renderer_metrics_sha256: 75095fc49fea3e89d11ed8dccf48ce988e9c6735ab64a63bb7e4a7d1c3f6cefa
+    hashes_manifest_sha256: 40ffa0fb1e940004a8e77690b3a3cf32b80d7fc2de354f3c7b842d0ecf42590e
+    status: accepted_nonformal_live_decoupling
+    formal: false
+
+  - id: amd_formal_gaussian_renderer_hard_crash_isolation
+    kind: authoritative_control_renderer_hard_crash_gate
+    host_role: amd
+    run_id: 20260804T102041Z_176664_amd_decoupled_gaussian_live_gate
+    parent_id: formal_observed_core_canonical_30k
+    injected_renderer_exit_code: 86
+    renderer_frames_before_exit: 3
+    control_steps_after_fault: 1200
+    control_effective_hz: 119.999237
+    control_watchdog_events: 0
+    state_snapshots_sent: 300
+    physical_output_commands: false
+    gate_metrics_sha256: abc0536382b6b5fed3067d61044eda7ad4bd6b4400c74bc68c0fccb9014c106f
+    control_metrics_sha256: bd64a824170527614c0f6c1fdec26a8dbcf6117a4156695ea7d88e39e13e2141
+    fault_marker_sha256: ffb1048f90fa7416b9c20e33123aa2a596bc4e0e98e39101bd56256945d09e7f
+    hashes_manifest_sha256: 3cf0df241be490a4d71d6dcfa6e239ac2332740da9f73c593804caaf85a6a840
+    status: accepted_nonformal_renderer_failure_isolation
+    formal: false
+
+  - id: radeon_c_clean_object_vksplat_preflight
+    kind: clean_upstream_vksplat_observed_object_formal_readiness
+    host_role: radeon-c
+    run_id: 20260804T091229Z_1950529_radeon_c_object_vksplat_preflight
+    vksplat_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+    vksplat_checkout_state: clean_upstream
+    gfx_target: gfx1100
+    vulkan_device: RADV_NAVI31
+    gaussian_count: 30000
+    rendered_views: 4
+    image_size_wh: [512, 512]
+    elapsed_s_including_setup: 0.452219868
+    current_vulkan_memory_bytes: 16271132
+    peak_vulkan_memory_bytes: 16271132
+    visual_review: accepted_identity_orientation_and_view_order
+    heldout_real_evidence: false
+    formal_registration_ready: true
+    metrics_sha256: 93e65a1aee1a3a17b4420f3bc8f8b660a1efeaab0ba790a14d812672a3537ef9
+    hashes_manifest_sha256: 88d45951274875d879157e849cb9a6ab7b459269509d321f06cebf5823029c47
+    status: superseded_by_registered_formal_training_and_render
+    formal: false
+
+  - id: apple_sharp_per_anchor
+    kind: generated_gaussian_geometry_hypotheses
+    host_role: phi-amd-work
+    run_id: sharp_m1_20260804T040104Z_1358185
+    anchors: 4
+    gaussian_count_per_anchor: 1179648
+    metric_alignment_p50_mm_range: [0.97, 2.39]
+    metric_rotation_correction_deg_range: [0.28, 4.49]
+    status: accepted_nonformal_geometry_proposal
+    formal: false
+
+  - id: unisharp_lossless_pseudoviews
+    kind: generated_appearance_and_pseudoview_proposal
+    host_role: phi-amd-work
+    run_id: unisharp_m1_20260804T064430Z_1382498
+    runtime_s: 43
+    anchors: 4
+    gaussian_count_per_anchor: 1179648
+    lossless_pseudoview_count: 80
+    manifest_sha256: 197df459eca88ad93bd054ee444dbf759ef11a7620ebf012f0c1a390112a948f
+    visual_audit_manifest_sha256: 74be365dd407edb8b500b0ab9cbef39f72178ffddf7aae13ac4d5c2df33c567a
+    metric_alignment_p50_mm_range: [5.29, 6.77]
+    metric_rotation_correction_deg_range: [10.67, 16.18]
+    accepted_roles: [appearance_proposal, pseudoview_proposal]
+    rejected_roles: [metric_geometry, observed_core, heldout_evaluation]
+    status: accepted_appearance_rejected_geometry
+    formal: false
+
+  - id: sharp_unisharp_direct_hybrid
+    kind: generated_direct_appearance_donation_ablation
+    host_role: phi-amd-work
+    run_id: sharp_fusion_20260804T065307Z_1384186
+    gaussian_count: 124420
+    ply_sha256: 964809f8b9c751f6c12b06f87a4850288fa45bf0f87525cb0d1368183bef65a0
+    render_run_id: vksplat_generated_fill_render_20260804T070145Z_52450
+    visual_audit_manifest_sha256: 66644369b6d07741d2475bb67edc835122553374f422424725f07a419ebdd896
+    metric_gate_passed: true
+    status: rejected_visual_holes_preserved_negative_result
+    formal: false
+
+  - id: sharp_unisharp_single_source_shell
+    kind: generated_completion_ablation
+    host_role: phi-amd-work
+    run_id: sharp_fusion_20260804T070657Z_1385043
+    gaussian_count: 260942
+    robust_height_mm: 98.2058
+    ply_sha256: 0aac9846e8f8493e93eec2756317764cf103849f1056f979f1215551008e0283
+    render_run_id: vksplat_generated_fill_render_20260804T072253Z_53804
+    visual_audit_manifest_sha256: 2e542944f45057b31dfd48241520541453443a352bf9c11bdd2d51f9c3b633dd
+    status: rejected_as_final_due_to_floaters_and_duplicate_surfaces
+    formal: false
+
+  - id: sharp_unisharp_depth_pruned_v2
+    kind: generated_confidence_pruned_completion
+    host_role: radeon-f
+    parent_id: sharp_unisharp_single_source_shell
+    gaussian_count: 229576
+    cross_source_gaussians: 124420
+    retained_single_source_gaussians: 105156
+    rejected_front_conflicts: 27892
+    source_max_abs_depth_error_m: 0.008
+    max_non_source_front_conflict_m: 0.004
+    pruning_mask_sha256: 3c79d1691c58a40ee8d68b2341dbc0a29b5d31c7d77f3dbe050df2b328cd6354
+    ply_sha256: 9a2dac7e7c5b6380e96c016ee9d8d6893e0923007c7a4a62a64cfe749d8f2a63
+    render_run_id: vksplat_generated_fill_render_20260804T073140Z_55110
+    visual_audit_manifest_sha256: f22fcc82d5f6a2062c952104552af439d9020fc18fd4d5e9960a00d6a8c18a5e
+    status: accepted_refinement_initializer_not_final_default_off
+    formal: false
+
+  - id: graffiti_mickey_rigid_proxy
+    kind: genesis_physics_and_debug_proxy
+    host_role: amd
+    run_id: 20260804T025212Z_132785_amd_graffiti_mickey_integration
+    visual_mesh_sha256: 59184e336677ac80f9d154f46b668db2208e36620c5fc6fb83cacd6e47dd2876
+    status: accepted_real_time_rigid_proxy
+    formal: false
+
+  - id: graffiti_mickey_pbd_smoke
+    kind: genesis_qualitative_soft_body_proxy
+    host_role: amd
+    run_id: 20260804T025240Z_132784_amd_soft_object
+    pbd_particles: 1303
+    collision_mesh_sha256: 8bea640b0222b2dbbf5e20c249608c35fce8dbedbdef2fc4315979a47f8c404d
+    status: accepted_feasibility_uncalibrated_material
+    formal: false
+
+  - id: dual_leader_monitor_bridge
+    kind: live_hil_transport_and_genesis_smoke
+    host_role: amd
+    run_id: 20260803T212411Z_70047_amd_live_bridge
+    steps: 960
+    requested_sim_hz: 120
+    accepted_packets: 425
+    rejected_packets: 0
+    watchdog_events: 0
+    metrics_sha256: c8daddd1fecc86a704f4178eb00ebe1674e36dc27ecc5551e5655c045d8f05c4
+    physical_follower_output: false
+    physical_haptic_output: false
+    status: accepted_monitor_only_transport_smoke
+    formal: false
+
+  - id: parallel_layout_pre_swap_smoke
+    kind: genesis_scene_layout_smoke
+    host_role: amd
+    run_id: parallel-layout-smoke-20260803T213849Z
+    arrangement: side_by_side_parallel
+    steps: 60
+    metrics_sha256: c6f6303388a8068cd20242c0baa15a6d08631890c3764181aced9d2be2aee116
+    status: passed_geometry_exposed_left_right_mapping_swap
+    superseded_by_config_fix: true
+    post_fix_interactive_gate_passed: false
+    formal: false
+
+  - id: haptic_bench_left_wrist_roll_1
+    kind: bounded_single_joint_physical_output_smoke
+    host_role: amd
+    run_id: 20260803T215854Z_84910_amd_haptic_bench
+    side: left
+    motor: wrist_roll
+    torque_limit_raw: 30
+    torque_limit_scale: 1000
+    max_offset_deg: 1.0
+    max_duration_s: 10
+    accepted_feedback_packets: 301
+    rejected_feedback_packets: 0
+    output_commands: 301
+    peak_abs_current_raw: 1
+    peak_temperature_c: 42
+    publisher_log_sha256: 4c5a62e277f632afe61b698f5177a43cbd03665358ed57032c80eeec13b78aa3
+    status: accepted_guarded_hardware_path_force_uncalibrated
+    formal: false
+
+  - id: haptic_bench_left_wrist_roll_2
+    kind: bounded_single_joint_physical_output_smoke
+    host_role: amd
+    run_id: 20260803T220040Z_85107_amd_haptic_bench
+    side: left
+    motor: wrist_roll
+    torque_limit_raw: 30
+    torque_limit_scale: 1000
+    max_offset_deg: 1.0
+    max_duration_s: 10
+    accepted_feedback_packets: 302
+    rejected_feedback_packets: 0
+    output_commands: 282
+    peak_abs_current_raw: 1
+    peak_temperature_c: 33
+    publisher_log_sha256: 48058617f49855757a1ce7b0ac915851a75a5c68023343a78cf20d72511176d3
+    status: accepted_repeat_guarded_hardware_path_force_uncalibrated
+    formal: false
+
+  - id: amd_haptic_contact_calibration
+    kind: millimetre_scale_genesis_contact_and_joint_effort_sweep
+    host_role: amd
+    run_id: 20260804T085549Z_165620_amd_haptic_contact_calibration
+    penetration_range_mm: [-2.0, 3.0]
+    negative_clearance_peak_force_n: 0.0
+    stable_contact_depths_mm: [1.0, 1.5, 2.0, 3.0]
+    stable_contact_force_n_range: [5.7182, 11.0546]
+    opposite_arm_isolated: true
+    gripper_solver_limit_hits: 0
+    recommended_side: left
+    recommended_motor: elbow_flex
+    recommended_joint_effort_p95: 0.1345489427447319
+    max_normalized_effort: 0.20
+    candidate_simulated_effort_full_scale: 0.6727447137236594
+    physical_output_commands: false
+    metrics_sha256: 792560a674443ca39f902806963e0cca62c4dc8bae5ba34c4c38d339354870fe
+    hashes_manifest_sha256: 6987c32ff173a0eee5f9db52f90a0b0a945164e6f7e592e40dcba3b8d92175eb
+    status: accepted_simulation_calibration_pending_physical_gate
+    formal: false
+
+validation:
+  scaffold_tests_collected: 142
+  scaffold_tests_passed: 137
+  scaffold_tests_skipped_no_local_opencv: 5
+  git_diff_check: passed
+  formal_result_claim: observed_object_training_and_anchor_render_only
+
+open_gates:
+  - calibrated_left_elbow_flex_single_joint_physical_gate
+  - guarded_single_arm_haptic_gate
+  - guarded_dual_arm_haptic_gate
+  - recorded_approach_grasp_handover_release_demo
+  - heldout_real_capture_and_metrics

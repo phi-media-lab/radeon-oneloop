@@ -1,0 +1,66 @@
+schema_version: 1
+environment: so101_bimanual_handover_live_leaders
+formal_profile: non_formal_live_demo
+backend: amdgpu
+genesis_version: 1.3.1
+topologies:
+  - localhost_leader_and_genesis_on_amd
+  - split_amd_leader_to_radeon_genesis
+leader_stream:
+  rate_hz: 30
+  joint_units: degrees
+  gripper_units: percent
+  transport: udp_json_v1
+  hardware_paths_committed: false
+haptic_feedback:
+  rate_hz: 30
+  transport: udp_json_v1
+  source: genesis_object_and_inter_arm_contacts
+  mode: monitor_only
+  physical_motor_output: false
+  motor_enable_gate: pending_bench_validation
+  watchdog_ms: 100
+  contact_deadband_n: 0.5
+  simulated_effort_full_scale_default: 3.35
+  calibrated_candidate_full_scale: 0.6727447137236594
+  calibrated_candidate_status: pending_physical_single_joint_gate
+  proposed_position_offset_limit_deg: 3.0
+  proposed_torque_limit_raw: 80
+  proposed_torque_limit_scale: 1000
+  first_bench:
+    enabled_by_default: false
+    motor_count: 1
+    gripper_allowed: false
+    max_output_duration_s: 10
+    max_position_offset_deg: 1.0
+    max_torque_limit_raw: 30
+    max_temperature_c: 45
+    watchdog_ms: 100
+    calibrated_side: left
+    calibrated_motor: elbow_flex
+simulation:
+  rate_hz: 120
+  interpolation_steps: 4
+  input_clamp: pinned_so101_mjcf_joint_ranges
+  watchdog_ms: 250
+  stale_behavior: hold_virtual_position
+  arm_base_separation_m: 0.40
+  model_forward_unit: [0.0, -1.0, 0.0]
+  model_lateral_unit: [1.0, 0.0, 0.0]
+  left_base_pos_m: [0.20, 0.0, 0.425]
+  right_base_pos_m: [-0.20, 0.0, 0.425]
+  shared_base_euler_deg: [0.0, 0.0, 0.0]
+appearance:
+  default_mode: debug-mesh
+  demo_mode: vksplat
+  default_asset: formal_observed_core_canonical_30k
+  generated_fill_enabled: false
+  renderer_failure_fallback: genesis_debug_mesh
+  control_dependency: false
+safety_scope:
+  physical_follower_output: false
+  real_leader_bus: read_only_by_default
+  sequence_check: true
+  action_range_check: true
+  rate_of_change_check: true
+formal: false

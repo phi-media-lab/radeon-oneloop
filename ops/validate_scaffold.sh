@@ -3,6 +3,15 @@ set -euo pipefail
 
 repo_root=$(git rev-parse --show-toplevel)
 cd "$repo_root"
+python_bin=${ONELOOP_VALIDATION_PYTHON:-}
+if [[ -z "$python_bin" ]]; then
+  if [[ -x "$repo_root/.venv/bin/python" ]]; then
+    python_bin="$repo_root/.venv/bin/python"
+  else
+    python_bin=$(command -v python3)
+  fi
+fi
+[[ -x "$python_bin" ]]
 
 required_files=(
   README.md
@@ -24,7 +33,7 @@ for path in "${required_files[@]}"; do
   fi
 done
 
-python3 -m json.tool ops/job_manifest.schema.json >/dev/null
+"$python_bin" -m json.tool ops/job_manifest.schema.json >/dev/null
 
 if command -v ruby >/dev/null 2>&1; then
   ruby -e 'require "yaml"; ARGV.each { |p| YAML.load_file(p) }' \
@@ -40,6 +49,6 @@ if git grep -nE '(gho_|github_pat_|AKIA[0-9A-Z]{16}|BEGIN (RSA |OPENSSH )?PRIVAT
 fi
 
 git diff --check
-PYTHONPATH=src python3 -m unittest discover -s tests -v
+PYTHONPATH=src "$python_bin" -m unittest discover -s tests -v
 bash -n ops/*.sh
 printf '%s\n' 'scaffold validation passed'

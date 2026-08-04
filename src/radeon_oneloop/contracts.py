@@ -72,12 +72,22 @@ def gripper_percent_to_joint(value: float, *, joint_min: float, joint_max: float
     return joint_min + (value / 100.0) * (joint_max - joint_min)
 
 
-def gripper_joint_to_percent(value: float, *, joint_min: float, joint_max: float) -> float:
+def gripper_joint_to_percent(
+    value: float,
+    *,
+    joint_min: float,
+    joint_max: float,
+    tolerance: float = 0.0,
+) -> float:
     if joint_max <= joint_min:
         raise ContractError("joint_max must be greater than joint_min")
     value = float(value)
-    if not joint_min <= value <= joint_max:
+    tolerance = float(tolerance)
+    if not math.isfinite(tolerance) or tolerance < 0.0:
+        raise ContractError("tolerance must be finite and non-negative")
+    if not joint_min - tolerance <= value <= joint_max + tolerance:
         raise ContractError(f"gripper joint outside [{joint_min}, {joint_max}]: {value}")
+    value = min(max(value, joint_min), joint_max)
     return 100.0 * (value - joint_min) / (joint_max - joint_min)
 
 
@@ -96,13 +106,23 @@ def lerobot_arm_to_genesis(values: Sequence[float]) -> tuple[float, ...]:
     return joints + (gripper,)
 
 
-def genesis_arm_to_lerobot(values: Sequence[float]) -> tuple[float, ...]:
+def genesis_arm_to_lerobot(
+    values: Sequence[float],
+    *,
+    gripper_tolerance_rad: float = math.radians(0.5),
+) -> tuple[float, ...]:
     """Convert one Genesis SO-101 arm back to LeRobot's physical-unit convention."""
     if len(values) != 6:
         raise ContractError(f"one SO-101 arm must have 6 values, got {len(values)}")
     joints = tuple(math.degrees(float(value)) for value in values[:5])
     gripper = gripper_joint_to_percent(
-        float(values[5]), joint_min=SO101_GRIPPER_MIN_RAD, joint_max=SO101_GRIPPER_MAX_RAD
+        float(values[5]),
+        joint_min=SO101_GRIPPER_MIN_RAD,
+        joint_max=SO101_GRIPPER_MAX_RAD,
+        # The rigid solver may settle a position-controlled gripper a tiny
+        # amount beyond its configured limit. Accept only this numerical
+        # boundary layer, then clamp it back to the frozen 0..100 contract.
+        tolerance=gripper_tolerance_rad,
     )
     return joints + (gripper,)
 

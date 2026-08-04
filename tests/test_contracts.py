@@ -1,3 +1,4 @@
+import math
 import unittest
 
 from radeon_oneloop.contracts import (
@@ -27,6 +28,18 @@ class ContractTests(unittest.TestCase):
                 percent,
             )
 
+    def test_gripper_observation_tolerates_only_small_solver_overshoot(self):
+        self.assertEqual(
+            gripper_joint_to_percent(
+                -0.0205, joint_min=-0.02, joint_max=0.04, tolerance=0.001
+            ),
+            0.0,
+        )
+        with self.assertRaises(ContractError):
+            gripper_joint_to_percent(
+                -0.022, joint_min=-0.02, joint_max=0.04, tolerance=0.001
+            )
+
     def test_action_limits_and_delta(self):
         limits = ActionLimits((-1.0,) * 12, (1.0,) * 12, (0.1,) * 12)
         limits.validate((0.0,) * 12)
@@ -39,6 +52,16 @@ class ContractTests(unittest.TestCase):
         recovered = genesis_arm_to_lerobot(lerobot_arm_to_genesis(physical))
         for left, right in zip(physical, recovered, strict=True):
             self.assertAlmostEqual(left, right)
+
+    def test_runtime_can_select_a_bounded_solver_tolerance(self):
+        genesis = list(lerobot_arm_to_genesis((0.0, 0.0, 0.0, 0.0, 0.0, 0.0)))
+        genesis[-1] -= math.radians(0.6)
+        with self.assertRaises(ContractError):
+            genesis_arm_to_lerobot(genesis)
+        recovered = genesis_arm_to_lerobot(
+            genesis, gripper_tolerance_rad=math.radians(1.0)
+        )
+        self.assertEqual(recovered[-1], 0.0)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,317 @@
+schema_version: radeon_oneloop.object_asset_config.v1
+asset_name: miniso_disney_fun_crash_graffiti_mickey_v1
+formal: false
+redistribution: false
+
+coordinate_convention:
+  front_axis: +Y
+  up_axis: +Z
+  viewer_left_axis: +X
+  unit: m
+  origin: plush_body_center
+
+metric_anchor:
+  kind: product_specification
+  dimension: overall_height
+  value_m: 0.095
+  uncertainty_m: 0.005
+  status: user_confirmed_metric_anchor
+
+normalization:
+  output_size: 1024
+  foreground_padding_fraction: 0.10
+  grabcut_iterations: 8
+  soft_alpha_sigma_px: 2.0
+  min_foreground_fraction: 0.08
+  max_foreground_fraction: 0.82
+
+observed_core:
+  model: VkSplat
+  supervision: four_real_masked_anchor_views_only
+  source_run_id: 20260804T095251Z_gaussian_train_84d468b_20260804
+  source_normalized_ply_sha256: d95edcb66edd5fd3f6fe3fda4686dfe718ce867507a9c4db0fa6dde88a2cfcc5
+  dataset_hash: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+  dataparser_inverse_scale: 0.30000000113228553
+  canonical_gaussians: 30000
+  canonical_ply_sha256: 0e26b6c4f993a7052fb471ad84a1a98180b262c868a4b179ce19b294b288bd1a
+  canonical_cameras_sha256: 050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26
+  canonical_provenance_sha256: 80efa4f5a98070395844205afa663ee8ca2975eda21e720c3cf785dcfd52bd02
+  canonical_visual_status: accepted_formal_observed_only_anchor_render_audit
+  canonical_render_run_id: 20260804T095859Z_gaussian_render_c8bd111_20260804
+  eligible_for_heldout_real_metrics: false
+  formal: true
+
+runtime_binding:
+  gate: genesis_vksplat_dynamic_pose_binding
+  default_appearance: observed_core
+  generated_fill_enabled: false
+  object_pose_contract: T_world_object_canonical
+  genesis_camera_contract: T_world_camera_opengl
+  renderer_camera_contract: T_camera_object_opencv
+  camera_basis_conversion_4x4:
+    - [1.0, 0.0, 0.0, 0.0]
+    - [0.0, -1.0, 0.0, 0.0]
+    - [0.0, 0.0, -1.0, 0.0]
+    - [0.0, 0.0, 0.0, 1.0]
+  transform_formula: inverse(T_world_camera_opengl * camera_basis_conversion) * T_world_object_canonical
+  preferred_renderer: genesis_nyx_light_field
+  active_renderer: vksplat_radv_offscreen
+  fallback_renderer: genesis_debug_mesh
+  occlusion_source: genesis_entity_segmentation_and_proxy_depth
+  renderer_failure_policy: latch_fallback_without_stopping_control
+  vksplat_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+  formal: false
+
+generation:
+  primary:
+    model: apple_ml_sharp
+    execution_host: phi-amd-work
+    accelerator: AMD_Instinct_MI300X_gfx942
+    mode: per_anchor_gaussian_hypotheses
+    input_view_ids: [anchor_front, anchor_right, anchor_rear, anchor_left]
+    require_neutral_background: true
+    require_cross_view_consistency: true
+    alignment_surface_layer: maximum_opacity
+    fusion_layer_policy: max_opacity_surface
+    voxel_size_m: 0.0015
+    min_observed_silhouette_views: 2
+    min_cross_source_views: 2
+    reduction_policy: keep_cross_source_supported
+    max_fused_gaussians: 300000
+    eligible_for_heldout_real_metrics: false
+    formal: false
+  appearance_proposal:
+    model: UniSHARP
+    execution_host: phi-amd-work
+    accelerator: AMD_Instinct_MI300X_gfx942
+    mode: per_anchor_local_orbit_gaussian_hypotheses
+    input_resolution: [768, 768]
+    gaussian_count_per_anchor: 1179648
+    acceptance_status: accepted_generated_appearance_proposal_rejected_metric_geometry
+    accepted_roles: [pseudo_view_proposal, appearance_fill_candidate]
+    rejected_roles: [metric_geometry, observed_core, heldout_evaluation]
+    lossless_pseudoview_count: 80
+    evidence_run_id: unisharp_m1_20260804T064430Z_1382498
+    evidence_run_manifest_sha256: 197df459eca88ad93bd054ee444dbf759ef11a7620ebf012f0c1a390112a948f
+    evidence_audit_manifest_sha256: 74be365dd407edb8b500b0ab9cbef39f72178ffddf7aae13ac4d5c2df33c567a
+    formal: false
+  hybrid_direct_ply_ablation:
+    geometry_model: apple_ml_sharp
+    appearance_model: UniSHARP
+    donor_fields: [f_dc_0, f_dc_1, f_dc_2, opacity]
+    output_gaussians: 124420
+    output_ply_sha256: 964809f8b9c751f6c12b06f87a4850288fa45bf0f87525cb0d1368183bef65a0
+    metric_gate_passed: true
+    visual_status: rejected_direct_appearance_fill
+    rejection_reason: appearance donation did not repair sparse exterior geometry or transmittance holes
+    render_audit_manifest_sha256: 66644369b6d07741d2475bb67edc835122553374f422424725f07a419ebdd896
+    formal: false
+  confidence_pruned_candidate:
+    geometry_model: apple_ml_sharp
+    appearance_model: UniSHARP
+    full_single_source_candidate_gaussians: 260942
+    full_single_source_ply_sha256: 0aac9846e8f8493e93eec2756317764cf103849f1056f979f1215551008e0283
+    pruning_policy: keep_cross_source_plus_source_depth_consistent_and_no_non_source_front_conflict
+    source_max_abs_depth_error_m: 0.008
+    max_non_source_front_conflict_m: 0.004
+    pruning_mask_sha256: 3c79d1691c58a40ee8d68b2341dbc0a29b5d31c7d77f3dbe050df2b328cd6354
+    output_gaussians: 229576
+    output_ply_sha256: 9a2dac7e7c5b6380e96c016ee9d8d6893e0923007c7a4a62a64cfe749d8f2a63
+    visual_status: accepted_for_confidence_pruning_not_final
+    render_audit_manifest_sha256: f22fcc82d5f6a2062c952104552af439d9020fc18fd4d5e9960a00d6a8c18a5e
+    next_gate: real_photo_refinement_and_observed_visibility_mask
+    formal: false
+  secondary:
+    model: Hunyuan3D-2mv
+    execution_host: phi-amd-work
+    accelerator: AMD_Instinct_MI300X_gfx942
+    mode: multiview_completion_mesh
+    input_view_ids: [anchor_front, anchor_right, anchor_rear, anchor_left]
+    status: optional_future_not_installed
+    formal: false
+
+views:
+  - id: anchor_front
+    source_id: mercari_four_view_m60402675889
+    instance_id: mercari_m60402675889_unit
+    source_relpath: mercari_four_view/front.png
+    source_sha256: fe5dfe6eb5d01c9be2fc349cad5b4a0cf1d0ec6fec165453133d8ee7a4f36674
+    tier: A
+    provenance: observed
+    view_label: front
+    roles: [pose, photometric, evaluation, identity, generation_input]
+    canonical: true
+    prepare: true
+    nominal_camera_orbit_deg: {azimuth: 0, elevation: 0}
+    grabcut_rect_fraction: [0.18, 0.03, 0.82, 0.95]
+
+  - id: anchor_right
+    source_id: mercari_four_view_m60402675889
+    instance_id: mercari_m60402675889_unit
+    source_relpath: mercari_four_view/right.png
+    source_sha256: 2c4d8cb6b87bae341f646ea50fbc56b4e8363e50a1965c10b356bb20a9e09537
+    tier: A
+    provenance: observed
+    view_label: right
+    roles: [pose, photometric, evaluation, identity, generation_input]
+    canonical: true
+    prepare: true
+    # Source label "right" is the listing sequence label.  The visible blue
+    # ear identifies this as the canonical -X side under the +X viewer-left
+    # coordinate contract.
+    nominal_camera_orbit_deg: {azimuth: -90, elevation: 0}
+    grabcut_rect_fraction: [0.20, 0.03, 0.80, 0.96]
+
+  - id: anchor_rear
+    source_id: mercari_four_view_m60402675889
+    instance_id: mercari_m60402675889_unit
+    source_relpath: mercari_four_view/rear.png
+    source_sha256: 89122368fcd5855868829af78c0d62ebafb936f18a87e91c91cacc034ae3e263
+    tier: A
+    provenance: observed
+    view_label: rear
+    roles: [pose, photometric, evaluation, identity, generation_input]
+    canonical: true
+    prepare: true
+    nominal_camera_orbit_deg: {azimuth: 180, elevation: 0}
+    grabcut_rect_fraction: [0.18, 0.03, 0.82, 0.96]
+
+  - id: anchor_left
+    source_id: mercari_four_view_m60402675889
+    instance_id: mercari_m60402675889_unit
+    source_relpath: mercari_four_view/left.png
+    source_sha256: cab0c63c824c6c72b957f95855bf250f088f304b9948a3db1020f873f5c14a4f
+    tier: A
+    provenance: observed
+    view_label: left
+    roles: [pose, photometric, evaluation, identity, generation_input]
+    canonical: true
+    prepare: true
+    # Source label "left" is the listing sequence label.  The visible black
+    # graffiti ear identifies this as the canonical +X side.
+    nominal_camera_orbit_deg: {azimuth: 90, elevation: 0}
+    grabcut_rect_fraction: [0.20, 0.03, 0.80, 0.96]
+
+  - id: support_front_top
+    source_id: mercari_user_confirmed_m24995712441
+    instance_id: mercari_m24995712441_unit
+    source_relpath: mercari_confirmed/front_top.png
+    source_sha256: 0710b1ac7e40bb32a87049fa9a8bea73fd3affa59a2f3c76166fb0e4ec840b94
+    tier: B
+    provenance: observed
+    view_label: front_top
+    roles: [identity, shape_prior]
+    canonical: true
+    prepare: false
+
+  - id: support_rear_tag
+    source_id: mercari_user_confirmed_m24995712441
+    instance_id: mercari_m24995712441_unit
+    source_relpath: mercari_confirmed/rear_tag.png
+    source_sha256: 98a4e1edf99508a7bdcdf0f12a34f38f23807805f096b8dc666f7b4ecb28ea70
+    tier: B
+    provenance: observed
+    view_label: rear_tag
+    roles: [identity, shape_prior]
+    canonical: true
+    prepare: false
+
+  - id: support_top_keyring
+    source_id: mercari_user_confirmed_m24995712441
+    instance_id: mercari_m24995712441_unit
+    source_relpath: mercari_confirmed/top_keyring.png
+    source_sha256: 886b419ebf8966d2702ab6ea7677a80904fec6aa2fe2e47fbe4a46b7bca17467
+    tier: B
+    provenance: observed
+    view_label: top_keyring
+    roles: [identity, shape_prior]
+    canonical: true
+    prepare: false
+
+  - id: support_promo_front
+    source_id: stc_series
+    instance_id: stc_promo_render
+    source_relpath: stc_series/graffiti_promo_front.png
+    source_sha256: d4339dff4e3675d89b31367c263d9e633563e84b118e633c2f159b958d3efde3
+    tier: B
+    provenance: observed
+    view_label: promo_front
+    roles: [identity]
+    canonical: true
+    prepare: false
+
+  - id: context_full_lineup
+    source_id: stc_series
+    instance_id: stc_catalog_lineup
+    source_relpath: stc_series/full_lineup.png
+    source_sha256: 6527c9f213268e884362ed6b53d824bab450c0ba7423751db13df49e48ec49c5
+    tier: B
+    provenance: observed
+    view_label: full_lineup
+    roles: [identity]
+    canonical: false
+    exclusion_reason: multi-variant catalog context, not an object reconstruction view
+    prepare: false
+
+  - id: context_box_front
+    source_id: mercari_packaging_m31210859832
+    instance_id: mercari_m31210859832_boxed_unit
+    source_relpath: mercari_packaging/graffiti_box_front.png
+    source_sha256: 0acfc7d0fd618d80c2c40c55feeda15c8c934a5199f86f4fdfa68dfbf8cc428e
+    tier: B
+    provenance: observed
+    view_label: box_front
+    roles: [identity]
+    canonical: false
+    exclusion_reason: packaging identity check, not an unobstructed reconstruction view
+    prepare: false
+
+  - id: context_standard_card
+    source_id: reddit_manufacturing_error
+    instance_id: reddit_standard_card_art
+    source_relpath: reddit/standard_card_front.png
+    source_sha256: dd66e34d8979b9484b21dfd8831c21ceebfac95a198ecfaa354b4f2164ba0932
+    tier: B
+    provenance: observed
+    view_label: standard_card_front
+    roles: [identity]
+    canonical: false
+    exclusion_reason: printed standard-orientation evidence, not a physical object view
+    prepare: false
+
+  - id: excluded_manufacturing_error
+    source_id: reddit_manufacturing_error
+    instance_id: reddit_two_graffiti_ear_unit
+    source_relpath: reddit/manufacturing_error_front.png
+    source_sha256: 2c7c923acadf34afc21ff37c9cff17b098f71e8c571a79ded9e1f2cc6a80a373
+    tier: B
+    provenance: observed
+    view_label: manufacturing_error_front
+    roles: [excluded]
+    canonical: false
+    exclusion_reason: reported two-graffiti-ear manufacturing error
+    prepare: false
+
+  - id: hil_rear_close
+    source_id: historical_hil_batch
+    instance_id: user_hil_physical_unit
+    source_relpath: historical_hil/ep017_hand_cam_rear_close.jpg
+    source_sha256: 45e7aeddd3ba3cb9b9fa71fbb6620bd8aaf12dbe42220ef34ea76cae3275fe64
+    tier: C
+    provenance: observed
+    view_label: in_hand_rear_close
+    roles: [domain_qa, deformation_qa]
+    canonical: true
+    prepare: false
+
+  - id: hil_front_scene
+    source_id: historical_hil_batch
+    instance_id: user_hil_physical_unit
+    source_relpath: historical_hil/ep017_front_cam_scene.jpg
+    source_sha256: 8a5f1b592069b83879d2f8838f26505e4ec602bb637d1540b511fc6633751b7b
+    tier: C
+    provenance: observed
+    view_label: task_front_scene
+    roles: [domain_qa, deformation_qa]
+    canonical: true
+    prepare: false
