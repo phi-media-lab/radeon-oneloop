@@ -73,6 +73,22 @@ no gripper solver limit is hit. The p95 simulated reaction is 0.13455 on
 cap gives a candidate effort full scale of `0.6727447137236594`. This candidate
 is configurable but is not the default and has not yet authorized motor output.
 
+Hardware read-only run
+`20260804T103609Z_180178_amd_haptic_readonly_preflight` opened both calibrated
+leader buses through the monitor connection, confirmed healthy electrical
+state, and exercised the pure command envelope with zero register writes. It
+was then superseded because it did not enforce distance from joint limits.
+Corrected run `20260804T104004Z_180237_amd_haptic_readonly_preflight` adds a
+five-degree bidirectional margin and fails closed: the current
+`left/elbow_flex` value is 93.538°, outside the allowed -94° through 84° range.
+All other checks pass: torque disabled, position mode, current 0, temperature
+34 °C, voltage 7.3 V, status 0, 0.2-degree candidate envelope at 30/1000, and
+101 ms watchdog fail-zero. It still issued zero register writes and no torque
+command. Failed-run metrics SHA-256:
+`1a55238d339b7d5f039c064e7f6cac9c7f91698025a66eaf8a8f41aa859eee9a`.
+The operator must manually move the elbow to 84° or lower, rerun the read-only
+gate, and then provide a fresh estop/clear-workspace attestation.
+
 ### Physics and debug object
 
 - The corrected Graffiti Mickey procedural asset uses the standard asymmetric
@@ -266,26 +282,29 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Remaining critical path
 
-1. Re-attest the reachable physical emergency stop, clear the left elbow, and
+1. Manually rotate `left/elbow_flex` from 93.538° into the read-only gate's
+   -94° through 84° range, preferably near the middle, and rerun the corrected
+   read-only preflight until it passes.
+2. Re-attest the reachable physical emergency stop, clear the left elbow, and
    run one 10-second `left/elbow_flex` test at the unchanged 30/1000 torque and
    one-degree limits using the calibrated 0.6727447 effort scale.
-2. Accept that gate only if watchdog/reject counts remain zero, output disables
+3. Accept that gate only if watchdog/reject counts remain zero, output disables
    on exit, current/temperature/voltage remain inside bounds, and the operator
    reports a useful but comfortable resistance.
-3. Generalize the already guarded renderer from one joint to one left arm, then
+4. Generalize the already guarded renderer from one joint to one left arm, then
    to both arms; repeat monitor-only and time-bounded low-torque gates at each
    expansion. Do not increase the 30/1000 first-trial torque ceiling.
-4. Record a short approach–grasp–handover–release demo with manifests, hashes,
+5. Record a short approach–grasp–handover–release demo with manifests, hashes,
    timing, safety state, and a terminal marker.
-5. Package the formal object lineage, nonformal HIL safety evidence, and demo
+6. Package the formal object lineage, nonformal HIL safety evidence, and demo
    video as separate evidence layers; do not relabel the APU integration runs
    as formal Radeon measurements.
-6. Capture additional real held-out views before claiming PSNR, SSIM, LPIPS,
+7. Capture additional real held-out views before claiming PSNR, SSIM, LPIPS,
    silhouette IoU, or novel-view quality.
 
 ## Verification status
 
-The fresh full scaffold collects 142 tests and passes all available tests, with
+The fresh full scaffold collects 145 tests and passes all available tests, with
 5 OpenCV-dependent tests skipped in the local environment;
 shell syntax, YAML/JSON parsing, and `git diff --check` also pass. These
 source-tree checks are not a substitute for the physical haptic gate or the

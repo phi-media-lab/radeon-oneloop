@@ -68,14 +68,27 @@ mechanically safe to resist motion.
    hit. P95 reaction effort ranked `elbow_flex` (0.13455), `shoulder_pan`
    (0.06421), then the remaining joints. `wrist_roll` was only 0.00066, which
    explains the weak earlier trials.
-5. **Pending, physical:** use `left/elbow_flex` and an explicit candidate
+5. **Pending manual reposition, hardware read-only:** the first read-only run
+   `20260804T103609Z_180178_amd_haptic_readonly_preflight` passed electrical
+   health and command-envelope checks but did not enforce a joint-limit margin;
+   it is superseded. Corrected run
+   `20260804T104004Z_180237_amd_haptic_readonly_preflight` added a fail-closed
+   five-degree bidirectional model margin and rejected the current
+   `left/elbow_flex` position of 93.538°; the permitted preflight range is
+   -94° through 84°. Both runs performed zero register writes or torque-enable
+   commands. Electrical state remains healthy: torque disabled, position mode,
+   current 0, 34 °C, 7.3 V, and status 0. The pure command kernel reaches the
+   expected 0.2-degree offset at 30/1000 and fails zero after a 101 ms
+   synthetic timeout. Manually place the elbow at or below 84° and repeat this
+   gate before physical output.
+6. **Pending, physical:** use `left/elbow_flex` and an explicit candidate
    `simulated_effort_full_scale=0.6727447137236594`. This is
    `p95_effort / max_normalized_effort`, so p95 contact reaches the existing
    0.20 normalized ceiling. It does not increase the 30/1000 torque limit,
    one-degree pre-normalization offset, or ten-second duration. The default
    remains 3.35 until this test passes current, thermal, watchdog, shutdown,
    and subjective-resistance gates.
-6. Expand only in this order: one calibrated joint, one arm, both arms. Add a
+7. Expand only in this order: one calibrated joint, one arm, both arms. Add a
    monitor-only gate before physical output at each expansion. Increase only
    after a measured force/current calibration. The current
    software ceiling of 80/1000 must not be raised during the first dual-arm
@@ -95,7 +108,7 @@ The dependency order is intentional:
 5. Only then enable one bounded motor for ten seconds, followed by one arm and
    finally both arms.
 
-Steps 1–4 are now complete for canonical PLY SHA-256
+Steps 1–4 are complete for canonical PLY SHA-256
 `0e26b6c4f993a7052fb471ad84a1a98180b262c868a4b179ce19b294b288bd1a`.
 The latest normal and fault-injected integration gates are
 `20260804T101926Z_173198_amd_decoupled_gaussian_live_gate` and
@@ -104,7 +117,9 @@ The latest normal and fault-injected integration gates are
 events. This ordering prevents an asset/coordinate defect or a renderer crash
 from first being discovered while an operator-facing motor is energized.
 
-Step 5 remains pending. A previous command-line confirmation is not reusable:
+The hardware read-only electrical checks pass, but physical step 6 remains
+blocked by the failed joint-margin check and then requires a fresh operator
+attestation. A previous command-line confirmation is not reusable:
 the operator must freshly attest that the physical power cut/emergency stop is
 immediately reachable and that the left `elbow_flex` sweep region is clear.
 
@@ -112,6 +127,14 @@ The simulation-only calibration command is:
 
 ```bash
 ./ops/run_amd_haptic_contact_calibration.sh
+```
+
+The hardware read-only preflight can be repeated without estop attestation
+because it contains no motor write path:
+
+```bash
+./ops/run_amd_haptic_readonly_preflight.sh \
+  LEFT_PORT RIGHT_PORT LEFT_ID RIGHT_ID left elbow_flex
 ```
 
 The prepared single-joint bench parameters are deliberately explicit rather

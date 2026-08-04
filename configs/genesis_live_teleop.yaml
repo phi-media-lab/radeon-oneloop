@@ -38,6 +38,15 @@ haptic_feedback:
     watchdog_ms: 100
     calibrated_side: left
     calibrated_motor: elbow_flex
+    readonly_preflight:
+      status: failed_requires_manual_reposition
+      run_id: 20260804T104004Z_180237_amd_haptic_readonly_preflight
+      electrical_health_status: passed
+      selected_position_deg: 93.53846153846153
+      accepted_position_range_deg: [-94.0, 84.0]
+      serial_register_writes: 0
+      torque_enable_commands: 0
+      physical_output_commands: false
 simulation:
   rate_hz: 120
   interpolation_steps: 4
