@@ -1,0 +1,87 @@
+{
+  "schema_version": "radeon_oneloop.learned_mesh_candidate_selection.v1",
+  "created_date": "2026-08-05",
+  "asset_name": "miniso_disney_fun_crash_graffiti_mickey_v1",
+  "formal": false,
+  "four_view_manifest_sha256": "84b622f5deaa79dccb833fe1abafb7fdf099dcae34f250f56bf87106877753a1",
+  "private_hil_identity_holdout_sha256": [
+    "a6d4fe8268f3e300c8c3d4d115f1e2bf764a39da2af0d8a892956180d3dbe85a",
+    "e3f9f078e5ff3b0f7db623f1125692085ed7594db24b7dd1e9cf2a1e42780d4f"
+  ],
+  "selection_policy": {
+    "identity_authority": "four_reviewed_real_photos",
+    "private_hil_role": "qualitative_rear_top_identity_only",
+    "required_checks": [
+      "single_front_face",
+      "face_absent_from_rear_hemisphere",
+      "two_asymmetric_ears_correct_sides",
+      "single_rear_strap",
+      "continuous_oval_body_no_duplicate_surface",
+      "four_cardinal_silhouettes_pass",
+      "private_hil_rear_top_identity_consistent"
+    ],
+    "accepted_role": "generated_conditioning_only",
+    "prohibited_roles": [
+      "observed_geometry",
+      "final_metric_geometry",
+      "collision_geometry",
+      "heldout_real_evidence",
+      "formal_single_radeon_lineage"
+    ]
+  },
+  "candidates": [
+    {
+      "seed": 10028,
+      "hunyuan_run_id": "hunyuan3d_2mv_20260804T191724Z_1423702_seed10028",
+      "hunyuan_manifest_sha256": "c9b883f2a08d19c74dd55985ba08dd0d9e02b337e056f57a81f925e40db164c6",
+      "raw_mesh_sha256": "36460f23dd5e8b3ec0f66c7488ed53abf6f68cbbdc429b23541551dd23b5765a",
+      "alignment_manifest_sha256": "67e2beefcfa0b0d8140a931624495350417f7f7dffbad80dba50e999fe1cd37a",
+      "aligned_ply_sha256": "2bf07e3e66e37bde7c83f5fb489651a93702fc2b6cf1adc3f77033df2db98655",
+      "extents_mm": [84.7192528307, 79.5235391370, 95.0],
+      "mean_silhouette_iou": 0.7717391233,
+      "min_silhouette_iou": 0.7471945990,
+      "texture_manifest_sha256": "e3180f52919c724a7326770fd12e918ec587a1c2aeed441340235959987507cb",
+      "orbit_video_sha256": "f4680d21e1adc264805550d959f0078c8fd1bf18b03b5741fef4db804b23f54e",
+      "review_sha256": "1efb1a9e825e95030f5f8e7acfc9d307d09268041dc5430d360c75f15efd1cc0",
+      "decision": "superseded_valid_candidate"
+    },
+    {
+      "seed": 10029,
+      "hunyuan_run_id": "hunyuan3d_2mv_20260804T191826Z_1423879_seed10029",
+      "hunyuan_manifest_sha256": "99490ee69ef35d07d8b29da3148e4b99dd8dc3b811ccf9aae78f103418cd19de",
+      "raw_mesh_sha256": "514cb9cefeb259ad6bd3e5288bdb59a8a67510140957076433d98557e3e7eb89",
+      "alignment_manifest_sha256": "e59304e5336cb4d685858eb1b46693eb45d0bfa6f4cc721741ba0c3108a46949",
+      "aligned_ply_sha256": "fc78b9b7384db965d04d9d0b2d692a4830f77f6ae062181eb08ab4b5eb8bccb6",
+      "extents_mm": [85.4014206767, 80.5731149250, 95.0],
+      "mean_silhouette_iou": 0.7745676858,
+      "min_silhouette_iou": 0.7514816658,
+      "texture_manifest_sha256": "3d7ee5bdc9b1169fa1a2d5abe9dcfac345b45817f2032dda577b8b17c342644b",
+      "orbit_video_sha256": "ee313c751ce0bc0eb64a1fb733bb4f6ad32ad8ccace4ec2cc4b0d74d25ac6cfb",
+      "review_sha256": "7b4ebf8876cf0eb07fdacf108625570c8ee2e8cf82f4920688db7acd5fad582a",
+      "decision": "superseded_valid_candidate"
+    },
+    {
+      "seed": 10030,
+      "hunyuan_run_id": "hunyuan3d_2mv_20260804T191927Z_1424095_seed10030",
+      "hunyuan_manifest_sha256": "facbfaeff1f64ec91ecf9f26d41b4c72d71bf437d583aab42c718ab2060694ea",
+      "raw_mesh_sha256": "e2738c11aa84bb40496c76dcf72f2ed7b7583d8ed66a8c7d7de4ab159fc0fc7a",
+      "alignment_manifest_sha256": "bbf0c25c83a4b4b942f0c58930dd6691d910408256e02b714e4cbd119a82ba04",
+      "aligned_ply_sha256": "0c62defa74d1393a27bdec631f3102b8843dd204ce393b5e58e76936973003eb",
+      "extents_mm": [84.9676529902, 79.3067709005, 95.0],
+      "mean_silhouette_iou": 0.7766434395,
+      "min_silhouette_iou": 0.7513391694,
+      "texture_manifest_sha256": "50ac6dd505de7b1a7ba6c67ef8b4fc99a87e82fbc75d714e2cf152231e43e5f8",
+      "textured_ply_sha256": "cc67f708c6f010d8a27e20769ab1b3c0849579187e8e9fda4905605af4d35e7b",
+      "orbit_video_sha256": "d9965840bf583a3dcf498f205c5b15c7a1c63cf9ea3e4299f09100fce1fd1748",
+      "review_sha256": "1d5a54d571dfab18f39bbb95bf6a35f5dfe717bd669192648e356972a1f4481c",
+      "conditioning_manifest_sha256": "68eb2fc76933d7519f3bbfb11eb1528720ad1b733fe800747bcbe6fa33b6f50c",
+      "decision": "accepted_conditioning_only"
+    }
+  ],
+  "known_defects": [
+    "four_view_projected_texture_blur_at_intercardinal_angles",
+    "generated_hidden_side_geometry_not_metric_truth",
+    "unobserved_underside_has_no_identity_texture"
+  ],
+  "selection": "seed10030"
+}

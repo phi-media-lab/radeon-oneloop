@@ -14,6 +14,7 @@ from sim.genesis_so101.gaussian_appearance import (
     composite_with_proxy_depth,
     entity_segmentation_index,
     link_segmentation_index,
+    layered_preview_asset,
     object_to_camera_opencv,
     transform_from_pos_quat_wxyz,
     validate_rigid_transform,
@@ -125,6 +126,7 @@ class GaussianAppearanceTests(unittest.TestCase):
                         "gaussian_count": 1,
                         "observed_only_training": True,
                         "formal": False,
+                        "provenance_class": "observed_core_candidate",
                     }
                 ),
                 encoding="utf-8",
@@ -141,6 +143,38 @@ class GaussianAppearanceTests(unittest.TestCase):
             )
             with self.assertRaisesRegex(RuntimeError, "formal status"):
                 asset.validate()
+
+    def test_layered_preview_keeps_generated_fill_nonformal(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            ply = root / "appearance_fused_preview.ply"
+            cameras = root / "cameras_observed.json"
+            provenance = root / "appearance_fused_preview.provenance.json"
+            ply.write_bytes(b"layered-ply")
+            cameras.write_text(
+                json.dumps({"camera_model": "PINHOLE_OPENCV", "cameras": [{}, {}, {}, {}]}),
+                encoding="utf-8",
+            )
+            provenance.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "radeon_oneloop.layered_gaussian_provenance.v1",
+                        "output_ply_sha256": _sha(ply),
+                        "gaussian_count": 31224,
+                        "observed_only_training": False,
+                        "formal": False,
+                        "eligible_for_heldout_real_metrics": False,
+                        "provenance_class": "confidence_fused_candidate",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            audit = layered_preview_asset(root).validate()
+
+            self.assertEqual(audit["gaussian_count"], 31224)
+            self.assertFalse(audit["formal"])
+            self.assertEqual(audit["provenance_class"], "confidence_fused_candidate")
 
     def test_proxy_matte_preserves_foreground_occluder(self):
         base = np.zeros((2, 2, 3), dtype=np.uint8)

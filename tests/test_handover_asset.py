@@ -12,6 +12,7 @@ if np is not None:
         DEFAULT_CONFIG,
         MATERIALS,
         build_mesh,
+        build_surface_carrier_parts,
         build_visual_parts,
         load_spec,
         signed_mesh_volume,
@@ -78,6 +79,29 @@ class HandoverAssetTests(unittest.TestCase):
         self.assertIn("keyring_head", display_names)
         self.assertGreater(len(display), len(simulation))
         self.assertIn("graffiti_pink", MATERIALS)
+
+    def test_surface_carrier_places_accessories_against_rear_within_body_height(self):
+        spec = load_spec(DEFAULT_CONFIG)
+        carrier = build_surface_carrier_parts(spec)
+        by_name = {part.name: part for part in carrier}
+        accessory_names = {
+            "carrier_rear_strap",
+            "carrier_keyring_head",
+            "carrier_keyring_left_ear",
+            "carrier_keyring_right_ear",
+        }
+        self.assertTrue(accessory_names.issubset(by_name))
+        accessory_vertices = np.concatenate(
+            [by_name[name].vertices for name in sorted(accessory_names)]
+        )
+        body_vertices = by_name["plush_body"].vertices
+        self.assertLess(float(accessory_vertices[:, 1].max()), -0.035)
+        self.assertGreaterEqual(
+            float(accessory_vertices[:, 2].min()), float(body_vertices[:, 2].min())
+        )
+        self.assertLessEqual(
+            float(accessory_vertices[:, 2].max()), float(body_vertices[:, 2].max())
+        )
 
     def test_generated_asset_is_content_hashed(self):
         spec = load_spec(DEFAULT_CONFIG)

@@ -39,6 +39,13 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
         raise FileExistsError(output if output.exists() else provenance_path)
     train_json_path = args.train_json.resolve()
     train = json.loads(train_json_path.read_text(encoding="utf-8"))
+    provenance_class = getattr(args, "provenance_class", "observed_core_candidate")
+    if provenance_class not in {
+        "observed_core_candidate",
+        "generated_fill_candidate",
+        "confidence_fused_candidate",
+    }:
+        raise ValueError(f"unsupported provenance class: {provenance_class}")
     transform = np.asarray(train["dataparser_transform"], dtype=np.float64)
     scale, rotation, translation = inverse_similarity(transform)
 
@@ -59,8 +66,19 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
             and recorded_dataset_manifest_sha != dataset_manifest_sha
         ):
             raise ValueError("training run does not bind the supplied dataset manifest")
-        if dataset_manifest.get("provenance", {}).get("secondary_accelerator_artifacts") is not False:
-            raise ValueError("dataset lineage does not exclude secondary-accelerator artifacts")
+        if dataset_manifest.get("schema_version") in {
+            "radeon_oneloop.hybrid_pseudoview_colmap_dataset.v1",
+            "radeon_oneloop.seva_pseudoview_colmap_dataset.v1",
+        }:
+            secondary_accelerator_artifacts = True
+        else:
+            secondary_accelerator_artifacts = dataset_manifest.get("provenance", {}).get(
+                "secondary_accelerator_artifacts"
+            )
+        if args.formal and secondary_accelerator_artifacts is not False:
+            raise ValueError("formal dataset lineage does not exclude secondary-accelerator artifacts")
+        if provenance_class == "observed_core_candidate" and secondary_accelerator_artifacts is not False:
+            raise ValueError("observed-core provenance cannot include generated accelerator artifacts")
         training_metrics = None
         if args.training_metrics is not None:
             metrics_path = args.training_metrics.resolve()
@@ -108,7 +126,7 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
             "dataset_manifest_sha256": dataset_manifest_sha,
             "dataset_hash": training_manifest.get("dataset_hash"),
             "dataset_formal_input_eligible": dataset_manifest.get("formal_input_eligible"),
-            "secondary_accelerator_artifacts": False,
+            "secondary_accelerator_artifacts": secondary_accelerator_artifacts,
             "training_metrics_sha256": (
                 sha256_file(args.training_metrics.resolve())
                 if args.training_metrics is not None
@@ -138,11 +156,15 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
     del vertices
 
     provenance = {
-        "schema_version": "radeon_oneloop.observed_core_canonicalization.v1",
+        "schema_version": (
+            "radeon_oneloop.observed_core_canonicalization.v1"
+            if provenance_class == "observed_core_candidate"
+            else "radeon_oneloop.gaussian_canonicalization.v2"
+        ),
         "formal": bool(args.formal),
         "host_role": args.host_role,
-        "provenance_class": "observed_core_candidate",
-        "observed_only_training": True,
+        "provenance_class": provenance_class,
+        "observed_only_training": provenance_class == "observed_core_candidate",
         "input_ply_sha256": sha256_file(source),
         "train_json_sha256": sha256_file(train_json_path),
         "dataparser_transform_original_to_normalized": transform.tolist(),
@@ -176,6 +198,15 @@ def main() -> int:
     parser.add_argument("--dataset-manifest", type=Path)
     parser.add_argument("--formal", action="store_true")
     parser.add_argument("--host-role", default="unspecified_nonformal")
+    parser.add_argument(
+        "--provenance-class",
+        choices=(
+            "observed_core_candidate",
+            "generated_fill_candidate",
+            "confidence_fused_candidate",
+        ),
+        default="observed_core_candidate",
+    )
     result = canonicalize(parser.parse_args())
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0

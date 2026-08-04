@@ -16,6 +16,7 @@ from radeon_oneloop.contracts import CAMERA_KEYS
 from .gaussian_appearance import (
     SafeAppearanceBinding,
     VkSplatAppearanceRenderer,
+    layered_preview_asset,
     observed_core_asset,
     transform_from_pos_quat_wxyz,
 )
@@ -24,6 +25,7 @@ from .scene import OBJECT_START_POS, build
 
 
 METRIC_EXTENT_TRIM_PERCENT = 0.01
+METRIC_SUPPORT_SIGMA = 2.0
 
 
 def gaussian_center_extents(
@@ -54,6 +56,64 @@ def gaussian_center_extents(
     return full_extents, high - low
 
 
+def gaussian_support_extents(
+    xyz: np.ndarray,
+    scales: np.ndarray,
+    rotations_wxyz: np.ndarray,
+    *,
+    sigma: float = METRIC_SUPPORT_SIGMA,
+    trim_percent: float = METRIC_EXTENT_TRIM_PERCENT,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return axis-aligned Gaussian support extents, including splat size.
+
+    A 3DGS asset is an ellipsoid field, not a point cloud.  Center-only
+    bounds systematically understate its visible metric envelope.  We use a
+    fixed two-sigma covariance envelope and apply the same tiny per-tail trim
+    used by the center diagnostic to reject isolated export outliers.
+    """
+
+    centers = np.asarray(xyz, dtype=np.float64)
+    scale_values = np.asarray(scales, dtype=np.float64)
+    quaternions = np.asarray(rotations_wxyz, dtype=np.float64)
+    if centers.ndim != 2 or centers.shape[1] != 3:
+        raise ValueError("Gaussian centers must have shape Nx3")
+    if scale_values.shape != centers.shape or quaternions.shape != (len(centers), 4):
+        raise ValueError("Gaussian scales and rotations must have shapes Nx3 and Nx4")
+    if not all(np.isfinite(value).all() for value in (centers, scale_values, quaternions)):
+        raise ValueError("Gaussian support inputs must be finite")
+    if np.any(scale_values <= 0.0):
+        raise ValueError("Gaussian scales must be positive")
+    if sigma <= 0.0 or not 0.0 <= trim_percent < 50.0:
+        raise ValueError("sigma must be positive and trim_percent must be in [0, 50)")
+    norms = np.linalg.norm(quaternions, axis=1, keepdims=True)
+    if np.any(norms < 1.0e-12):
+        raise ValueError("Gaussian rotations contain a zero quaternion")
+    w, x, y, z = (quaternions / norms).T
+    rotations = np.stack(
+        (
+            1.0 - 2.0 * (y * y + z * z),
+            2.0 * (x * y - z * w),
+            2.0 * (x * z + y * w),
+            2.0 * (x * y + z * w),
+            1.0 - 2.0 * (x * x + z * z),
+            2.0 * (y * z - x * w),
+            2.0 * (x * z - y * w),
+            2.0 * (y * z + x * w),
+            1.0 - 2.0 * (x * x + y * y),
+        ),
+        axis=1,
+    ).reshape(-1, 3, 3)
+    axis_sigma = np.sqrt(
+        np.einsum("nij,nj,nij->ni", rotations, scale_values * scale_values, rotations)
+    )
+    lower = centers - sigma * axis_sigma
+    upper = centers + sigma * axis_sigma
+    full_extents = np.max(upper, axis=0) - np.min(lower, axis=0)
+    robust_lower = np.percentile(lower, trim_percent, axis=0)
+    robust_upper = np.percentile(upper, 100.0 - trim_percent, axis=0)
+    return full_extents, robust_upper - robust_lower
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--so101-asset-root", type=Path, required=True)
@@ -61,16 +121,30 @@ def main() -> None:
     parser.add_argument("--vksplat-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=20260803)
+    parser.add_argument("--layered-preview", action="store_true")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     import imageio.v3 as iio
 
-    asset = observed_core_asset(args.observed_core_root)
+    asset = (
+        layered_preview_asset(args.observed_core_root)
+        if args.layered_preview
+        else observed_core_asset(args.observed_core_root)
+    )
     asset_audit = asset.validate()
     gaussians = read_3dgs_ply(asset.ply_path)
-    full_extents, robust_extents = gaussian_center_extents(gaussians["xyz"])
+    center_full_extents, center_robust_extents = gaussian_center_extents(gaussians["xyz"])
+    full_extents, robust_extents = gaussian_support_extents(
+        gaussians["xyz"], gaussians["scales"], gaussians["rotations"]
+    )
+    metric_extents = robust_extents if args.layered_preview else center_robust_extents
+    metric_extent_method = (
+        "anisotropic_gaussian_two_sigma_support"
+        if args.layered_preview
+        else "lightly_trimmed_gaussian_centers"
+    )
     spec = load_spec()
-    height_error_m = abs(float(robust_extents[2]) - spec.nominal_overall_height_m)
+    height_error_m = abs(float(metric_extents[2]) - spec.nominal_overall_height_m)
     height_tolerance_m = max(0.002, 0.03 * spec.nominal_overall_height_m)
 
     task, handles = build(
@@ -135,12 +209,17 @@ def main() -> None:
             "center_trim_count_per_tail": int(
                 len(gaussians["xyz"]) * METRIC_EXTENT_TRIM_PERCENT / 100.0
             ),
-            "full_center_extents_m": full_extents.tolist(),
+            "full_center_extents_m": center_full_extents.tolist(),
+            "robust_center_extents_m": center_robust_extents.tolist(),
+            "support_sigma": METRIC_SUPPORT_SIGMA,
+            "full_support_extents_m": full_extents.tolist(),
             "robust_percentile_range": [
                 METRIC_EXTENT_TRIM_PERCENT,
                 100.0 - METRIC_EXTENT_TRIM_PERCENT,
             ],
-            "appearance_extents_m": robust_extents.tolist(),
+            "robust_support_extents_m": robust_extents.tolist(),
+            "appearance_metric_extents_m": metric_extents.tolist(),
+            "metric_extent_method": metric_extent_method,
             "nominal_overall_height_m": spec.nominal_overall_height_m,
             "height_error_m": height_error_m,
             "height_tolerance_m": height_tolerance_m,
@@ -153,6 +232,7 @@ def main() -> None:
         "appearance": diagnostics,
         "vksplat_memory": memory,
         "physical_output": False,
+        "layered_preview": args.layered_preview,
         "gate_scope": "static pose, transform, renderer and conservative proxy-depth matte",
         "not_proven": [
             "dynamic pose stability",

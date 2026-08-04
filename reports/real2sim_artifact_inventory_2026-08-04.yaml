@@ -8,13 +8,15 @@ privacy:
   locator_policy: host_role_plus_run_id_and_content_hash
 
 release_decision:
-  default_appearance_id: formal_observed_core_canonical_30k
-  continuous_live_demo_appearance_id: geometry_frozen_observed_candidate_30k
+  default_appearance_id: formal_geometry_frozen_observed_canonical_30k
+  continuous_live_demo_appearance_id: formal_geometry_frozen_observed_canonical_30k
   default_physics_id: graffiti_mickey_rigid_proxy
   generated_fill_enabled_by_default: false
+  vista4d_depth_lift_enabled: false
+  surface_carrier_installed_in_genesis: false
   candidate_requires_explicit_nonformal_switch: true
   physical_force_feedback_priority: deferred_not_submission_blocking
-  next_gate: capture_reserved_real_interanchor_views_then_formal_candidate_rerun
+  next_gate: restore_authorized_seva_weights_then_generate_audit_and_distill_primary_orbit
 
 artifacts:
   - id: m1_reviewed_orbitfix
@@ -155,6 +157,112 @@ artifacts:
     redistribution: false
     status: accepted_default_formal_appearance
     formal: true
+
+  - id: formal_geometry_frozen_observed_train_30k
+    kind: registered_radeon_geometry_frozen_vksplat_training
+    host_role: radeon-c
+    run_id: 20260804T204531Z_gaussian_train_14053af_20260804
+    parent_id: formal_observed_core_dataset
+    git_commit: 14053af9bcd4b15258815c0fd67bd6e248d6d812
+    gpu_uid: "0x153f7d55778ab659"
+    gfx_target: gfx1100
+    vksplat_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+    config_sha256: a634c71a9934f2308562583e450d20a86d7c983e031d99330d0d3d5fbc7ba643
+    dataset_sha256: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    steps: 2000
+    gaussian_count: 30000
+    elapsed_s: 10.388847386
+    peak_vram_bytes: 122502412
+    geometry_frozen: true
+    generated_fill_enabled: false
+    trained_ply_sha256: e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378
+    run_manifest_sha256: 45a96959f3f25658804ba2d2be335b785881d89e0767bb7f56bb4f60cbcb9c1d
+    metrics_sha256: 5ae68080a52a3f0aadf3e7967e3ed0f74f6856c0c71953c082410e79583896ec
+    heldout_real_evidence: false
+    bitwise_checkpoint_determinism_claim: false
+    status: accepted_registered_formal_training
+    formal: true
+
+  - id: formal_geometry_frozen_observed_canonical_30k
+    kind: registered_radeon_geometry_frozen_metric_canonical_gaussian_and_anchor_render
+    host_role: radeon-c
+    run_id: 20260804T205059Z_gaussian_render_e149f01_20260804
+    parent_id: formal_geometry_frozen_observed_train_30k
+    git_commit: e149f0145591b3e77470c6d3c558b961cb0e9d51
+    gpu_uid: "0x153f7d55778ab659"
+    gfx_target: gfx1100
+    vksplat_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+    config_sha256: 80ead530aa99e410410e639527836b6f22c7e73e217ccc191859f20aad2e33cd
+    dataset_sha256: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    parent_checkpoint_sha256: e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378
+    gaussian_count: 30000
+    canonical_ply_sha256: 7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706
+    cameras_sha256: 050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26
+    provenance_sha256: c2c95e0f7b5e51ffb5e9aeda7ecdc45229d75b4adf8683b09e6319c638795528
+    rendered_views: 4
+    image_size_wh: [1024, 1024]
+    elapsed_render_s: 1.17589826
+    peak_vram_bytes: 34884748
+    run_manifest_sha256: 4f9493f6e8fbbb0393d75522fed4a7c6b73d603fbb0b371d33c2e5c3ade720fa
+    metrics_sha256: d1ee2de51cca6c04fc83a092976b1e1a08f67802b44d9cf92ec282fd32f16ff4
+    render_manifest_sha256: d15c6b4b7e99308b61b69c456d1ffba3d081bbca34eb48ad14929cb270efd88c
+    robust_extent_m_p0001_p9999: [0.08854717016257346, 0.07456604391336441, 0.09022012353017926]
+    heldout_real_evidence: false
+    generated_fill_enabled: false
+    status: accepted_default_formal_appearance
+    formal: true
+
+  - id: amd_formal_geometry_frozen_orbit_contract_mismatch_negative
+    kind: exact_formal_asset_continuous_orbit_runtime_contract_failure
+    host_role: amd
+    run_id: 20260804T205629Z_217870_amd_gaussian_orbit_audit
+    parent_id: formal_geometry_frozen_observed_canonical_30k
+    failure: runtime_still_pinned_to_superseded_formal_asset_hashes
+    physical_output: false
+    status: failed_preserved_then_fixed_by_updating_default_hash_contract
+    formal: false
+
+  - id: amd_formal_geometry_frozen_continuous_orbit
+    kind: exact_formal_asset_continuous_360_degree_development_audit
+    host_role: amd
+    run_id: 20260804T205804Z_217937_amd_gaussian_orbit_audit
+    parent_id: formal_geometry_frozen_observed_canonical_30k
+    frames_without_duplicate_endpoint: 72
+    cycle_closure_rgb_mae: 0.0
+    border_contact_frames: 0
+    alpha_support_fraction_range: [0.439056396484375, 0.6280059814453125]
+    mean_render_ms: 25.108457046994708
+    metrics_sha256: 8d4da82b5781c8f2ebff7c9cff58153c65f66705f9b36374df10455e82a5c199
+    contact_sheet_sha256: 6f29b71f469680be1fdb76a7ed2ad629244541a09bbdd59e854a11cd3b44da12
+    video_sha256: 9037e9a2ec48ce171b6d092f59865420a59d3d2de0fe9aa470b70ea74aed97df
+    hashes_manifest_sha256: dbccb4ee60589fac44cbb31c20ca255da3b97d4b1cd17296999519a89b038559
+    visual_review: accepted_shell_continuity_with_four_view_side_blur_and_stretch_limit
+    heldout_real_evidence: false
+    physical_output: false
+    status: accepted_nonformal_numeric_and_visual_audit_of_exact_formal_asset
+    formal: false
+
+  - id: amd_formal_geometry_frozen_readonly_live_gate
+    kind: exact_formal_asset_readonly_dual_leader_genesis_gaussian_runtime_gate
+    host_role: amd
+    run_id: 20260804T205940Z_218151_amd_decoupled_gaussian_live_gate
+    parent_id: formal_geometry_frozen_observed_canonical_30k
+    duration_s: 12.0
+    control_effective_hz: 119.99944517238015
+    control_watchdog_events: 0
+    renderer_gaussian_successes: 186
+    renderer_gaussian_failures: 0
+    renderer_fallback_frames: 0
+    renderer_effective_hz: 7.667070936015435
+    renderer_gaussian_mean_ms: 24.088130872045713
+    gate_sha256: 8047fc7632a389831e00f89ec6693e8b4e87d5f48b7fdaf14ebd7c223e99fb7a
+    video_sha256: 2e679509db46cffefb4255281b37ce06f64dcdf629f9974b378e2fe6d96b5360
+    hashes_manifest_sha256: 7bf55d5bfdcfe47ae0b01c215afd1d9da5c065220aa2fa06b4c8c0d465a2e345
+    leader_action_span: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    physical_output: false
+    task_success_evaluated: false
+    status: accepted_runtime_integration_gate_final_task_recording_pending_operator_motion
+    formal: false
 
   - id: formal_observed_core_continuous_orbit_negative
     kind: continuous_360_degree_novel_angle_audit
@@ -412,6 +520,137 @@ artifacts:
     status: accepted_appearance_rejected_geometry
     formal: false
 
+  - id: vista4d_observed_orbit_baseline
+    kind: generated_appearance_video_completion_baseline
+    host_role: phi-amd-work
+    run_id: vista4d_object_20260804T142413Z_1397758_seed10027
+    input_frames: 49
+    image_size_wh: [672, 384]
+    runtime_s: 746
+    observed_gaussian_sha256: dc4de9a0a3f4dadf62a4c03c2be939a9b178d284254c9e833a2e19941e41793b
+    generated_video_sha256: 17c346276ceb01f54c32e0fc780bb297950afa27dad88064ce727291827c07f0
+    manifest_sha256: e88d2a4e429c56663cfad1b99ab292bf8e1c5eb25bf1938ab0b77bcd312c19bb
+    audit_metrics_sha256: 78cd91ac4dc23792347e0613e3871bae2351630f46c863dbbd2657c265f6d10b
+    accepted_roles: [appearance_video_baseline, vista4d_interface_proof]
+    rejected_roles: [metric_geometry, observed_core, heldout_evaluation]
+    status: accepted_nonformal_executable_baseline_mild_visual_gain
+    formal: false
+
+  - id: vista4d_sparse_real_keyframe_ablation
+    kind: generated_appearance_video_sparse_keyframe_ablation
+    host_role: phi-amd-work
+    run_id: vista4d_object_20260804T145734Z_1400842_seed10027
+    parent_id: vista4d_observed_orbit_baseline
+    real_keyframe_indices: [0, 12, 24, 37]
+    runtime_s: 726
+    generated_video_sha256: c982a4f15f251e763b19047af84bf63a8562b8cbdfaf306a2352df31e8122108
+    manifest_sha256: 48aa04a5ea79944435efc1a401da7493f218c53c294c9488c95cc5dfa29e8bc3
+    audit_metrics_sha256: 59c54f64e047f3031d875a33882d55eac8fcefc69caadfad97f906e86dbdb0cb
+    temporal_delta_residual_p95_baseline: 0.036972233839333055
+    temporal_delta_residual_p95_ablation: 0.09882413074374198
+    status: rejected_sparse_keyframe_source_identity_did_not_propagate
+    formal: false
+
+  - id: vista4d_surface_carrier_95mm
+    kind: complete_metric_surface_conditioning_proposal
+    host_role: amd
+    run_id: 20260804T153528Z_201147_amd_surface_carrier
+    vertices: 12078
+    triangles: 24044
+    extents_mm: [87.9380489, 74.0295057, 95.0]
+    four_view_silhouette_iou_mean: 0.7549688486
+    four_view_silhouette_iou_min: 0.7113338807
+    observed_vertex_fraction: 0.8212452393
+    fallback_vertex_fraction: 0.1787547607
+    rocm_fit_runtime_s: 10.5806
+    ply_sha256: 4bb613c66c39bdd7fd4be10e4035e0f224bdf015fcaf67fa359bdf827d96705b
+    manifest_sha256: c30186ef633f786995651dc3f5b4021f4cc04d2e4fb7aca8d04b991dbfc9d5de
+    hashes_manifest_sha256: 58fa132d803f54597563006df62d3cf24f4c82a403ee4e6c30aa3814968edd33
+    accepted_roles: [preserved_negative_control, geometry_prior_failure_analysis]
+    rejected_roles: [complete_geometry_prior, continuous_vista4d_mainline_source, observed_truth, collision_geometry, heldout_evaluation]
+    status: rejected_invalid_procedural_geometry_prior_preserved_for_ablation
+    formal: false
+
+  - id: vista4d_surface_carrier_mask_alignment
+    kind: observed_point_to_surface_carrier_mask_threshold_ablation
+    host_role: amd
+    run_id: 20260804T160852Z_201746_amd_vista4d_mask_alignment
+    tested_alpha_threshold_range: [0.001, 0.5]
+    baseline_mean_iou: 0.68555
+    selected_alpha_threshold: 0.5
+    selected_mean_iou: 0.70619
+    metrics_sha256: 4e0c8d91279ff316cbba497373037ad3d280368fc16d54790c3086db9566e45e
+    hashes_manifest_sha256: a65b7db6ef655f45849c88eda0cf44f1ae5474aa9abb8f706bebc8295b69ef2c
+    status: accepted_failure_measurement_not_a_candidate_promotion_gate
+    formal: false
+
+  - id: vista4d_surface_carrier_default_mask
+    kind: generated_appearance_video_surface_carrier_ablation
+    host_role: phi-amd-work
+    run_id: vista4d_object_20260804T154158Z_1404244_seed10027
+    seed: 10027
+    point_alpha_threshold: 0.001
+    generated_video_sha256: a85c93aecd70fcf61cb985c23d88a170ac858586667efad47f43851bfbd275da
+    manifest_sha256: e3c01d5f18ffb620eeb8809af4fbb6c620576ae029aac48ee20812957e886d23
+    audit_metrics_sha256: 037950f6e8d299da083b6ae710cbc429648d179c3ee0afb147633fb535bd04fd
+    source_silhouette_iou_mean: 0.82811
+    observed_rgb_mae_mean: 0.25952
+    source_rgb_mae_mean: 0.27525
+    closure_rgb_mae: 0.06006
+    status: rejected_depth_lift_fuzzy_overexposed_identity_drift
+    formal: false
+
+  - id: vista4d_surface_carrier_mask050_cfg300
+    kind: generated_appearance_video_surface_carrier_ablation
+    host_role: phi-amd-work
+    run_id: vista4d_object_20260804T161211Z_1407492_seed10027
+    seed: 10027
+    point_alpha_threshold: 0.5
+    cfg_scale: 3.0
+    generated_video_sha256: 3e2063f09915c03e6ad200ade2d228c3ca2689cb451cf357cb51e3c3610c1a3d
+    manifest_sha256: 28dd9fd54ddf49c10753601e4f50660065776fbbe7d8295014feb1d480951b05
+    audit_metrics_sha256: bdbf21f95f5c3bc15ed0ae4398acf957aae46f14f8d3714455ba69c0b648b27a
+    source_silhouette_iou_mean: 0.83728
+    observed_rgb_mae_mean: 0.29321
+    source_rgb_mae_mean: 0.28117
+    closure_rgb_mae: 0.05709
+    status: rejected_depth_lift_identity_worse_despite_temporal_background_gain
+    formal: false
+
+  - id: surface_carrier_genesis_glb_preview
+    kind: portable_mesh_conversion_and_genesis_visual_gate
+    host_role: amd
+    conversion_run_id: 20260804T164138Z_207112_amd_surface_carrier_glb
+    preview_run_id: 20260804T164150Z_207150_amd_surface_carrier_genesis_preview
+    glb_sha256: 3ac021c0a091081c6a03af3b016b9ce37978267ff4c4e6ebe5666d7b8fddad0f
+    conversion_manifest_sha256: 29dee3d29fafabf2b0975184c7ffb7802ae4659ff2ab47cd06fc40d0796aca1c
+    preview_metrics_sha256: 14d417367de44b94a02bd6dfa838e87bd5b2771778bb1f4f04bd9cf089fbb2a5
+    preview_image_sha256: 3579a247d1002e085cc5fa840c1739c2e11d64d1124930009d739feb7f933c5f
+    technical_load_passed: true
+    visual_review: rejected_color_breakup_and_faceting
+    installed_in_genesis: false
+    status: rejected_live_visual_fallback_preserved_negative_evidence
+    formal: false
+
+  - id: four_view_generation_input_v1
+    kind: geometry_free_four_observed_view_generator_contract
+    host_role: phi-amd-work
+    run_id: 20260804T171947Z_1412586_phi_four_view_input
+    parent_id: reviewed_m1_orbit_fixed
+    reviewed_manifest_sha256: 62e5bc9e6d1d88cc499eaf617a7de4bea9bf2041cbb42543299468516c9202a4
+    manifest_sha256: d348b0085bda2df4ac05db6c559cf44a1a8ad64fa2b22fe52b8aac2fd88c3c12
+    hashes_manifest_sha256: 25b6dab8b0c1e440228fbbeacdbf7a6a2602b727f77e7b39c8f72b959f2eeded
+    target_cameras_sha256: cc937110de7ebcd468bf0f5925b7154fa481e1a43a4ffe440ea5d528fe2da14f
+    observed_input_views: 4
+    seva_target_views: 49
+    hunyuan_named_views: [front, left, back, right]
+    inherited_geometry_input: null
+    procedural_geometry_allowed: false
+    accepted_roles: [seva_input, hunyuan3d_2mv_input, camera_contract]
+    rejected_roles: [observed_completion, heldout_evaluation, formal_metric]
+    status: accepted_nonformal_generation_input_contract_visual_qa_pass
+    formal: false
+
   - id: sharp_unisharp_direct_hybrid
     kind: generated_direct_appearance_donation_ablation
     host_role: phi-amd-work
@@ -621,16 +860,115 @@ artifacts:
     status: failed_repeat_confirms_manual_elbow_reposition_required
     formal: false
 
+  - id: observed_visual_hull_initialization_v1
+    kind: observed_mask_only_gaussian_geometry_initialization
+    host_role: radeon-c
+    gaussian_count: 30000
+    source_evidence: four_reviewed_real_masks_only
+    points_sha256: 1138a85221bf16a8ecd33304cf71ad12ef61a3e0d59c37d8b5092482ccd1ba2f
+    manifest_sha256: d9997ca5b1be4a48aacc47b11833aae17a369cc95132dff2b2a393658ef587c0
+    generated_geometry: false
+    status: accepted_nonformal_initializer
+    formal: false
+
+  - id: vista4d_hunyuan_seed10030_reshoot_v3
+    kind: generated_orbit_reshoot_identity_ablation
+    host_role: phi-amd-work
+    run_id: vista4d_object_20260804T193303Z_1426807_seed10027
+    conditioning_mesh_seed: 10030
+    audit_run_id: vista4d_audit_20260804T200147Z_1429181
+    audit_metrics_sha256: 97e35444a31335cebc6f9d68e42bfcd5f5ee6b2451d89581769cbf78d453952f
+    rejection_review_sha256: 47629db7c680e29d0208f89e498a0971a0c55ba78a387ef95abcf501da0f1081
+    silhouette_iou_mean: 0.4331888
+    silhouette_iou_min: 0.183667
+    observed_rgb_mae_mean: 0.3543
+    status: rejected_identity_drift_hash_quarantined
+    formal: false
+
+  - id: hunyuan_seed10030_observed_init_frozen15k
+    kind: independent_mesh_first_generated_appearance_ablation
+    host_role: radeon-f
+    dataset_run_id: learned_mesh_hybrid_colmap_20260804T200658Z_1430280
+    dataset_manifest_sha256: bbc1fe79af34fca2d0ab504fb15cc86166235cb52d5877aac2da6175ae183d46
+    training_run_id: vksplat_object_frozen_appearance_20260804T201026Z_61927
+    training_steps: 15000
+    gaussian_count: 30000
+    canonical_ply_sha256: 360fcde4d686fd2f9f347eaafbd8211576064ae9c0e2d3fd16c67b2b88ab083e
+    geometry_initializer_id: observed_visual_hull_initialization_v1
+    generated_geometry: false
+    status: completed_nonformal_fallback_ablation
+    formal: false
+
+  - id: hunyuan_seed10030_low_visibility_fill
+    kind: generated_appearance_visibility_partition
+    host_role: radeon-f
+    parent_id: hunyuan_seed10030_observed_init_frozen15k
+    visibility_histogram: {zero_real_views: 151, one_real_view: 1073, two_or_more_real_views: 28776}
+    retained_gaussians: 1224
+    max_observed_views: 1
+    ply_sha256: f198ceffcbb0e8e381d40535b4056c25f5598023b94a3b872fb1668e7f109afe
+    provenance_sha256: d38214b39c32b9be50fe7c6f7cfb6c44718dddf054831ccfcf232ffb457a03bd
+    status: accepted_optional_fill_default_off
+    formal: false
+
+  - id: hunyuan_seed10030_layered_preview
+    kind: observed_core_plus_toggleable_generated_fill
+    host_role: radeon-f
+    observed_gaussians: 30000
+    generated_fill_gaussians: 1224
+    total_gaussians: 31224
+    observed_core_preserved_bitwise: true
+    fused_ply_sha256: 30ea567c52c4942a80f3e7e999ab4e0854681684143ad4e830f1e177bb860b0c
+    layer_manifest_sha256: b0817c241a3ddc844cf7fb55b98540071f33ce9912dc0a53e9b0d8a21222ab74
+    comparison_metrics_sha256: 1a4d672561fbe3d36a612fff497a33ae88985914fcdfee6063bed4bbf2793b4a
+    orbit_mean_rgb_mae_vs_observed: 0.0016552784553805024
+    minimum_anchor_foreground_iou: 0.9925531763128237
+    generated_fill_effectiveness: inconclusive_without_heldout_real_views
+    status: accepted_nonformal_toggle_default_off
+    formal: false
+
+  - id: hunyuan_seed10030_layered_genesis_static
+    kind: genesis_layered_gaussian_static_registration_gate
+    host_role: amd
+    run_id: layered_fusion_genesis_static_run_20260804T203108Z_215958
+    parent_id: hunyuan_seed10030_layered_preview
+    runtime_bundle_manifest_sha256: e83d1f7ef582b5b1d9553e950704eca3bc2bf5fa007590849226f08c3ee2d145
+    metrics_sha256: 04c4c55a1e7ae3b7dafcd757c1593c8144eb25cf807b7ffbb3a33be3559fcd64
+    hash_index_sha256: ebab628843c85af6db6b9e58c858de99990190f71f0a7f33e1a22d001e1dddef
+    rendered_views: 8
+    renderer_failures: 0
+    renderer_fallbacks: 0
+    mean_render_ms: 23.318570994888432
+    gaussian_support_height_mm: 94.87315636493629
+    height_error_mm: 0.12684363506371144
+    physics_collision_geometry: independent_95mm_procedural_proxy
+    physical_output: false
+    status: accepted_nonformal_static_gate_default_off
+    formal: false
+
+  - id: seva_v1_1_primary_access_gate
+    kind: external_model_access_gate
+    host_role: phi-amd-work
+    code_commit: fe19948e
+    camera_contract_ready: true
+    audit_and_dataset_builders_ready: true
+    model_weights_present: false
+    stored_huggingface_credential_valid: false
+    secrets_recorded: false
+    status: blocked_on_authorized_model_access
+    formal: false
+
 validation:
-  scaffold_tests_collected: 201
-  scaffold_tests_passed: 195
-  scaffold_tests_skipped_dependency_specific: 6
+  scaffold_tests_collected: 249
+  scaffold_tests_passed: 236
+  scaffold_tests_skipped_dependency_specific: 13
   git_diff_check: passed
   formal_result_claim: observed_object_training_and_anchor_render_only
 
 open_gates:
+  - restore_authorized_seva_v1_1_model_access
+  - generate_audit_and_distill_seva_primary_orbit
   - capture_reserved_real_interanchor_heldout_views
-  - register_and_rerun_geometry_frozen_candidate_on_radeon_c
   - recorded_approach_grasp_handover_release_demo
   - heldout_real_capture_and_metrics
 deferred_gates:

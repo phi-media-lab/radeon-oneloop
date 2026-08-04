@@ -14,6 +14,8 @@ output_root=$4
 python_bin=$5
 vksplat_root=$6
 repo_root=$7
+expected_camera_count=${ONELOOP_VKSPLAT_EXPECTED_CAMERAS:-4}
+background=${ONELOOP_VKSPLAT_BACKGROUND:-1.0}
 render_script="$repo_root/gaussian/vksplat_render_ply.py"
 
 [[ -f "$ply" ]]
@@ -22,6 +24,14 @@ render_script="$repo_root/gaussian/vksplat_render_ply.py"
 [[ -x "$python_bin" ]]
 [[ -f "$vksplat_root/vksplat/simple_trainer.py" ]]
 [[ -f "$render_script" ]]
+[[ "$expected_camera_count" =~ ^[1-9][0-9]*$ ]]
+"$python_bin" - "$background" <<'PY'
+import math
+import sys
+value = float(sys.argv[1])
+if not math.isfinite(value) or not 0.0 <= value <= 1.0:
+    raise SystemExit("render background must be finite and in [0, 1]")
+PY
 
 script_path=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")
 run_id="vksplat_generated_fill_render_$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}"
@@ -76,6 +86,8 @@ XDG_RUNTIME_DIR="$xdg_runtime" timeout --signal=TERM --kill-after=15 300 \
   --output "$run_dir/render" \
   --vksplat-root "$vksplat_root" \
   --vksplat-commit "$vksplat_commit" \
+  --expected-camera-count "$expected_camera_count" \
+  --background "$background" \
   >"$run_dir/stdout.log" 2>"$run_dir/stderr.log"
 
 "$python_bin" - "$run_dir/manifest.json" "$run_id" "$ply" "$cameras" \

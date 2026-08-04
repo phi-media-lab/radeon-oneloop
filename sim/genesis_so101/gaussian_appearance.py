@@ -25,13 +25,13 @@ import numpy as np
 
 VKSPLAT_COMMIT = "e26c254938c81ff85998cd357a9e005e255d9b03"
 OBSERVED_CORE_PLY_SHA256 = (
-    "0e26b6c4f993a7052fb471ad84a1a98180b262c868a4b179ce19b294b288bd1a"
+    "7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706"
 )
 OBSERVED_CORE_CAMERAS_SHA256 = (
     "050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26"
 )
 OBSERVED_CORE_PROVENANCE_SHA256 = (
-    "80efa4f5a98070395844205afa663ee8ca2975eda21e720c3cf785dcfd52bd02"
+    "c2c95e0f7b5e51ffb5e9aeda7ecdc45229d75b4adf8683b09e6319c638795528"
 )
 OBSERVED_CORE_GAUSSIANS = 30_000
 
@@ -185,6 +185,9 @@ class ObservedCoreAsset:
     expected_provenance_sha256: str = OBSERVED_CORE_PROVENANCE_SHA256
     expected_gaussians: int = OBSERVED_CORE_GAUSSIANS
     expected_formal: bool = True
+    expected_provenance_schema: str = "radeon_oneloop.observed_core_canonicalization.v1"
+    expected_provenance_class: str = "observed_core_candidate"
+    required_observed_only_training: bool = True
 
     def validate(self) -> dict[str, Any]:
         paths = (self.ply_path, self.cameras_path, self.provenance_path)
@@ -209,14 +212,16 @@ class ObservedCoreAsset:
         if mismatches:
             raise GaussianAppearanceError(f"observed-core hash mismatch: {mismatches}")
         provenance = json.loads(self.provenance_path.read_text(encoding="utf-8"))
-        if provenance.get("schema_version") != "radeon_oneloop.observed_core_canonicalization.v1":
+        if provenance.get("schema_version") != self.expected_provenance_schema:
             raise GaussianAppearanceError("unsupported observed-core provenance schema")
         if provenance.get("output_ply_sha256") != hashes["ply"]:
             raise GaussianAppearanceError("provenance does not bind the canonical PLY")
         if provenance.get("gaussian_count") != self.expected_gaussians:
             raise GaussianAppearanceError("unexpected observed-core Gaussian count")
-        if provenance.get("observed_only_training") is not True:
-            raise GaussianAppearanceError("default appearance is not observed-only")
+        if provenance.get("observed_only_training") is not self.required_observed_only_training:
+            raise GaussianAppearanceError("appearance training class does not match the asset role")
+        if provenance.get("provenance_class") != self.expected_provenance_class:
+            raise GaussianAppearanceError("appearance provenance class does not match the asset role")
         if provenance.get("formal") is not self.expected_formal:
             raise GaussianAppearanceError(
                 "observed-core formal status does not match the pinned asset class"
@@ -631,4 +636,37 @@ def nonformal_candidate_asset(root: Path) -> ObservedCoreAsset:
         expected_provenance_sha256=sha256_file(provenance_path),
         expected_gaussians=gaussian_count,
         expected_formal=False,
+    )
+
+
+def layered_preview_asset(root: Path) -> ObservedCoreAsset:
+    """Load an explicit generated-fill preview without relabeling it observed-only."""
+
+    resolved = root.resolve()
+    ply = resolved / "appearance_fused_preview.ply"
+    cameras = resolved / "cameras_observed.json"
+    provenance_path = resolved / "appearance_fused_preview.provenance.json"
+    missing = [str(path) for path in (ply, cameras, provenance_path) if not path.is_file()]
+    if missing:
+        raise GaussianAppearanceError(f"layered-preview files are missing: {missing}")
+    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    if provenance.get("formal") is not False:
+        raise GaussianAppearanceError("layered preview requires formal=false provenance")
+    if provenance.get("eligible_for_heldout_real_metrics") is not False:
+        raise GaussianAppearanceError("layered preview cannot be held-out-real evidence")
+    gaussian_count = provenance.get("gaussian_count")
+    if not isinstance(gaussian_count, int) or gaussian_count <= 0:
+        raise GaussianAppearanceError("layered-preview Gaussian count must be positive")
+    return ObservedCoreAsset(
+        ply_path=ply,
+        cameras_path=cameras,
+        provenance_path=provenance_path,
+        expected_ply_sha256=sha256_file(ply),
+        expected_cameras_sha256=sha256_file(cameras),
+        expected_provenance_sha256=sha256_file(provenance_path),
+        expected_gaussians=gaussian_count,
+        expected_formal=False,
+        expected_provenance_schema="radeon_oneloop.layered_gaussian_provenance.v1",
+        expected_provenance_class="confidence_fused_candidate",
+        required_observed_only_training=False,
     )

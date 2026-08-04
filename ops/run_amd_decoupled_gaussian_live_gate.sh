@@ -32,6 +32,7 @@ presenter_jpeg_quality=${ONELOOP_PRESENTER_JPEG_QUALITY:-90}
 show_genesis_viewer=${ONELOOP_SHOW_GENESIS_VIEWER:-0}
 record_video=${ONELOOP_RECORD_VIDEO:-0}
 candidate_nonformal=${ONELOOP_LIVE_CANDIDATE_NONFORMAL:-0}
+generated_fill_enabled=${ONELOOP_GENERATED_FILL_ENABLED:-0}
 run_id="$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}_amd_decoupled_gaussian_live_gate"
 run_dir="$run_root/$run_id"
 consumer_dir="$run_dir/consumer"
@@ -43,13 +44,26 @@ renderer_dir="$run_dir/renderer"
 [[ -x "$rocm_python" ]]
 [[ -x "$lerobot_python" ]]
 [[ -f "$so101_assets/so101_new_calib.xml" ]]
-[[ -f "$observed_core/appearance_observed_canonical.ply" ]]
 [[ -d "$vksplat_root/vksplat/shader" ]]
 [[ "$fault_exit_after_frames" =~ ^[0-9]+$ ]]
 [[ "$show_presenter" == 0 || "$show_presenter" == 1 ]]
 [[ "$show_genesis_viewer" == 0 || "$show_genesis_viewer" == 1 ]]
 [[ "$record_video" == 0 || "$record_video" == 1 ]]
 [[ "$candidate_nonformal" == 0 || "$candidate_nonformal" == 1 ]]
+[[ "$generated_fill_enabled" == 0 || "$generated_fill_enabled" == 1 ]]
+if [[ "$generated_fill_enabled" == 1 && "$candidate_nonformal" == 1 ]]; then
+  printf '%s\n' 'layered preview and generic nonformal candidate modes are mutually exclusive' >&2
+  exit 64
+fi
+if [[ "$generated_fill_enabled" == 1 ]]; then
+  appearance_ply="$observed_core/appearance_fused_preview.ply"
+  [[ -f "$observed_core/appearance_fused_preview.provenance.json" ]]
+else
+  appearance_ply="$observed_core/appearance_observed_canonical.ply"
+  [[ -f "$observed_core/provenance.json" ]]
+fi
+[[ -f "$appearance_ply" ]]
+[[ -f "$observed_core/cameras_observed.json" ]]
 [[ "$presenter_host" == 127.0.0.1 || "$presenter_host" == localhost || "$presenter_host" == ::1 ]]
 [[ "$presenter_port" =~ ^[0-9]+$ ]] && (( presenter_port >= 1 && presenter_port <= 65535 ))
 [[ "$presenter_jpeg_quality" =~ ^[0-9]+$ ]] && (( presenter_jpeg_quality >= 50 && presenter_jpeg_quality <= 100 ))
@@ -121,9 +135,9 @@ printf '%s\n' \
   "candidate_nonformal: $candidate_nonformal" \
   'leader_bus_mode: read_only' \
   'physical_output: false' \
-  'generated_fill_enabled: false' \
+  "generated_fill_enabled: $generated_fill_enabled" \
   "fault_exit_after_frames: $fault_exit_after_frames" \
-  "ply_sha256: $(sha256sum "$observed_core/appearance_observed_canonical.ply" | awk '{print $1}')" \
+  "ply_sha256: $(sha256sum "$appearance_ply" | awk '{print $1}')" \
   >"$run_dir/manifest.yaml"
 
 renderer_args=(
@@ -149,6 +163,9 @@ if [[ "$record_video" == 1 ]]; then
 fi
 if [[ "$candidate_nonformal" == 1 ]]; then
   renderer_args+=(--candidate-nonformal)
+fi
+if [[ "$generated_fill_enabled" == 1 ]]; then
+  renderer_args+=(--layered-preview)
 fi
 if (( fault_exit_after_frames > 0 )); then
   renderer_args+=(--fault-exit-after-frames "$fault_exit_after_frames")
@@ -249,7 +266,7 @@ fi
 "$rocm_python" - "$consumer_dir/metrics.json" "$renderer_dir/metrics.json" \
   "$run_dir/publisher.log" "$run_dir/gate.json" "$renderer_dir/FAULT_INJECTED.json" \
   "$fault_exit_after_frames" "$renderer_status" "$show_presenter" \
-  "$candidate_nonformal" <<'PY'
+  "$candidate_nonformal" "$generated_fill_enabled" <<'PY'
 import json, sys
 from pathlib import Path
 
@@ -258,6 +275,7 @@ fault_frames = int(sys.argv[6])
 renderer_status = int(sys.argv[7])
 show_presenter = bool(int(sys.argv[8]))
 candidate_nonformal = bool(int(sys.argv[9]))
+generated_fill_enabled = bool(int(sys.argv[10]))
 consumer = json.loads(consumer_path.read_text())
 publisher_text = publisher_path.read_text()
 decoder = json.JSONDecoder()
@@ -300,6 +318,9 @@ else:
         "renderer_asset_mode_matches_request": (
             renderer["candidate_nonformal"] is candidate_nonformal
         ),
+        "renderer_layered_mode_matches_request": (
+            renderer["layered_preview"] is generated_fill_enabled
+        ),
     })
     if show_presenter:
         checks.update({
@@ -324,6 +345,7 @@ report = {
     "render_effective_hz": render_effective_hz,
     "appearance_successes": appearance_successes,
     "appearance_failures": appearance_failures,
+    "generated_fill_enabled": generated_fill_enabled,
     "physical_output": False,
 }
 output_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")

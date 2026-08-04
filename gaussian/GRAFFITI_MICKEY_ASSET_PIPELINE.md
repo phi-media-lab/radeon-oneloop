@@ -282,10 +282,50 @@ front of any non-source real surface. The current v2 result contains 229,576
 Gaussians and is accepted for **real-photo refinement and observed-visibility
 masking**, not as a final appearance asset.
 
-Hunyuan3D-2mv remains an optional future coherent-mesh comparison; it is not
-currently installed and is not on the blocking path. A pose-free Gaussian
-model such as NoPoSplat or FreeSplatter is another future comparison.
+The third implemented generation interface is **Vista4D**. It consumes a
+49-frame source video, a point-grounded render, alpha/motion masks, and target
+cameras and emits a generated appearance video.  It does not emit a completed
+PLY or mesh and the released interface does not directly accept four still
+images. The first same-source Gaussian baseline completed on MI300X and is
+accepted only as an executable reshooting-interface proof. A fixed-
+seed A/B that inserted the four reviewed real views at frames 0/12/24/37
+preserved those frames but failed to propagate their detail between anchors
+and increased temporal p95 residual from 0.03697 to 0.09882.  Sparse real
+keyframes are therefore a preserved negative control.
+
+The subsequent procedural 95 mm surface-carrier branch is also a negative
+control. Its silhouette fit and real-color coverage are measurements of the
+carrier, not evidence that the photographed object's geometry was recovered.
+Because the distorted procedural geometry directly controls depth, silhouette,
+and point conditioning, neither it nor its Vista4D derivatives may initialize
+the final mesh or Gaussian. Portable Genesis PLY/GLB probes also fail the
+visual gate.
+
+The corrected mainline takes the four reviewed real photographs as the only
+identity input. Stable Virtual Camera v1.1 is the preferred camera-controlled
+orbit-video generator. Hunyuan3D-2mv is a separately gated multi-candidate
+fallback, never an automatically trusted complete-mesh prior. Four-view
+alignment, continuous-orbit topology review, and private HIL identity review
+must all pass before optional Vista4D reshooting or Gaussian distillation.
+NoPoSplat or FreeSplatter remains an optional comparison.
+
+The original Hunyuan seed `10027` and all descendants are quarantined by exact
+run IDs, manifest/asset hashes, and hybrid dataset hash. This includes its
+aligned and real-projected mesh, the derived Vista4D video, and the 5k/15k
+VkSplat runs. Numeric convergence cannot rehabilitate a rejected geometry
+prior. The replacement seed sweep `10028`/`10029`/`10030` starts directly from
+the four real images. Seed `10030` is the current conditioning-only selection;
+the other two are preserved as valid but dominated candidates.
 TRELLIS-family models likewise remain optional rather than the default.
+
+The executed seed-`10030` fallback does not use the mesh as Gaussian geometry.
+It initializes 30,000 frozen Gaussians from the four observed masks, fits only
+appearance, and partitions the result by visibility in the four real cameras.
+Only 1,224 Gaussians visible in at most one real anchor survive as a generated
+fill layer; 28,776 overlapping observed support are rejected. The fused
+31,224-Gaussian preview preserves the observed core bit-for-bit and is accepted
+only as a default-off nonformal toggle. Its separate Vista4D reshoot is
+quarantined for front-identity persistence and rear/ear drift.
 
 1. Generate multiple deterministic candidates. For SHARP, treat the four
    input views as four independently generated Gaussian hypotheses; for a
@@ -475,15 +515,42 @@ The following additions turn this plan into an executable pipeline:
 10. `gaussian/canonicalize_vksplat_ply.py` and
     `gaussian/record_observed_canonical_audit.py` — exact inverse VkSplat
     dataparser similarity and immutable four-direction canonical render audit.
-11. `gaussian/align_object_metric.py` — canonical-axis and product-dimension
-   transform with validation report.
-12. `sim/genesis_so101/gaussian_appearance.py` — Nyx capability probe,
-   VkSplat-composite path and GLB fallback behind one binding interface.
-13. `configs/graffiti_mickey_asset.yaml` — pinned inputs, thresholds, machine
-   role, formal flag and output locations.
-14. Unit tests for provenance leakage, mirror rejection, generated-region
+11. `gaussian/prepare_four_view_generation.py`,
+    `ops/run_phi_prepare_four_view_generation.sh`, and
+    `gaussian/FOUR_VIEW_GENERATIVE_REAL2SIM.md` — geometry-free, hash-bound
+    four-observed-view inputs for SEVA, Hunyuan3D-2mv, and the downstream
+    Vista4D handoff.
+12. `gaussian/prepare_vista4d_object_input.py`,
+    `ops/run_amd_vista4d_object_input.sh`,
+    `ops/run_phi_vista4d_object_completion.sh`, and
+    `gaussian/audit_vista4d_completion.py` — exact Vista4D object contract,
+    fixed-seed MI300X generation, and temporal/identity audit with generated
+    content excluded from formal and held-out-real evidence.
+13. `gaussian/completion_candidate.py` — immutable observed/generated PLY,
+    confidence, source-label, transform, and hash contract for a later
+    Vista4D-depth lifting stage. The current Vista4D audits do not authorize
+    this stage.
+14. `gaussian/surface_carrier.py`,
+    `gaussian/audit_vista4d_mask_alignment.py`, and
+    `gaussian/export_surface_carrier_glb.py` — bounded AMD-ROCm carrier fit,
+    exact support-threshold measurement, and portable visual conversion. The
+    GLB path is retained as rejected visual evidence, not a live default.
+15. `gaussian/align_object_metric.py` — canonical-axis and product-dimension
+    transform with validation report.
+16. `sim/genesis_so101/gaussian_appearance.py` — Nyx capability probe,
+    VkSplat-composite path and GLB fallback behind one binding interface.
+17. `configs/graffiti_mickey_asset.yaml` — pinned inputs, thresholds, machine
+    role, formal flag and output locations.
+18. Unit tests for provenance leakage, mirror rejection, generated-region
     masks, metric alignment, quaternion/covariance synchronization, PLY
     decoding and renderer fallback.
+19. `gaussian/export_observed_initialization.py`,
+    `gaussian/prune_generated_fill_visibility.py`, and
+    `gaussian/fuse_gaussian_layers.py` — observed-only geometry initialization,
+    real-camera visibility partitioning, and bit-preserving layered preview.
+20. `gaussian/audit_layered_gaussian_fusion.py` and the explicit Genesis
+    `layered-preview` loader — no-harm A/B, default-off runtime binding, and
+    independent-collision enforcement.
 
 ## 8. Execution order and exit criteria
 
@@ -496,9 +563,11 @@ Milestones:
    canonical identity contract pass P0/P1.
 2. **M2 — observed twin:** A1 and A2 evaluated; best real-only Gaussian passes
    P2/P3 and is metric aligned.
-3. **M3 — optional completion:** MI300X SHARP geometry and UniSHARP appearance
-   proposals are ranked independently; Hunyuan remains optional. A3 branches
-   enter fusion only if their own P4/P5 gates pass.
+3. **M3 — learned completion:** SEVA multi-view video is preferred; externally
+   reviewed Hunyuan3D-2mv candidates are a fallback. Every proposal is aligned
+   to the four reviewed observations and screened over a continuous orbit
+   before optional Vista4D reshooting. A3 branches enter fusion only if their
+   own P4/P5 gates pass and no quarantine token appears in their lineage.
 4. **M4 — dynamic demo:** physics-driven appearance runs in Genesis with
    correct occlusion and safe fallback.
 5. **M5 — formal package:** the selected asset path is rerun on `radeon-c`
@@ -518,4 +587,7 @@ generated content, physics priors, and formal Radeon measurements.
 - NoPoSplat: <https://github.com/cvg/NoPoSplat>
 - FreeSplatter: <https://openaccess.thecvf.com/content/ICCV2025/papers/Xu_FreeSplatter_Pose-free_Gaussian_Splatting_for_Sparse-view_3D_Reconstruction_ICCV_2025_paper.pdf>
 - Hunyuan3D-2 and Hunyuan3D-2mv: <https://github.com/Tencent-Hunyuan/Hunyuan3D-2>
+- Stable Virtual Camera: <https://github.com/Stability-AI/stable-virtual-camera>
+- AIHoloImager staged mesh workflow: <https://github.com/gongminmin/AIHoloImager>
+- Vista4D video reshooting/completion: <https://github.com/Eyeline-Labs/Vista4D>
 - Genesis Nyx renderer: <https://genesis-world.readthedocs.io/en/latest/user_guide/rendering/nyx_renderer.html>

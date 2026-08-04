@@ -1,0 +1,80 @@
+{
+  "artifact_hashes": {
+    "all_front_cam_contact_sheet_sha256": "191af8c936a6c63c6aedf12524c7778b81b3b5eb079d8f6e1a8c2c5e25a156cd",
+    "all_hand_cam_contact_sheet_sha256": "5e87055483101a339dcabb83b2203b97dfff8dce1960d97ff7b34a84b138fa4d",
+    "frames_jsonl_sha256": "e516888501d5b47c34ee13420df23065ee27e734e081448989a06bc635bfbf13",
+    "hashes_sha256": "3263e11d12627cb8e471435adc48e278c20d47370d83e78c286a3f09302dc216",
+    "manifest_sha256": "b1e41cdb5752d99d622577d47f9d731c353a4ce05a3d4501457be84c5f1880e4"
+  },
+  "coverage": {
+    "front_cam": {
+      "observed_regions": [
+        "task_space silhouette"
+      ],
+      "pose_status": "dynamic_object_pose_unknown",
+      "quality": "small_and_robot_occluded"
+    },
+    "hand_cam": {
+      "observed_regions": [
+        "rear_top_plush",
+        "manufacturer_tag",
+        "cyan_ear",
+        "contact_deformation"
+      ],
+      "pose_status": "moving_wrist_hand_eye_metric_gate_failed",
+      "quality": "identity_useful_but_not_calibrated"
+    },
+    "missing_or_untrusted_regions": [
+      "underside",
+      "clean_intercardinal_sides",
+      "calibrated_elevated_orbit"
+    ]
+  },
+  "dataset_info_sha256": "e198927b1fc7f0d7566e5a4b622872ba3f2a0bafa58010f5d900441e6debcb3d",
+  "formal": false,
+  "generated_content_present": false,
+  "image_count": 576,
+  "policy": {
+    "eligible_for_generated_training": false,
+    "eligible_for_heldout_metric_novel_view": false,
+    "eligible_for_metric_geometry": false,
+    "eligible_for_private_2d_identity_review": true,
+    "mask_decision": "do_not_invent_complete_object_masks_for_robot_occluded_dynamic_frames",
+    "raw_data_redistributed": false
+  },
+  "reviewed_success_episode_count": 24,
+  "run_id": "20260804T175724Z_208999_amd_hil_object_coverage",
+  "schema_version": "radeon_oneloop.hil_object_coverage_review.v1",
+  "splits": {
+    "deformation_reference": [
+      {
+        "camera": "hand_cam",
+        "episode_index": 0,
+        "frame_index": 644,
+        "image_sha256": "b09446ea047888532a39651dca7fb16fc2cc565e5ab34351b8f7ba96f0e2b149",
+        "phase_index": 5,
+        "view_label": "rear_top_gripper_occluded"
+      }
+    ],
+    "generated_training": [],
+    "private_identity_holdout": [
+      {
+        "camera": "hand_cam",
+        "episode_index": 12,
+        "frame_index": 128,
+        "image_sha256": "e3f9f078e5ff3b0f7db623f1125692085ed7594db24b7dd1e9cf2a1e42780d4f",
+        "phase_index": 1,
+        "view_label": "rear_top_tag_cyan_ear"
+      },
+      {
+        "camera": "hand_cam",
+        "episode_index": 10,
+        "frame_index": 256,
+        "image_sha256": "a6d4fe8268f3e300c8c3d4d115f1e2bf764a39da2af0d8a892956180d3dbe85a",
+        "phase_index": 2,
+        "view_label": "rear_top_tag_cyan_ear"
+      }
+    ]
+  },
+  "visual_review_status": "accepted_with_role_restrictions"
+}

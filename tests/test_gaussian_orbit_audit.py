@@ -11,6 +11,10 @@ from sim.genesis_so101.gaussian_orbit_audit import (
     scaled_intrinsic,
 )
 from sim.genesis_so101.gaussian_appearance import nonformal_candidate_asset
+from gaussian.prepare_vista4d_object_input import (
+    load_surface_carrier_source,
+    vista4d_camera_track,
+)
 
 
 class GaussianOrbitAuditTests(unittest.TestCase):
@@ -51,6 +55,23 @@ class GaussianOrbitAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "positive"):
             canonical_orbit_extrinsic(0.0, distance_m=0.0)
 
+    def test_vista4d_camera_conversion_recovers_canonical_render_orbit(self):
+        intrinsic = np.asarray(((500.0, 0.0, 335.5), (0.0, 500.0, 191.5), (0, 0, 1)))
+        cameras, intrinsics = vista4d_camera_track(
+            frames=49,
+            intrinsic_3x3=intrinsic,
+            distance_m=0.3,
+        )
+        self.assertEqual(cameras.shape, (49, 4, 4))
+        self.assertEqual(intrinsics.shape, (49, 4))
+        conversion = np.diag([-1.0, -1.0, 1.0, 1.0])
+        np.testing.assert_allclose(
+            conversion @ cameras[0],
+            np.linalg.inv(canonical_orbit_extrinsic(0.0)),
+            atol=1e-12,
+        )
+        np.testing.assert_allclose(intrinsics[0], [500.0, 500.0, 335.5, 191.5])
+
     def test_candidate_loader_requires_nonformal_self_bound_provenance(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -84,6 +105,40 @@ class GaussianOrbitAuditTests(unittest.TestCase):
             provenance.write_text(json.dumps(value), encoding="utf-8")
             with self.assertRaisesRegex(RuntimeError, "formal=false"):
                 nonformal_candidate_asset(root)
+
+    def test_surface_carrier_loader_rejects_unaccepted_manifest_before_pixels(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest = root / "manifest.json"
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "radeon_oneloop.surface_carrier.v1",
+                        "formal": False,
+                        "accepted_numeric": False,
+                        "visual_review_required": True,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (root / "hashes.sha256").write_text("", encoding="utf-8")
+            (root / "DONE").write_text(
+                json.dumps(
+                    {
+                        "manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
+                        "hashes_sha256": hashlib.sha256(b"").hexdigest(),
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "historical numeric record"):
+                load_surface_carrier_source(
+                    root,
+                    width=672,
+                    height=384,
+                    target_c2w=np.zeros((49, 4, 4)),
+                    target_intrinsics=np.zeros((49, 4)),
+                )
 
 
 if __name__ == "__main__":

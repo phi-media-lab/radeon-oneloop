@@ -20,6 +20,7 @@ from radeon_oneloop.contracts import CAMERA_KEYS
 from .gaussian_appearance import (
     SafeAppearanceBinding,
     VkSplatAppearanceRenderer,
+    layered_preview_asset,
     nonformal_candidate_asset,
     observed_core_asset,
 )
@@ -109,6 +110,11 @@ def main() -> None:
         help="Use a self-bound formal=false candidate instead of the pinned default.",
     )
     parser.add_argument(
+        "--layered-preview",
+        action="store_true",
+        help="Use an explicit formal=false observed-core plus generated-fill preview.",
+    )
+    parser.add_argument(
         "--fault-exit-after-frames",
         type=int,
         default=0,
@@ -127,6 +133,8 @@ def main() -> None:
         raise ValueError("present-http-port must be between 0 and 65535")
     if not 50 <= args.present_jpeg_quality <= 100:
         raise ValueError("present-jpeg-quality must be between 50 and 100")
+    if args.candidate_nonformal and args.layered_preview:
+        raise ValueError("candidate-nonformal and layered-preview are mutually exclusive")
     args.output.mkdir(parents=True, exist_ok=True)
     import imageio.v3 as iio
 
@@ -158,11 +166,12 @@ def main() -> None:
             seed=args.seed,
             show_viewer=False,
         )
-        asset = (
-            nonformal_candidate_asset(args.observed_core_root)
-            if args.candidate_nonformal
-            else observed_core_asset(args.observed_core_root)
-        )
+        if args.layered_preview:
+            asset = layered_preview_asset(args.observed_core_root)
+        elif args.candidate_nonformal:
+            asset = nonformal_candidate_asset(args.observed_core_root)
+        else:
+            asset = observed_core_asset(args.observed_core_root)
         asset_audit = asset.validate()
         binding = SafeAppearanceBinding.create(
             lambda: VkSplatAppearanceRenderer(asset, args.vksplat_root)
@@ -181,6 +190,7 @@ def main() -> None:
                     "status": "ready",
                     "asset": asset_audit,
                     "candidate_nonformal": args.candidate_nonformal,
+                    "layered_preview": args.layered_preview,
                     "binding": binding.metrics(),
                     "presenter": presenter.metrics() if presenter is not None else None,
                     "physical_output": False,
@@ -280,6 +290,7 @@ def main() -> None:
             "formal": False,
             "asset": asset_audit,
             "candidate_nonformal": args.candidate_nonformal,
+            "layered_preview": args.layered_preview,
             "accepted": accepted,
             "duration_s": args.duration_s,
             "elapsed_s": elapsed_s,

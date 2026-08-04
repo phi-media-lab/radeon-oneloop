@@ -2,7 +2,7 @@
 set -euo pipefail
 
 usage() {
-  printf 'usage: %s <dataset> <output-root> <python-bin> <vksplat-root> <repo-root> <steps> <smoke|sparse_static|mcmc>\n' "$0" >&2
+  printf 'usage: %s <dataset> <output-root> <python-bin> <vksplat-root> <repo-root> <steps> <smoke|sparse_static|frozen_appearance|mcmc>\n' "$0" >&2
   exit 64
 }
 
@@ -14,15 +14,25 @@ vksplat_root=$4
 repo_root=$5
 steps=$6
 mode=$7
+eval_interval=${ONELOOP_VKSPLAT_EVAL_INTERVAL:-8}
+min_images=${ONELOOP_VKSPLAT_MIN_IMAGES:-4}
 trainer="$repo_root/gaussian/vksplat_train.py"
+vksplat_commit=${vksplat_root##*/vksplat-}
 
 [[ -d "$dataset" ]]
 [[ -f "$dataset/DONE" ]]
 [[ -x "$python_bin" ]]
 [[ -f "$vksplat_root/vksplat/simple_trainer.py" ]]
+[[ "$vksplat_commit" =~ ^[0-9a-f]{40}$ ]]
 [[ -f "$trainer" ]]
 [[ "$steps" =~ ^[1-9][0-9]*$ ]]
-[[ "$mode" == smoke || "$mode" == sparse_static || "$mode" == mcmc ]] || usage
+[[ "$eval_interval" =~ ^[0-9]+$ ]]
+(( eval_interval > 1 ))
+[[ "$min_images" =~ ^[1-9][0-9]*$ ]]
+[[ "$mode" == smoke || "$mode" == sparse_static || "$mode" == frozen_appearance || "$mode" == mcmc ]] || usage
+
+PYTHONPATH="$repo_root" "$python_bin" -m gaussian.provenance_quarantine \
+  --check-json "$dataset/dataset_manifest.json"
 
 script_path=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")
 run_id="vksplat_object_${mode}_$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}"
@@ -52,6 +62,52 @@ trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
+"$python_bin" - "$dataset" "$eval_interval" "$mode" <<'PY'
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+eval_interval = int(sys.argv[2])
+mode = sys.argv[3]
+manifest_path = root / "dataset_manifest.json"
+done_path = root / "DONE"
+manifest = json.loads(manifest_path.read_text())
+done = json.loads(done_path.read_text())
+if done.get("manifest_sha256") != hashlib.sha256(manifest_path.read_bytes()).hexdigest():
+    raise SystemExit("dataset DONE does not bind manifest")
+generated_dataset_schemas = {
+    "radeon_oneloop.hybrid_pseudoview_colmap_dataset.v1",
+    "radeon_oneloop.seva_pseudoview_colmap_dataset.v1",
+}
+if manifest.get("schema_version") in generated_dataset_schemas:
+    split = manifest.get("vksplat_split_contract", {})
+    if split.get("recommended_eval_interval") != eval_interval:
+        raise SystemExit("generated dataset eval interval differs from its split contract")
+    names = sorted(path.name for path in (root / "images").glob("*.png"))
+    if not names or names[0] != split.get("lexicographically_first_eval_image"):
+        raise SystemExit("generated dataset eval probe ordering changed")
+    if not split.get("all_unique_real_anchors_train") or not split.get(
+        "eval_probe_is_generated_duplicate"
+    ):
+        raise SystemExit("generated dataset weakened its real-anchor split boundary")
+    initial = manifest.get("initial_points", {})
+    if initial.get("source") != "observed_real_mask_CPU_visual_hull":
+        raise SystemExit("generated dataset does not initialize from observed geometry")
+    if initial.get("generated_geometry_prior") is not False:
+        raise SystemExit("generated dataset illegally initializes from generated geometry")
+    if mode != "frozen_appearance":
+        raise SystemExit("generated pseudo-view datasets require frozen_appearance mode")
+    profile = manifest.get("required_training_profile", {})
+    if profile and (
+        profile.get("freeze_geometry") is not True
+        or profile.get("disable_refinement") is not True
+        or profile.get("keep_output_as_generated_fill_layer") is not True
+    ):
+        raise SystemExit("generated dataset training profile was weakened")
+PY
+
 exec 9>/tmp/radeon-oneloop-gpu0.lock
 if ! flock -n 9; then
   printf '%s\n' 'GPU0 is locked by another Radeon OneLoop job' >&2
@@ -78,9 +134,9 @@ command=(
   --image-dir images
   --mask-dir masks
   --sparse-dir sparse/0
-  --min-images 4
+  --min-images "$min_images"
   --steps "$steps"
-  --eval-interval 8
+  --eval-interval "$eval_interval"
   --host-role radeon_f_gpu0_gfx1100_nonformal
 )
 case "$mode" in
@@ -89,6 +145,9 @@ case "$mode" in
     ;;
   sparse_static)
     command+=(--strategy default --freeze-higher-sh --disable-refinement)
+    ;;
+  frozen_appearance)
+    command+=(--strategy default --freeze-higher-sh --freeze-geometry --disable-refinement)
     ;;
   mcmc)
     command+=(--strategy mcmc --freeze-higher-sh --scale-reg 0.01 --opacity-reg 0.01)
@@ -102,12 +161,13 @@ finished_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 "$python_bin" - \
   "$run_dir/manifest.json" "$run_id" "$dataset" "$script_path" "$trainer" \
   "$started_utc" "$finished_utc" "$((finished_epoch - started_epoch))" \
-  "$steps" "$mode" "$train_dir/oneloop_metrics.json" <<'PY'
+  "$steps" "$mode" "$eval_interval" "$min_images" "$vksplat_commit" "$train_dir/oneloop_metrics.json" <<'PY'
 import hashlib, json, sys
 from pathlib import Path
 (
     manifest_path, run_id, dataset, runner, trainer, started_utc,
-    finished_utc, runtime_s, steps, mode, metrics_path,
+    finished_utc, runtime_s, steps, mode, eval_interval, min_images,
+    vksplat_commit, metrics_path,
 ) = sys.argv[1:]
 
 def sha256(path):
@@ -128,10 +188,14 @@ value = {
     "host_role": "radeon_f_gpu0_gfx1100_nonformal",
     "mode": mode,
     "steps": int(steps),
+    "eval_interval": int(eval_interval),
+    "min_images": int(min_images),
     "started_utc": started_utc,
     "finished_utc": finished_utc,
     "runtime_s": int(runtime_s),
     "dataset_manifest_sha256": sha256(dataset_manifest),
+    "dataset_hash": metrics["dataset"]["dataset_hash"],
+    "vksplat_commit": vksplat_commit,
     "runner_sha256": sha256(runner),
     "trainer_sha256": sha256(trainer),
     "metrics_sha256": sha256(metrics_path),

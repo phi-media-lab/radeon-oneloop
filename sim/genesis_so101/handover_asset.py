@@ -324,6 +324,55 @@ def build_visual_parts(
     return parts
 
 
+def build_surface_carrier_parts(spec: HandoverObjectSpec) -> list[MeshPart]:
+    """Build the complete appearance carrier used by the Real2Sim pipeline.
+
+    Unlike the presentation-only display proxy, the strap and Mickey-head
+    ring are laid against the rear (negative Y) surface.  This matches the
+    reviewed rear/side photographs and keeps the complete carrier inside the
+    95 mm object-height contract.  Collision geometry intentionally continues
+    to omit these thin accessories.
+    """
+
+    parts = build_visual_parts(spec, include_accessories=False)
+    rear_y = -0.0415
+    parts.extend(
+        [
+            _part(
+                "carrier_rear_strap",
+                "vinyl_black",
+                _box_mesh((0.012, 0.0025, 0.048), (0.0, rear_y, 0.008)),
+            ),
+            _part(
+                "carrier_keyring_head",
+                "vinyl_black",
+                _torus_mesh((0.0, rear_y - 0.001, -0.027), 0.0105, 0.0015),
+            ),
+            _part(
+                "carrier_keyring_left_ear",
+                "vinyl_black",
+                _torus_mesh(
+                    (-0.008, rear_y - 0.001, -0.019),
+                    0.0055,
+                    0.0013,
+                    major_segments=24,
+                ),
+            ),
+            _part(
+                "carrier_keyring_right_ear",
+                "vinyl_black",
+                _torus_mesh(
+                    (0.008, rear_y - 0.001, -0.019),
+                    0.0055,
+                    0.0013,
+                    major_segments=24,
+                ),
+            ),
+        ]
+    )
+    return parts
+
+
 def _combine_parts(parts: Iterable[MeshPart]) -> tuple[np.ndarray, np.ndarray]:
     vertices = []
     faces = []

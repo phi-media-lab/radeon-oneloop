@@ -79,3 +79,24 @@ and stratified-reconstruction suite can be dispatched sequentially with:
   /absolute/baseline/checkpoints/010000/pretrained_model BASELINE_SHA256 \
   /absolute/phase/checkpoints/010000/pretrained_model PHASE_SHA256
 ```
+
+## Nonformal Vista4D surface-carrier branch
+
+The private reviewed-photo root is supplied only at execution time. The AMD
+carrier and portable visual conversion remain `formal: false`:
+
+```bash
+ONELOOP_M1_MANIFEST=/path/to/reviewed_m1/manifest.json \
+  ./ops/run_amd_surface_carrier.sh
+
+ONELOOP_OBSERVED_CORE_ROOT=/path/to/observed_core \
+ONELOOP_VISTA4D_SURFACE_CARRIER_ROOT=/path/to/carrier/artifacts \
+  ./ops/run_amd_surface_carrier_glb.sh
+
+ONELOOP_SURFACE_CARRIER_ROOT=/path/to/carrier/artifacts \
+  ./ops/run_amd_vista4d_mask_alignment.sh
+```
+
+The current carrier-conditioned Vista4D runs failed their identity gate. Do
+not feed them into `completion_candidate.py` or replace the Genesis collision
+proxy with the exported GLB.

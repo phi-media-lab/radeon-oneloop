@@ -1,0 +1,215 @@
+{
+  "schema_version": "radeon_oneloop.real2sim_quarantine.v1",
+  "updated_utc": "2026-08-05T00:00:00Z",
+  "policy": {
+    "action": "reject_before_dataset_build_or_training",
+    "allowed_role": "preserved_negative_control_only",
+    "applies_to_descendants": true,
+    "human_visual_rejection_overrides_numeric_convergence": true
+  },
+  "entries": [
+    {
+      "id": "distorted_hunyuan3d_2mv_seed_mesh_v2",
+      "decision": "rejected",
+      "reason_codes": [
+        "severe_identity_geometry_distortion",
+        "four_view_silhouette_fit_did_not_validate_topology",
+        "must_not_seed_or_render_pseudoviews"
+      ],
+      "run_ids": [
+        "hunyuan_alignment_20260804T181241Z_1417634",
+        "learned_mesh_texture_20260804T181918Z_1418443"
+      ],
+      "sha256": [
+        "aabd9087a32f847b67b4abb821fedb2f51d75e7159481df59af995a5f9a92711",
+        "cc2f7f65f51156701de723e5458280e9cb2833b49a0d4429b35cb392215d0e92",
+        "0955c387d1d540b26d5b4f329a582bd2429e7c6503ccc6dd673b1260e044326d",
+        "ffa89b42836b3009c64925446c272a3e18b0246f546e098f04b60fb258efce62",
+        "af509b8a43687534d7f06bc4d798085f1731f415842064bb758a324cf14ae426",
+        "f141923d3423be3533824caa9324eba30a1dfaa430aeebe4b923edaff98108f8",
+        "7572591aa1705d739b2dfb78c5c22202314166abb80bf97b93bceeb39bb33545"
+      ],
+      "prohibited_roles": [
+        "geometry_initialization",
+        "pseudoview_source",
+        "appearance_completion",
+        "collision_geometry",
+        "heldout_evidence",
+        "formal_lineage"
+      ]
+    },
+    {
+      "id": "distorted_mesh_vista4d_descendants_v2",
+      "decision": "rejected",
+      "reason_codes": [
+        "front_face_persisted_into_side_and_rear_views",
+        "ear_identity_duplicated_or_disappeared",
+        "rear_strap_overwritten",
+        "loop_endpoint_face_deformation"
+      ],
+      "run_ids": [
+        "vista4d_object_20260804T182850Z_1419668_seed10027",
+        "vista4d_audit_20260804T184139Z_1420944"
+      ],
+      "sha256": [
+        "fd06e0958eb418ef7f85f28e5814ebb18d78128620479d13c7ac0ffbc8511698",
+        "bfe11c71e2368d66f16f96a489fbd7cc8e2dadca605779444fbcc8c2b471d4b5",
+        "274d93e8aaaedd7dbd1291962a9561be9bdc8aeb0f8d77166aad6370d92e93ff",
+        "7276220be0b15d7fa288341e23ce15e2dd2d60bdd05fd55d6f5da3f8852ca526",
+        "3c038b789230e3b40782e620296327ae5c988578e96084ec1fb5bc5b7fd990b7"
+      ],
+      "prohibited_roles": [
+        "pseudoview_training",
+        "depth_lifting",
+        "mesh_or_gaussian_truth",
+        "heldout_evidence",
+        "formal_lineage"
+      ]
+    },
+    {
+      "id": "distorted_mesh_hybrid_vksplat_descendants_v1",
+      "decision": "rejected",
+      "reason_codes": [
+        "dataset_inherited_rejected_mesh_geometry",
+        "training_convergence_cannot_rehabilitate_invalid_prior",
+        "no_independent_heldout_real_evaluation"
+      ],
+      "run_ids": [
+        "learned_mesh_hybrid_colmap_20260804T185306Z_1422047",
+        "vksplat_object_frozen_appearance_20260804T190111Z_58573",
+        "vksplat_object_sparse_static_20260804T190124Z_58572",
+        "vksplat_object_frozen_appearance_20260804T190233Z_59786"
+      ],
+      "dataset_hashes": [
+        "f3c2c58d47d805daa74eb91376283c654c2aa2cf1e99fa8e25834aeeceb03014"
+      ],
+      "sha256": [
+        "2e4d73addcf77f303156d378a8195b6b8c96b12dde20cf40dae8d8b390ae5f3e",
+        "1362b50abdc3454bf1d6baac7a204974163386d1f51487a7ad781413ab74fe7c",
+        "e445caaaedcc07b5900a13d1d1131b6b52f5b7954bb411e76c7471c771edd072",
+        "ecabe94870312ed1c1199a22a13ef76178076b45d3917a86267163ffb085c46b",
+        "ac2b9a45eb8141444a2f4cd3232c9a5201abf5545c0f4e5ccb15d45328f3447e",
+        "e6ae45bb69340efd0e8b314d4aab3ec30c0a206961c1c151070b27e2831f5c7b",
+        "4c0ffd9b9cfeceea28ddc7e937606c955cfe08204e97c487f6d6deacaa61990e",
+        "952b6e5b08b15af485839156957de20156513f065fc9e68fb34e33319f9702bf"
+      ],
+      "prohibited_roles": [
+        "candidate_asset",
+        "appearance_completion",
+        "collision_geometry",
+        "heldout_evidence",
+        "formal_lineage"
+      ]
+    },
+    {
+      "id": "procedural_surface_carrier_invalid_complete_prior_v1",
+      "decision": "rejected",
+      "reason_codes": [
+        "procedural_shape_is_materially_distorted",
+        "real_texture_projection_does_not_validate_geometry",
+        "must_remain_negative_control_only"
+      ],
+      "run_ids": [
+        "20260804T153528Z_201147_amd_surface_carrier",
+        "20260804T160852Z_201746_amd_vista4d_mask_alignment"
+      ],
+      "sha256": [
+        "4bb613c66c39bdd7fd4be10e4035e0f224bdf015fcaf67fa359bdf827d96705b",
+        "c30186ef633f786995651dc3f5b4021f4cc04d2e4fb7aca8d04b991dbfc9d5de",
+        "58fa132d803f54597563006df62d3cf24f4c82a403ee4e6c30aa3814968edd33",
+        "4e0c8d91279ff316cbba497373037ad3d280368fc16d54790c3086db9566e45e",
+        "a65b7db6ef655f45849c88eda0cf44f1ae5474aa9abb8f706bebc8295b69ef2c"
+      ],
+      "prohibited_roles": [
+        "complete_geometry_prior",
+        "pseudoview_source",
+        "appearance_completion",
+        "collision_geometry",
+        "heldout_evidence",
+        "formal_lineage"
+      ]
+    },
+    {
+      "id": "procedural_surface_carrier_vista4d_descendants_v1",
+      "decision": "rejected",
+      "reason_codes": [
+        "depth_lifted_invalid_procedural_geometry",
+        "face_overexposure_and_identity_drift",
+        "temporal_gain_does_not_rehabilitate_source_geometry"
+      ],
+      "run_ids": [
+        "vista4d_object_20260804T154158Z_1404244_seed10027",
+        "vista4d_object_20260804T161211Z_1407492_seed10027"
+      ],
+      "sha256": [
+        "a85c93aecd70fcf61cb985c23d88a170ac858586667efad47f43851bfbd275da",
+        "e3c01d5f18ffb620eeb8809af4fbb6c620576ae029aac48ee20812957e886d23",
+        "037950f6e8d299da083b6ae710cbc429648d179c3ee0afb147633fb535bd04fd",
+        "3e2063f09915c03e6ad200ade2d228c3ca2689cb451cf357cb51e3c3610c1a3d",
+        "28dd9fd54ddf49c10753601e4f50660065776fbbe7d8295014feb1d480951b05",
+        "bdbf21f95f5c3bc15ed0ae4398acf957aae46f14f8d3714455ba69c0b648b27a"
+      ],
+      "prohibited_roles": [
+        "pseudoview_training",
+        "depth_lifting",
+        "mesh_or_gaussian_truth",
+        "heldout_evidence",
+        "formal_lineage"
+      ]
+    },
+    {
+      "id": "procedural_surface_carrier_genesis_glb_descendant_v1",
+      "decision": "rejected",
+      "reason_codes": [
+        "derived_from_invalid_visual_geometry",
+        "genesis_preview_has_color_breakup_and_faceting",
+        "technical_load_success_is_not_visual_acceptance"
+      ],
+      "run_ids": [
+        "20260804T164138Z_207112_amd_surface_carrier_glb",
+        "20260804T164150Z_207150_amd_surface_carrier_genesis_preview"
+      ],
+      "sha256": [
+        "3ac021c0a091081c6a03af3b016b9ce37978267ff4c4e6ebe5666d7b8fddad0f",
+        "29dee3d29fafabf2b0975184c7ffb7802ae4659ff2ab47cd06fc40d0796aca1c",
+        "14d417367de44b94a02bd6dfa838e87bd5b2771778bb1f4f04bd9cf089fbb2a5",
+        "3579a247d1002e085cc5fa840c1739c2e11d64d1124930009d739feb7f933c5f"
+      ],
+      "prohibited_roles": [
+        "live_visual_asset",
+        "collision_geometry",
+        "candidate_asset",
+        "heldout_evidence",
+        "formal_lineage"
+      ]
+    },
+    {
+      "id": "hunyuan_seed10030_vista4d_reshoot_rejected_v1",
+      "decision": "rejected",
+      "reason_codes": [
+        "front_face_persists_through_side_and_rear_views",
+        "ear_and_rear_identity_drift",
+        "anchor_silhouette_iou_mean_0_433_min_0_184"
+      ],
+      "run_ids": [
+        "vista4d_object_20260804T193303Z_1426807_seed10027",
+        "vista4d_audit_20260804T200147Z_1429181"
+      ],
+      "sha256": [
+        "25d3c7872c7356a13be57d31bba1ee6d6d51c78b543d54823b44e188153e3ef7",
+        "43ecfff58231831f4faa23aca67a6027ede54f4fb5185c2b8c9aad7a3a9665a0",
+        "97e35444a31335cebc6f9d68e42bfcd5f5ee6b2451d89581769cbf78d453952f",
+        "1cdc764b41fe4bd1f019375172f8cad9924af1f49673147f71374531c68f85c6",
+        "47629db7c680e29d0208f89e498a0971a0c55ba78a387ef95abcf501da0f1081"
+      ],
+      "prohibited_roles": [
+        "pseudoview_training",
+        "depth_lifting",
+        "mesh_or_gaussian_truth",
+        "collision_geometry",
+        "heldout_evidence",
+        "formal_lineage"
+      ]
+    }
+  ]
+}

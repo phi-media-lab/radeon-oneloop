@@ -161,8 +161,10 @@ def render(args: argparse.Namespace) -> dict[str, object]:
     if cameras_document.get("camera_model") != "PINHOLE_OPENCV":
         raise VkSplatRenderError("only PINHOLE_OPENCV cameras are supported")
     cameras = cameras_document["cameras"]
-    if len(cameras) != 4:
-        raise VkSplatRenderError("object audit requires exactly four cameras")
+    if len(cameras) != args.expected_camera_count:
+        raise VkSplatRenderError(
+            f"object audit requires {args.expected_camera_count} cameras, got {len(cameras)}"
+        )
     gaussians = read_3dgs_ply(ply_path)
 
     output = args.output.resolve()
@@ -263,6 +265,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--vksplat-root", type=Path, required=True)
     parser.add_argument("--vksplat-commit", required=True)
     parser.add_argument("--active-sh-degree", type=int, default=0, choices=range(4))
+    parser.add_argument("--expected-camera-count", type=int, default=4)
     parser.add_argument("--background", type=float, default=0.125)
     parser.add_argument("--formal", action="store_true")
     parser.add_argument("--host-role", default="unspecified_nonformal")

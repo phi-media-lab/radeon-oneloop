@@ -40,6 +40,15 @@ but it is deferred and is no longer on the submission critical path:
    geometry and fits only observed-photo color/opacity. Its explicit nonformal
    candidate passes a 72-frame continuous 360-degree audit and a 12-second
    read-only dual-leader live gate with no Gaussian fallback.
+8. The Vista4D-specific ablation includes a procedural 95 mm carrier,
+   real-photo projection, measured mask alignment, and two fixed-seed MI300X
+   runs. The carrier is now explicitly rejected as a complete-geometry prior:
+   color projection did not correct its distorted shape, and both videos also
+   lose identity. The branch is preserved only as failure evidence.
+9. The independent Hunyuan seed-`10030` fallback now completes the full
+   observed-core/generated-fill separation and Genesis static-binding path.
+   It passes the no-harm gate only as a default-off nonformal toggle; it does
+   not replace the still access-gated SEVA primary branch.
 
 The next release milestone is a reproducible package of the real-photo input,
 geometry-frozen single-Radeon build, continuous-orbit review, and dual-leader
@@ -211,7 +220,7 @@ surfaces between the four observed anchors. The registered asset therefore
 remains valid for its declared anchor-view lineage and registration claims, but
 is rejected as the final continuous-view demo appearance.
 
-### Geometry-frozen continuous-view candidate
+### Geometry-frozen formal successor and continuous-view candidate
 
 The four Mercari photographs are views of the same Graffiti Mickey variant as
 the physical handover object. To prevent four-view optimization from moving
@@ -224,13 +233,19 @@ observed-photo DC color and opacity. It uses the same real-only dataset hash
 peaks at 122,502,412 bytes reported Vulkan memory, and emits canonical PLY
 SHA-256 `dc4de9a0a3f4dadf62a4c03c2be939a9b178d284254c9e833a2e19941e41793b`.
 
-This run remains explicitly `formal=false`: it is an executed candidate, not
-a registry entry or held-out-quality claim. Two earlier failed attempts are
-preserved. The first exposed an incompatible canonicalizer CLI on the remote
-copy; the second proved that an exact zero center learning rate enters
-VkSplat's logarithmic schedule and creates non-finite positions. The accepted
-run uses the smallest constant positive rate and verifies all Gaussian fields
-are finite.
+That preflight remains explicitly `formal=false`, and its two earlier failed
+attempts remain preserved. A clean, registered successor now executes the same
+geometry-frozen contract as formal training job
+`20260804T204531Z_gaussian_train_14053af_20260804`: 2,000 steps in 10.389 s,
+30,000 splats, 122,502,412 bytes reported peak Vulkan memory, and trained PLY
+SHA-256 `e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378`.
+Formal render job `20260804T205059Z_gaussian_render_e149f01_20260804` binds
+that exact checkpoint, emits canonical PLY SHA-256
+`7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706`,
+and renders the four 1024-square observed anchors in 1.176 s with 34,884,748
+bytes reported peak Vulkan memory. Both jobs exclude generated fill, learned
+secondary-accelerator artifacts, collision geometry, and held-out-quality
+claims.
 
 On `amd`, continuous-orbit run
 `20260804T131459Z_193927_amd_gaussian_orbit_audit` renders 72 distinct 512-square
@@ -246,6 +261,25 @@ successful HIL episodes. It confirms the same doll and supplies task-domain
 rear/top/tag/workspace evidence. It does not supply calibrated camera poses or
 dense front-to-side coverage, so it is identity/domain evidence rather than
 metric training geometry or held-out evaluation.
+
+The exact registered successor has now also passed its own development audit,
+so it no longer inherits the old checkpoint's orbit result by assumption.
+Run `20260804T205804Z_217937_amd_gaussian_orbit_audit` binds canonical PLY
+`7f01c1e6…`, closes with zero RGB error, has zero border-contact frames, and
+renders in 25.108 ms/frame on average. Human review accepts the shell and
+front/rear identity while retaining side-angle blur and stretch as an explicit
+four-view limitation. The preceding failed run
+`20260804T205629Z_217870_amd_gaussian_orbit_audit` is preserved: it exposed
+that the AMD runtime still pinned the superseded formal hashes, which was then
+corrected rather than bypassed.
+
+Read-only dual-leader runtime gate
+`20260804T205940Z_218151_amd_decoupled_gaussian_live_gate` binds the same exact
+formal asset and passes at 119.999 Hz control and 7.667 Hz composed rendering,
+with 186 Gaussian successes, zero fallback frames, zero watchdog events, and
+zero physical-output commands. All 12 leader channels were stationary, so the
+run proves integration only; it does not count as an approach, grasp, handover,
+release, or task-success recording.
 
 ### AMD runtime appearance capability
 
@@ -374,6 +408,121 @@ The result is useful as an optional real-photo refinement initializer. It is
 not the default asset and must remain independently disableable. Its PLY hash
 is `9a2dac7e7c5b6380e96c016ee9d8d6893e0923007c7a4a62a64cfe749d8f2a63`.
 
+### Vista4D appearance-completion A/B
+
+The MI300X Vista4D interface experiment uses an exact object
+adapter now exports 49 source/point frames, alpha and zero-motion masks,
+target cameras, hashes, and a terminal marker.  The first fixed-seed run used
+the observed Gaussian orbit for both source and point condition and completed
+in 746 seconds.  It is visually stable and mildly smoother, but does not by
+itself create metric geometry.
+
+A second 726-second run held the seed and all model parameters fixed while
+injecting the four reviewed SAM3 Mercari views at frames 0/12/24/37.  Those
+four identities were preserved, but detail did not propagate to intermediate
+views.  Temporal-delta residual p95 rose from 0.03697 to 0.09882, so sparse
+keyframe injection is rejected as the next source-video construction and is
+retained as a negative control.
+
+The then-proposed procedural carrier stage was executed in AMD run
+`20260804T153528Z_201147_amd_surface_carrier` constructs a complete
+12,078-vertex / 24,044-triangle carrier at exact 95 mm height, fits it to the
+four reviewed silhouettes (mean IoU 0.75497), and projects real-photo color to
+82.12% of its vertices. These numbers characterize only the fitted procedural
+carrier; they do not validate the photographed object's geometry. A measured
+point-mask sweep selects alpha 0.50 as the
+best tested alignment, raising mean point/carrier IoU from 0.68555 to 0.70619.
+
+Two carrier-conditioned Vista4D runs then hold seed and prompt fixed.  The
+default-mask branch reaches source silhouette IoU 0.82811 but is fuzzy and
+overexposed.  The alpha-0.50 / CFG-3 branch improves source IoU to 0.83728,
+background MAE to 0.02610, temporal residual to 0.10198, and closure to
+0.05709, but worsens observed RGB MAE to 0.29321 and further blurs the face.
+Both are rejected for depth lifting. Genesis conversion experiments are also
+preserved as negative visual evidence: PLY is unsupported, vertex colors are
+ignored, and texture/material GLBs show unacceptable breakup. The carrier is
+not an offline candidate; it is an invalid complete-geometry prior and may not
+enter the corrected generation mainline. The collision proxy and observed-
+Gaussian runtime layers remain unchanged.
+
+### Corrected four-view generation mainline
+
+The reviewed four-view M1 artifact is now the sole identity authority. The
+new geometry-free input contract emits four observed SEVA inputs, 49 ordered
+target cameras, and Hunyuan3D-2mv `front/left/back/right` RGBA inputs. It
+explicitly sets `geometry_input: null` and rejects procedural carrier use.
+Stable Virtual Camera supplies the video-first novel-view prior;
+Hunyuan3D-2mv supplies a learned complete mesh; real-view differentiable
+alignment must pass before optional Vista4D reshooting or Gaussian
+distillation.
+
+### 2026-08-05 generated-lineage correction
+
+Subsequent human review rejected Hunyuan seed `10027` despite its coarse
+four-view silhouette fit. The mesh has material identity/topology distortion;
+therefore its aligned/real-projected versions, the derived Vista4D video, the
+hybrid COLMAP dataset, and all three Radeon-f VkSplat descendants are preserved
+negative controls only. `gaussian/real2sim_quarantine.json` records exact
+run IDs and hashes. Dataset construction, Vista4D inference, and VkSplat
+training now run `gaussian.provenance_quarantine` before taking the GPU lock.
+The old hybrid dataset was tested on both phi and Radeon-f and exits with code
+65 before training.
+
+A replacement Hunyuan sweep generated seeds `10028`, `10029`, and `10030`
+directly from the four reviewed images. All have a single front face, two
+correctly asymmetric ears, one rear strap, and a continuous oval body over the
+reviewed 360-degree contact sheets. Seed `10030` has the best coarse alignment
+(mean silhouette IoU `0.77664`, minimum `0.75134`) and is accepted only as a
+generated conditioning proposal. Seeds `10028` and `10029` are valid but
+superseded. The accepted review binds the orbit, aligned mesh, four-image
+manifest, and the two private HIL rear/top identity exemplars; generated hidden
+geometry remains non-metric and ineligible for collision or formal evidence.
+
+SEVA remains the preferred four-image-to-orbit stage. Its code and fixed camera
+contract are ready, but phi currently reports an invalid stored Hugging Face
+credential and no local v1.1 weights. No token is recorded in the repository
+or command logs. Hunyuan seed `10030` is a controlled fallback, not a
+replacement for the preferred geometry-free SEVA path.
+
+### 2026-08-05 layered fallback and Genesis gate
+
+The fallback experiment no longer uses a generated mesh as Gaussian geometry.
+`observed_visual_hull_initialization_v1` exports 30,000 centers from only the
+four reviewed real masks; its PLY SHA-256 begins `1138a85221bf`. Hunyuan seed
+`10030` supplies appearance pseudo-views only, with centers, scales, rotations,
+refinement, and higher SH frozen. The 5k and 15k candidates are visually
+equivalent, so the 15k result is the terminal ablation rather than an argument
+for more optimization.
+
+The seed-`10030` Vista4D reshoot is rejected and quarantined as a descendant:
+mean silhouette IoU is `0.433189`, minimum IoU is `0.183667`, mean observed RGB
+MAE is `0.3543`, and visual review shows the front face persisting around the
+orbit while ear/rear identity drifts. It is not a training source.
+
+Observed-visibility pruning partitions the terminal VkSplat candidate without
+mixing provenance. Of 30,000 generated-appearance Gaussians, 151 are invisible
+from all four real anchors, 1,073 are visible from one, and 28,776 are visible
+from at least two. The optional fill therefore contains 1,224 Gaussians; the
+30,000-Gaussian geometry-frozen observed core remains byte-identical. The fused
+preview PLY SHA-256 is
+`30ea567c52c4942a80f3e7e999ab4e0854681684143ad4e830f1e177bb860b0c`.
+
+The same-camera 49-view comparison passes the observed-anchor safety gate:
+mean RGB MAE versus the observed core is `0.0016553`, worst anchor RGB MAE is
+`0.0022200`, minimum anchor foreground IoU is `0.992553`, and mean orbit IoU is
+`0.995814`. It is accepted only as
+`optional_nonformal_toggle_default_off`; completion effectiveness is explicitly
+inconclusive without held-out real views.
+
+On `amd`, static run
+`layered_fusion_genesis_static_run_20260804T203108Z_215958` loads the generated
+layer through a dedicated `layered-preview` schema rather than weakening the
+observed-only loader. Eight of eight VkSplat renders succeed with zero fallback
+at mean `23.319 ms`. The metric gate now measures the anisotropic two-sigma
+Gaussian support envelope rather than point-center bounds: robust height is
+`94.873 mm`, only `0.127 mm` from the 95 mm anchor. The independent procedural
+collision proxy remains active; no USB bus or physical output is involved.
+
 ## Decision matrix
 
 | Component | Current decision | Allowed role |
@@ -387,30 +536,44 @@ is `9a2dac7e7c5b6380e96c016ee9d8d6893e0923007c7a4a62a64cfe749d8f2a63`.
 | UniSHARP | Appearance accepted, geometry rejected | Pseudo-views and masked appearance proposals |
 | 124,420 direct SHARP/UniSHARP hybrid | Rejected | Preserved negative control |
 | 229,576 confidence-pruned fill | Conditional | Optional refinement initializer, default off |
-| Hunyuan3D-2mv | Deferred | Non-blocking future comparison |
+| Vista4D same-source video | Accepted nonformal interface baseline | Reshooting execution proof; no completion claim |
+| Vista4D sparse-real-keyframe video | Rejected source construction | Preserved negative control; identity impulses do not propagate |
+| 95 mm real-textured surface carrier | Rejected geometry prior | Preserved failure control; never enters learned completion mainline |
+| Vista4D surface-carrier videos | Rejected for depth lift | Preserved continuity/identity ablation; never promoted to Gaussian or mesh truth |
+| Surface-carrier Genesis GLBs | Rejected visual fallback | Portable conversion evidence only; procedural debug proxy remains active |
+| Four-view generator input | Accepted nonformal contract | Sole identity source for SEVA and Hunyuan branches |
+| Stable Virtual Camera v1.1 | Access-gated preferred mainline | Code/cameras ready; phi credential invalid and weights absent |
+| Hunyuan3D-2mv seed 10027 | Rejected and hash-quarantined | Preserved negative control; all descendants blocked |
+| Hunyuan3D-2mv seeds 10028/10029 | Valid but superseded candidates | Candidate diversity evidence only |
+| Hunyuan3D-2mv seed 10030 | Accepted nonformal conditioning only | Vista4D/direct appearance A/B; never observed/collision/formal truth |
+| Hunyuan seed-10030 Vista4D reshoot | Rejected and quarantined | Preserved identity-drift negative control |
+| 30k observed-mask visual-hull initializer | Accepted | Geometry initialization for frozen-geometry appearance fits only |
+| 1,224-Gaussian low-visibility fill | Conditional | Default-off nonformal appearance toggle; no metric/physics claim |
+| 31,224-Gaussian layered preview | Static gate accepted | Genesis visual A/B only; observed core stays authoritative |
 
 ## Four-machine allocation and competition boundary
 
 | Host | Current role | Evidence status |
 | --- | --- | --- |
 | `amd` | USB leaders, Genesis, HIL, haptics, physics integration | Development, `formal: false` |
-| `phi-amd-work` / MI300X | VGGT, SHARP, UniSHARP, generation and pruning ablations | Development, `formal: false` |
+| `phi-amd-work` / MI300X | VGGT, SHARP, UniSHARP, SEVA, Hunyuan3D-2mv, Vista4D generation and pruning ablations | Development, `formal: false` |
 | `radeon-f` | VkSplat/RADV training and render integration | Development, `formal: false` |
 | `radeon-c` / GPU0 / `gfx1100` | Final pinned optimization, rendering and declared measurements | Only formal evidence host |
 
 MI300X is deliberately used to shorten research iteration, but its checkpoints
 and timing numbers are not silently promoted into the formal single-Radeon
-lineage. The competition submission must still run with generated fill
-disabled. Only jobs registered in `ops/formal_run_registry.yaml` and executed
+lineage. The competition submission's formal evidence path must still run with
+generated fill disabled. Only jobs registered in `ops/formal_run_registry.yaml` and executed
 on `radeon-c` GPU0 may populate formal result tables.
 
 ## Remaining critical path
 
-1. Capture additional real views at inter-anchor angles and freeze them as a
+1. Restore authorized SEVA v1.1 model access on `phi-amd-work`, run the bound
+   four-image/49-camera orbit, audit identity and continuity, then build the
+   observed-initialized frozen-geometry distillation dataset.
+2. Capture additional real views at inter-anchor angles and freeze them as a
    held-out set before the next optimization run. Use them for silhouette and
    photometric evaluation, not as hidden training views.
-2. Turn the geometry-frozen preflight into the registered formal candidate
-   command on `radeon-c`; rerun rather than relabel the existing nonformal job.
 3. Record the final short approach–grasp–handover–release demo with the explicit
    candidate switch, manifest, hashes, timing, safety state, and terminal
    marker. Keep leader access read-only for the submission-critical recording.
@@ -426,7 +589,7 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Verification status
 
-The fresh full scaffold collects 201 tests and passes 195, with 6 dependency-
+The fresh full scaffold runs 249 tests and passes 236, with 13 dependency-
 specific tests skipped in the local environment. Shell syntax, YAML/JSON
 parsing, and `git diff --check` also pass. These source-tree checks are not a
 substitute for held-out capture or the final recorded handover demo.

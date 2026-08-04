@@ -6,6 +6,21 @@
 > the continuous-view asset and live Genesis bridge. The guarded branch below
 > remains available for later work and none of its safety gates are weakened.
 
+The rejected Vista4D surface-carrier experiments do not change this safety
+boundary. The carrier is also an invalid complete-geometry prior; its generated
+videos and portable GLB candidates failed identity or visual-fidelity gates,
+so Genesis still computes contact against the same
+rigid procedural proxy and the pose-synchronous observed Gaussian remains a
+non-authoritative rendering layer. No generated surface is used to derive
+contact force or leader-motor output.
+
+The later 1,224-Gaussian low-visibility fill follows the same boundary. It is
+loaded only through an explicit `layered-preview` visual switch, is off by
+default, and is clipped by the existing Genesis proxy-depth matte. Static gate
+`layered_fusion_genesis_static_run_20260804T203108Z_215958` changes neither the
+collision entity nor the contact query. Generated fill therefore cannot alter
+haptic forces even when the visual A/B is enabled.
+
 The live bridge carries a 30 Hz return stream from Genesis to the leader host.
 Its default is **monitor-only**: no torque is enabled and no goal is written to
 either physical leader.
@@ -121,8 +136,14 @@ The dependency order is intentional:
 5. Only then enable one bounded motor for ten seconds, followed by one arm and
    finally both arms.
 
-Steps 1–4 are complete for canonical PLY SHA-256
-`0e26b6c4f993a7052fb471ad84a1a98180b262c868a4b179ce19b294b288bd1a`.
+Steps 1–4 were completed for the original formal canonical PLY. The current
+default is its registered geometry-frozen successor, canonical PLY SHA-256
+`7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706`.
+Its exact continuous-orbit gate
+`20260804T205804Z_217937_amd_gaussian_orbit_audit` and read-only live gate
+`20260804T205940Z_218151_amd_decoupled_gaussian_live_gate` now also pass with
+zero physical-output commands. The live gate used stationary leader inputs and
+therefore does not replace the operator-driven task recording.
 The latest normal and fault-injected integration gates are
 `20260804T101926Z_173198_amd_decoupled_gaussian_live_gate` and
 `20260804T102041Z_176664_amd_decoupled_gaussian_live_gate`; both retain
