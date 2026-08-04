@@ -20,6 +20,7 @@ parent_manifest="$parent_run/manifest.json"
 parent_metrics="$parent_run/metrics.json"
 parent_ply="$parent_run/train/splat.ply"
 parent_train_json="$parent_run/train/train.json"
+parent_config="$parent_run/config.yaml"
 canonical_ply="$canonical_dir/appearance_observed_canonical.ply"
 provenance="$canonical_dir/provenance.json"
 
@@ -41,6 +42,8 @@ export PYTHONPATH="$repo_root/src:$repo_root"
   --train-json "$parent_train_json" \
   --training-run-manifest "$parent_manifest" \
   --training-metrics "$parent_metrics" \
+  --training-config "$parent_config" \
+  --vksplat-commit "$vksplat_commit" \
   --dataset-manifest "$dataset_manifest" \
   --output "$canonical_ply" \
   --output-provenance "$provenance" \

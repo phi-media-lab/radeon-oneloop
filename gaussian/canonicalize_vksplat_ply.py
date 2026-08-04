@@ -80,12 +80,31 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
                 raise ValueError("formal canonicalization requires formal training metrics")
             if dataset_manifest.get("formal_input_eligible") is not True:
                 raise ValueError("formal canonicalization requires a formal-input-eligible dataset")
+            if args.training_config is None or not args.vksplat_commit:
+                raise ValueError("formal canonicalization requires training config and VkSplat commit")
+            training_config_sha = sha256_file(args.training_config.resolve())
+            if training_manifest.get("config_hash") != training_config_sha:
+                raise ValueError("formal training manifest does not bind the supplied config")
+        else:
+            training_config_sha = (
+                sha256_file(args.training_config.resolve())
+                if args.training_config is not None
+                else None
+            )
         training_lineage = {
             "training_run_manifest_sha256": sha256_file(training_path),
-            "training_run_id": training_manifest.get("run_id"),
+            "training_run_id": training_manifest.get("run_id")
+            or training_manifest.get("job_id"),
             "training_formal": training_manifest.get("formal"),
-            "training_host_role": training_manifest.get("host_role"),
-            "vksplat_commit": training_manifest.get("vksplat_commit"),
+            "training_host_role": training_manifest.get("host_role")
+            or (training_metrics or {}).get("host_role"),
+            "training_host": training_manifest.get("host"),
+            "training_job_role": training_manifest.get("role"),
+            "training_git_commit": training_manifest.get("git_commit"),
+            "training_gpu_uid": training_manifest.get("gpu_uid"),
+            "training_config_sha256": training_config_sha,
+            "vksplat_commit": training_manifest.get("vksplat_commit")
+            or args.vksplat_commit,
             "dataset_manifest_sha256": dataset_manifest_sha,
             "dataset_hash": training_manifest.get("dataset_hash"),
             "dataset_formal_input_eligible": dataset_manifest.get("formal_input_eligible"),
@@ -152,6 +171,8 @@ def main() -> int:
     parser.add_argument("--output-provenance", type=Path, required=True)
     parser.add_argument("--training-run-manifest", type=Path)
     parser.add_argument("--training-metrics", type=Path)
+    parser.add_argument("--training-config", type=Path)
+    parser.add_argument("--vksplat-commit")
     parser.add_argument("--dataset-manifest", type=Path)
     parser.add_argument("--formal", action="store_true")
     parser.add_argument("--host-role", default="unspecified_nonformal")
