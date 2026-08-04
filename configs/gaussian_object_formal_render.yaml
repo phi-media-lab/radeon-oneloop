@@ -1,0 +1,30 @@
+schema_version: 1
+profile: observed_object_vksplat_formal_render
+formal_host: radeon-c
+formal_gpu: GPU0
+formal_gpu_uid: "0x153f7d55778ab659"
+gfx_target: gfx1100
+parent_training:
+  run_id: 20260804T095251Z_gaussian_train_84d468b_20260804
+  git_commit: 84d468bb5ca6f08bcbf071e9880c712fa24619a6
+  manifest_sha256: d27440b792f96f5f522a58e34ce091d97239595b1ffe86a1b5605130bd9ffb00
+  metrics_sha256: 6c8cd274c80acbd67b00d721ae4d202b57847585cab0ee50ef6c891ad3fa36fd
+  splat_sha256: d95edcb66edd5fd3f6fe3fda4686dfe718ce867507a9c4db0fa6dde88a2cfcc5
+dataset:
+  dataset_hash: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+  manifest_sha256: 04900c1a3afc0f2f5e73ce0e34042e91a10c469a9c0b255e3157e7985e9b660e
+cameras:
+  method: manual_ring_metric_silhouette_gauge_CPU
+  sha256: 050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26
+renderer:
+  name: VkSplat
+  backend: Vulkan_RADV
+  source_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+  views: 4
+  active_sh_degree: 0
+claims:
+  formal_render_execution_and_resource_metrics: true
+  heldout_quality_claim: false
+  bitwise_checkpoint_determinism_claim: false
+  generated_fill_enabled: false
+status: pending_frozen_formal_render

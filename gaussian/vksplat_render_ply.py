@@ -33,6 +33,21 @@ class VkSplatRenderError(RuntimeError):
     pass
 
 
+def validate_source_provenance(
+    source_provenance: dict[str, object], *, formal: bool, host_role: str
+) -> None:
+    if source_provenance.get("formal") is not formal:
+        raise VkSplatRenderError("source provenance formal flag does not match the render")
+    if formal:
+        if host_role != "radeon_c_gpu0_gfx1100_formal":
+            raise VkSplatRenderError("formal rendering requires the Radeon-c formal host role")
+        lineage = source_provenance.get("training_lineage")
+        if not isinstance(lineage, dict) or lineage.get("training_formal") is not True:
+            raise VkSplatRenderError("formal rendering requires formal training lineage")
+        if lineage.get("secondary_accelerator_artifacts") is not False:
+            raise VkSplatRenderError("formal rendering rejects secondary-accelerator artifacts")
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -130,8 +145,9 @@ def render(args: argparse.Namespace) -> dict[str, object]:
     cameras_path = args.cameras.resolve()
     source_provenance_path = args.source_provenance.resolve()
     source_provenance = json.loads(source_provenance_path.read_text(encoding="utf-8"))
-    if source_provenance.get("formal") is not False:
-        raise VkSplatRenderError("source provenance must be explicitly non-formal")
+    validate_source_provenance(
+        source_provenance, formal=bool(args.formal), host_role=args.host_role
+    )
     if source_provenance.get("provenance_class") not in {
         "generated_fill_candidate",
         "observed_core_candidate",
@@ -209,9 +225,13 @@ def render(args: argparse.Namespace) -> dict[str, object]:
         "generated_fill_candidate": "nonformal generated-fill visual QA",
         "confidence_fused_candidate": "nonformal confidence-fused visual QA",
     }
+    purpose = purpose_by_provenance[source_provenance["provenance_class"]]
+    if args.formal:
+        purpose = purpose.replace("nonformal", "formal")
     manifest = {
         "schema_version": "radeon_oneloop.vksplat_generated_ply_render.v1",
-        "formal": False,
+        "formal": bool(args.formal),
+        "host_role": args.host_role,
         "renderer": "VkSplat_RADV",
         "vksplat_commit": args.vksplat_commit,
         "ply_sha256": sha256_file(ply_path),
@@ -223,8 +243,9 @@ def render(args: argparse.Namespace) -> dict[str, object]:
         "vram_bytes": int(device),
         "peak_vram_bytes": int(peak),
         "renders": records,
-        "purpose": purpose_by_provenance[source_provenance["provenance_class"]],
-        "eligible_for_formal_metrics": False,
+        "purpose": purpose,
+        "eligible_for_formal_metrics": bool(args.formal),
+        "eligible_for_heldout_real_metrics": False,
     }
     (output / "render_manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -243,6 +264,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--vksplat-commit", required=True)
     parser.add_argument("--active-sh-degree", type=int, default=0, choices=range(4))
     parser.add_argument("--background", type=float, default=0.125)
+    parser.add_argument("--formal", action="store_true")
+    parser.add_argument("--host-role", default="unspecified_nonformal")
     return parser.parse_args()
 
 

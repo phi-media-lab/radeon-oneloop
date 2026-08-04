@@ -37,9 +37,31 @@ class CanonicalizeVkSplatPlyTests(unittest.TestCase):
                 output=root / "output.ply",
                 output_provenance=root / "provenance.json",
                 training_run_manifest=training_manifest,
+                training_metrics=None,
                 dataset_manifest=None,
+                formal=False,
+                host_role="unspecified_nonformal",
             )
             with self.assertRaisesRegex(ValueError, "supplied together"):
+                canonicalize(args)
+
+    def test_formal_canonicalization_requires_lineage(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            train = root / "train.json"
+            train.write_text(json.dumps({"dataparser_transform": np.eye(4).tolist()}))
+            args = Namespace(
+                ply=root / "missing.ply",
+                train_json=train,
+                output=root / "output.ply",
+                output_provenance=root / "provenance.json",
+                training_run_manifest=None,
+                training_metrics=None,
+                dataset_manifest=None,
+                formal=True,
+                host_role="radeon_c_gpu0_gfx1100_formal",
+            )
+            with self.assertRaisesRegex(ValueError, "complete training lineage"):
                 canonicalize(args)
 
 

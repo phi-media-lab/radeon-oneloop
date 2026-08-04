@@ -53,10 +53,33 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
         training_manifest = json.loads(training_path.read_text(encoding="utf-8"))
         dataset_manifest = json.loads(dataset_path.read_text(encoding="utf-8"))
         dataset_manifest_sha = sha256_file(dataset_path)
-        if training_manifest.get("dataset_manifest_sha256") != dataset_manifest_sha:
+        recorded_dataset_manifest_sha = training_manifest.get("dataset_manifest_sha256")
+        if (
+            recorded_dataset_manifest_sha is not None
+            and recorded_dataset_manifest_sha != dataset_manifest_sha
+        ):
             raise ValueError("training run does not bind the supplied dataset manifest")
         if dataset_manifest.get("provenance", {}).get("secondary_accelerator_artifacts") is not False:
             raise ValueError("dataset lineage does not exclude secondary-accelerator artifacts")
+        training_metrics = None
+        if args.training_metrics is not None:
+            metrics_path = args.training_metrics.resolve()
+            training_metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+            if training_metrics.get("artifacts", {}).get("splat.ply") != sha256_file(source):
+                raise ValueError("training metrics do not bind the supplied PLY")
+            if training_metrics.get("dataset", {}).get("dataset_hash") != training_manifest.get(
+                "dataset_hash"
+            ):
+                raise ValueError("training metrics and run manifest disagree on dataset hash")
+        if args.formal:
+            if args.host_role != "radeon_c_gpu0_gfx1100_formal":
+                raise ValueError("formal canonicalization requires the Radeon-c formal host role")
+            if training_manifest.get("formal") is not True:
+                raise ValueError("formal canonicalization requires a formal parent training run")
+            if training_metrics is None or training_metrics.get("formal") is not True:
+                raise ValueError("formal canonicalization requires formal training metrics")
+            if dataset_manifest.get("formal_input_eligible") is not True:
+                raise ValueError("formal canonicalization requires a formal-input-eligible dataset")
         training_lineage = {
             "training_run_manifest_sha256": sha256_file(training_path),
             "training_run_id": training_manifest.get("run_id"),
@@ -67,7 +90,15 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
             "dataset_hash": training_manifest.get("dataset_hash"),
             "dataset_formal_input_eligible": dataset_manifest.get("formal_input_eligible"),
             "secondary_accelerator_artifacts": False,
+            "training_metrics_sha256": (
+                sha256_file(args.training_metrics.resolve())
+                if args.training_metrics is not None
+                else None
+            ),
+            "input_ply_sha256": sha256_file(source),
         }
+    elif args.formal:
+        raise ValueError("formal canonicalization requires complete training lineage")
 
     shutil.copyfile(source, output)
     offset, count, dtype = parse_vertex_layout(output)
@@ -89,7 +120,8 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
 
     provenance = {
         "schema_version": "radeon_oneloop.observed_core_canonicalization.v1",
-        "formal": False,
+        "formal": bool(args.formal),
+        "host_role": args.host_role,
         "provenance_class": "observed_core_candidate",
         "observed_only_training": True,
         "input_ply_sha256": sha256_file(source),
@@ -104,7 +136,7 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
         "gaussian_count": count,
         "training_lineage": training_lineage,
         "eligible_for_heldout_real_metrics": False,
-        "eligible_for_formal_metrics": False,
+        "eligible_for_formal_metrics": bool(args.formal),
     }
     temporary = provenance_path.with_name(f".{provenance_path.name}.tmp")
     temporary.write_text(json.dumps(provenance, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -119,7 +151,10 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--output-provenance", type=Path, required=True)
     parser.add_argument("--training-run-manifest", type=Path)
+    parser.add_argument("--training-metrics", type=Path)
     parser.add_argument("--dataset-manifest", type=Path)
+    parser.add_argument("--formal", action="store_true")
+    parser.add_argument("--host-role", default="unspecified_nonformal")
     result = canonicalize(parser.parse_args())
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0

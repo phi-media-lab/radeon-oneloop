@@ -5,10 +5,28 @@ from pathlib import Path
 
 import numpy as np
 
-from gaussian.vksplat_render_ply import read_3dgs_ply
+from gaussian.vksplat_render_ply import (
+    VkSplatRenderError,
+    read_3dgs_ply,
+    validate_source_provenance,
+)
 
 
 class VkSplatRenderPlyTests(unittest.TestCase):
+    def test_formal_render_requires_formal_radeon_lineage(self):
+        provenance = {
+            "formal": True,
+            "training_lineage": {
+                "training_formal": True,
+                "secondary_accelerator_artifacts": False,
+            },
+        }
+        validate_source_provenance(
+            provenance, formal=True, host_role="radeon_c_gpu0_gfx1100_formal"
+        )
+        with self.assertRaisesRegex(VkSplatRenderError, "formal host role"):
+            validate_source_provenance(provenance, formal=True, host_role="radeon_f")
+
     def test_binary_ply_decodes_logits_and_ignores_audit_fields(self):
         fields = [
             "x", "y", "z", "f_dc_0", "f_dc_1", "f_dc_2", "opacity",
