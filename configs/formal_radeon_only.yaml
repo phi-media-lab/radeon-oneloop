@@ -9,8 +9,9 @@ accelerator:
 backends:
   simulation: genesis_amdgpu
   policy: pytorch_rocm
+  object_appearance: vksplat_vulkan_radv
 deferred_backends:
-  gaussian: vksplat_vulkan_radv
+  gaussian_workspace: deferred_no_calibrated_so101_workspace_capture
 cpu_edge:
   accelerator_inference_allowed: false
 forbidden_formal_sources:
@@ -22,7 +23,24 @@ fail_closed:
   reject_software_renderer: true
   reject_device_count_mismatch: true
 conditional_gates:
-  gaussian_vulkan:
+  gaussian_workspace_vulkan:
     enabled: false
     reason: deferred_no_calibrated_so101_workspace_capture
     require_rocm_vulkan_identity_match_before_enable: true
+  observed_object_vksplat:
+    enabled: true
+    status: seeded_nonformal_preflight_passed_pending_frozen_formal_run
+    source_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+    source_checkout: clean_pinned_archive
+    dataset_hash: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    dataset_manifest_sha256: 04900c1a3afc0f2f5e73ce0e34042e91a10c469a9c0b255e3157e7985e9b660e
+    initialization: deterministic_reviewed_mask_visual_hull_CPU
+    unique_observed_train_views: 4
+    train_from_scratch_on_radeon_c: true
+    forbid_inherited_checkpoint_or_ply: true
+    secondary_accelerator_artifacts: false
+    generated_fill_enabled: false
+    formal_output_ply_sha256: pending
+    require_registered_radeon_c_gpu0_run_for_claims: true
+    heldout_quality_claim_allowed: false
+    bitwise_checkpoint_determinism_claim_allowed: false

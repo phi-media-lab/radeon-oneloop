@@ -1,0 +1,32 @@
+schema_version: 1
+profile: observed_object_gaussian_renderer_preflight_only
+formal_host: radeon-c
+formal_gpu: GPU0
+gfx_target: gfx1100
+renderer:
+  name: VkSplat
+  backend: Vulkan_RADV
+  source_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+  source_checkout: clean_upstream
+asset:
+  id: legacy_renderer_readiness_input_30k
+  gaussian_count: 30000
+  generated_fill_enabled: false
+  ply_sha256: ad30184dd9b39fdc211404538e70c0544d2c418b1af2003ae6f07353c5471183
+  cameras_sha256: 4d03ed63829d786325adf29e4a6c1fb2542d0a090ba3b66ea1e8b099d994cb00
+  provenance_sha256: 9e8e70efb8c9d5d98e9e792f9f0c06836eb1127cdfd1e8d8dceda9e728441bf9
+scope:
+  appearance_only: true
+  policy_input: false
+  collision_geometry: false
+  workspace_gaussian: false
+  heldout_quality_claim: false
+lineage:
+  trained_on: radeon-f
+  initialization_contains_mi300x_artifact: true
+  eligible_for_formal_training_or_asset_claim: false
+  permitted_use: renderer_readiness_preflight_only
+replacement:
+  config: configs/gaussian_object_formal_train.yaml
+  requirement: train_from_CPU_visual_hull_initialization_on_radeon_c_GPU0
+status: passed_renderer_preflight_never_register_as_formal_asset

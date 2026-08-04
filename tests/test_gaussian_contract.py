@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from gaussian.vksplat_train import validate_dataset
+from gaussian.vksplat_train import load_trainer, validate_dataset
 
 
 class GaussianContractTests(unittest.TestCase):
@@ -25,3 +25,49 @@ class GaussianContractTests(unittest.TestCase):
     def test_capture_schema_is_valid_json(self):
         schema = json.loads(Path("gaussian/workspace_capture.schema.json").read_text())
         self.assertIn("scale_anchor", schema["required"])
+
+    def test_four_view_object_dataset_requires_matching_masks(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "images").mkdir()
+            (root / "masks").mkdir()
+            (root / "sparse/0").mkdir(parents=True)
+            for index in range(4):
+                (root / "images" / f"anchor_{index}.png").write_bytes(bytes([index]))
+                (root / "masks" / f"anchor_{index}.png").write_bytes(bytes([index + 1]))
+            for name in ("cameras", "images", "points3D"):
+                (root / "sparse/0" / f"{name}.txt").write_text(name)
+            value = validate_dataset(
+                root,
+                "images",
+                "sparse/0",
+                min_images=4,
+                mask_dir="masks",
+            )
+            self.assertEqual(value["images"], 4)
+            self.assertEqual(value["masks"], 4)
+
+    def test_pinned_trainer_shader_path_keeps_upstream_checkout_clean(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp)
+            trainer_path = source / "vksplat" / "simple_trainer.py"
+            trainer_path.parent.mkdir(parents=True)
+            trainer_path.write_text(
+                "import os\n"
+                "import random\n"
+                "import numpy as np\n"
+                "def join_dir(parent, child):\n"
+                "    value = os.path.join(parent, child)\n"
+                "    return value if value.endswith(os.sep) else value + os.sep\n",
+                encoding="utf-8",
+            )
+            trainer = load_trainer(source)
+            self.assertTrue(trainer.join_dir("/tmp", "shader").endswith("shader//"))
+            self.assertTrue(trainer.join_dir("/tmp", "output").endswith("output/"))
+            self.assertFalse(trainer.join_dir("/tmp", "output").endswith("output//"))
+
+    def test_formal_object_runner_does_not_commit_private_dataset_path(self):
+        runner = Path("ops/run_formal_object_vksplat_train.sh").read_text()
+        self.assertIn("ONELOOP_OBJECT_DATASET:?", runner)
+        self.assertNotIn("/root/radeon-oneloop-data", runner)
+        self.assertIn("--formal", runner)

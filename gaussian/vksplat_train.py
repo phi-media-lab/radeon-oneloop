@@ -21,7 +21,14 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def validate_dataset(root: Path, image_dir: str, sparse_dir: str) -> dict[str, Any]:
+def validate_dataset(
+    root: Path,
+    image_dir: str,
+    sparse_dir: str,
+    *,
+    min_images: int = 8,
+    mask_dir: str | None = None,
+) -> dict[str, Any]:
     images = root / image_dir
     sparse = root / sparse_dir
     image_paths = (
@@ -33,10 +40,20 @@ def validate_dataset(root: Path, image_dir: str, sparse_dir: str) -> dict[str, A
         if images.is_dir()
         else []
     )
-    if len(image_paths) < 8:
+    if len(image_paths) < min_images:
         raise ValueError(
-            f"workspace capture requires at least 8 images, found {len(image_paths)}"
+            f"dataset requires at least {min_images} images, found {len(image_paths)}"
         )
+    mask_paths: list[Path] = []
+    if mask_dir is not None:
+        masks = root / mask_dir
+        if not masks.is_dir():
+            raise FileNotFoundError(f"missing mask directory: {masks}")
+        for image_path in image_paths:
+            mask_path = masks / f"{image_path.stem}.png"
+            if not mask_path.is_file():
+                raise FileNotFoundError(f"missing mask for {image_path.name}: {mask_path}")
+            mask_paths.append(mask_path)
     model_format = None
     model_paths: list[Path] = []
     for suffix in ("bin", "txt"):
@@ -49,7 +66,8 @@ def validate_dataset(root: Path, image_dir: str, sparse_dir: str) -> dict[str, A
     if model_format is None:
         raise FileNotFoundError(f"missing complete COLMAP model under {sparse}")
     ledger = [
-        (str(path.relative_to(root)), sha256(path)) for path in image_paths + model_paths
+        (str(path.relative_to(root)), sha256(path))
+        for path in image_paths + mask_paths + model_paths
     ]
     dataset_hash = hashlib.sha256(
         "".join(f"{value}  {name}\n" for name, value in ledger).encode()
@@ -57,6 +75,7 @@ def validate_dataset(root: Path, image_dir: str, sparse_dir: str) -> dict[str, A
     return {
         "dataset_hash": dataset_hash,
         "images": len(image_paths),
+        "masks": len(mask_paths),
         "model_format": model_format,
         "files": [{"path": name, "sha256": value} for name, value in ledger],
     }
@@ -74,6 +93,20 @@ def load_trainer(source: Path) -> Any:
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
+    # The pinned binding concatenates ``generated/...`` directly onto the
+    # shader-directory argument. Its upstream trainer supplies one trailing
+    # separator, which is consumed by that concatenation on this build.
+    # Preserve the clean upstream checkout and adapt only the shader lookup at
+    # runtime by supplying ``shader//``.
+    upstream_join_dir = module.join_dir
+
+    def shader_safe_join_dir(parent: str, child: str) -> str:
+        value = upstream_join_dir(parent, child)
+        if child == "shader":
+            return value.rstrip(os.sep) + os.sep + os.sep
+        return value
+
+    module.join_dir = shader_safe_join_dir
     return module
 
 
@@ -84,35 +117,81 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--image-dir", default="images")
     parser.add_argument("--sparse-dir", default="sparse/0")
+    parser.add_argument("--mask-dir")
+    parser.add_argument("--min-images", type=int, default=8)
     parser.add_argument("--steps", type=int, default=30000)
     parser.add_argument(
         "--strategy", choices=("default", "mcmc"), default="default"
     )
+    parser.add_argument("--freeze-higher-sh", action="store_true")
+    parser.add_argument("--disable-refinement", action="store_true")
+    parser.add_argument("--init-scale", type=float)
+    parser.add_argument("--scale-reg", type=float)
+    parser.add_argument("--opacity-reg", type=float)
     parser.add_argument("--eval-interval", type=int, default=8)
+    parser.add_argument("--seed", type=int, default=20260804)
     parser.add_argument("--evaluate", action="store_true")
+    parser.add_argument("--formal", action="store_true")
+    parser.add_argument("--host-role", default="unspecified_nonformal")
     args = parser.parse_args()
-    if args.steps <= 0 or args.eval_interval <= 1:
+    if args.steps <= 0 or args.eval_interval <= 1 or args.min_images <= 0:
         raise ValueError("steps must be positive and eval-interval must exceed one")
+    if args.formal and args.host_role != "radeon_c_gpu0_gfx1100_formal":
+        raise ValueError("formal VkSplat evidence is restricted to radeon-c GPU0 gfx1100")
+    if not args.formal and args.host_role.rsplit("_", 1)[-1] == "formal":
+        raise ValueError("a nonformal run cannot use a formal host-role label")
     dataset = args.dataset.resolve()
     output = args.output.resolve()
     if output.exists() and any(output.iterdir()):
         raise FileExistsError(f"refusing to reuse non-empty output: {output}")
     output.mkdir(parents=True, exist_ok=True)
-    dataset_report = validate_dataset(dataset, args.image_dir, args.sparse_dir)
+    dataset_report = validate_dataset(
+        dataset,
+        args.image_dir,
+        args.sparse_dir,
+        min_images=args.min_images,
+        mask_dir=args.mask_dir,
+    )
     trainer = load_trainer(args.source.resolve())
+    # VkSplat's upstream training loop shuffles image indices with Python's
+    # module-level random generator. Bind both Python and NumPy generators to
+    # the recorded seed before constructing or running the trainer.
+    trainer.random.seed(args.seed)
+    trainer.np.random.seed(args.seed)
     config_type = (
         trainer.MCMCTrainerConfig
         if args.strategy == "mcmc"
         else trainer.TrainerConfig
     )
     config = config_type()
+    if args.freeze_higher_sh:
+        config.features_rest_lr = 0.0
+    if args.disable_refinement:
+        config.refine_start_iter = args.steps + 1
+        config.refine_stop_iter = 0
+    if args.init_scale is not None:
+        if args.init_scale <= 0:
+            raise ValueError("init-scale must be positive")
+        config.init_scale = args.init_scale
+    if args.scale_reg is not None:
+        if args.scale_reg < 0:
+            raise ValueError("scale-reg cannot be negative")
+        config.scale_reg = args.scale_reg
+    if args.opacity_reg is not None:
+        if args.opacity_reg < 0:
+            raise ValueError("opacity-reg cannot be negative")
+        config.opacity_reg = args.opacity_reg
     config.enable_viewer = False
     config.output_dir = str(output)
     config.output_ply = str(output / "splat.ply")
     config.dataset_dir = str(dataset)
     config.image_dir = str((dataset / args.image_dir).resolve()) + os.sep
     config.sparse_dir = str((dataset / args.sparse_dir).resolve()) + os.sep
-    config.mask_dir = ""
+    config.mask_dir = (
+        str((dataset / args.mask_dir).resolve()) + os.sep
+        if args.mask_dir is not None
+        else ""
+    )
     config.train_steps = args.steps
     config.max_steps = args.steps
     config.eval_interval = args.eval_interval
@@ -131,9 +210,22 @@ def main() -> None:
     train = json.loads((output / "train.json").read_text())
     report = {
         "schema_version": "radeon_oneloop.gaussian_train.v1",
+        "formal": bool(args.formal),
+        "host_role": args.host_role,
         "backend": "vksplat_vulkan",
         "strategy": args.strategy,
+        "optimization_profile": {
+            "freeze_higher_sh": bool(args.freeze_higher_sh),
+            "features_rest_lr": config.features_rest_lr,
+            "disable_refinement": bool(args.disable_refinement),
+            "refine_start_iter": config.refine_start_iter,
+            "refine_stop_iter": config.refine_stop_iter,
+            "init_scale": config.init_scale,
+            "scale_reg": config.scale_reg,
+            "opacity_reg": config.opacity_reg,
+        },
         "steps": args.steps,
+        "seed": args.seed,
         "dataset": dataset_report,
         "num_splats": train.get("num_splats"),
         "elapsed_seconds": train.get("time_elapsed"),

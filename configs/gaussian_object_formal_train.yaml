@@ -1,0 +1,48 @@
+schema_version: 1
+profile: observed_object_vksplat_formal_train
+formal_host: radeon-c
+formal_gpu: GPU0
+formal_gpu_uid: "0x153f7d55778ab659"
+gfx_target: gfx1100
+seed: 20260804
+dataset:
+  id: graffiti_mickey_manual_ring_visual_hull_r160_v1
+  dataset_hash: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+  manifest_sha256: 04900c1a3afc0f2f5e73ce0e34042e91a10c469a9c0b255e3157e7985e9b660e
+  reviewed_source_manifest_sha256: 62e5bc9e6d1d88cc499eaf617a7de4bea9bf2041cbb42543299468516c9202a4
+  unique_observed_train_views: 4
+  validation_views: 1
+  validation_rule: front_observed_duplicate_no_heldout_claim
+  generated_views: false
+  generated_geometry: false
+  learned_depth: false
+  secondary_accelerator_artifacts: false
+initialization:
+  method: deterministic_reviewed_mask_visual_hull_CPU
+  grid_resolution: 160
+  sampled_surface_points: 30000
+  sample_seed: 20260804
+trainer:
+  name: VkSplat
+  backend: Vulkan_RADV
+  source_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+  source_checkout: clean_pinned_archive
+  runtime_shader_path_adapter: true
+  steps: 2000
+  strategy: default
+  freeze_higher_sh: true
+  disable_refinement: true
+  expected_gaussian_count: 30000
+claims:
+  generated_fill_enabled: false
+  heldout_quality_claim: false
+  appearance_only: true
+  policy_input: false
+  collision_geometry: false
+reproducibility:
+  seeded_image_order: true
+  cpp_rng_seed: 42
+  bitwise_checkpoint_determinism: false
+  reason: Vulkan_parallel_float_atomic_accumulation_order
+  required_claim: fixed_inputs_command_environment_and_statistical_visual_stability
+status: seeded_nonformal_preflight_passed_pending_frozen_commit

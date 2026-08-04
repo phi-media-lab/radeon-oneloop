@@ -48,7 +48,10 @@ import sys
 import vksplat
 
 module = vksplat.VkSplat()
-module.initialize(sys.argv[1], -1)
+# The pinned C++ binding concatenates relative shader paths without inserting
+# a separator.  Resolve that contract here instead of relying on shell/path
+# normalization of a trailing slash.
+module.initialize(sys.argv[1].rstrip("/") + "//", -1)
 module.cleanup()
 print(json.dumps({"vksplat_import": True, "vulkan_initialize": True}, sort_keys=True))
 PY
