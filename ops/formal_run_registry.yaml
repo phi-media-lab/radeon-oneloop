@@ -250,3 +250,24 @@ runs:
       - bitwise_checkpoint_determinism
       - generated_fill
       - collision_geometry
+  - id: 20260804T205059Z_gaussian_render_e149f01_20260804
+    role: gaussian_render
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: e149f0145591b3e77470c6d3c558b961cb0e9d51
+    config_sha256: 80ead530aa99e410410e639527836b6f22c7e73e217ccc191859f20aad2e33cd
+    dataset_sha256: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    seed: 20260804
+    parent_checkpoint_sha256: e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378
+    checkpoint_sha256: 7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706
+    evidence: artifacts/formal/object_gaussian_geometry_frozen_render
+    accepted_claims:
+      - formal_metric_canonicalization_bound_to_geometry_frozen_parent_training_lineage
+      - four_1024x1024_VkSplat_RADV_anchor_renders
+      - formal_render_wall_time_and_Vulkan_VRAM
+    excluded_claims:
+      - heldout_view_quality
+      - bitwise_checkpoint_determinism
+      - generated_fill
+      - collision_geometry

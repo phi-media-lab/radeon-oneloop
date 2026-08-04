@@ -1,0 +1,100 @@
+/root/radeon-oneloop-runs/jobs/20260804T204531Z_gaussian_train_14053af_20260804/manifest.json: OK
+/root/radeon-oneloop-runs/jobs/20260804T204531Z_gaussian_train_14053af_20260804/metrics.json: OK
+/root/radeon-oneloop-runs/jobs/20260804T204531Z_gaussian_train_14053af_20260804/train/splat.ply: OK
+/root/radeon-oneloop-data/object_assets/graffiti_mickey_asset_v1/formal_inputs/manual_ring_visual_hull_r160_v1/dataset_manifest.json: OK
+/root/radeon-oneloop-data/object_assets/graffiti_mickey_asset_v1/formal_inputs/manual_ring_pose_v1/cameras_observed.json: OK
+./config.json: OK
+./oneloop_metrics.json: OK
+./splat.ply: OK
+./train.json: OK
+./val_00000.png: OK
+{
+  "dataparser_transform_original_to_normalized": [
+    [
+      3.3310041427612305,
+      -0.10996610671281815,
+      -0.05856683850288391,
+      0.006202198565006256
+    ],
+    [
+      -0.05590669810771942,
+      0.0810447484254837,
+      -3.331878900527954,
+      -0.0029373043216764927
+    ],
+    [
+      0.11134209483861923,
+      3.330533027648926,
+      0.07914376258850098,
+      0.006754445843398571
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "eligible_for_formal_metrics": true,
+  "eligible_for_heldout_real_metrics": false,
+  "formal": true,
+  "gaussian_count": 30000,
+  "host_role": "radeon_c_gpu0_gfx1100_formal",
+  "input_ply_sha256": "e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378",
+  "inverse_similarity_normalized_to_canonical": {
+    "rotation_3x3": [
+      [
+        0.9993012293229985,
+        -0.016772009393078394,
+        0.03340262594013882
+      ],
+      [
+        -0.03298983415723708,
+        0.02431342418240106,
+        0.9991599104879271
+      ],
+      [
+        -0.017570051824821513,
+        -0.9995636927898658,
+        0.023743129753409458
+      ]
+    ],
+    "scale": 0.30000000113228553,
+    "translation_m": [
+      -0.0019418236195678593,
+      -0.0019418238302160377,
+      -0.000896226449926549
+    ]
+  },
+  "observed_only_training": true,
+  "output_ply_sha256": "7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706",
+  "provenance_class": "observed_core_candidate",
+  "schema_version": "radeon_oneloop.observed_core_canonicalization.v1",
+  "train_json_sha256": "fd8990de578f1727afee63a6149c53cf1f6ac32f3cb75aecf717fde92389b03f",
+  "training_lineage": {
+    "dataset_formal_input_eligible": true,
+    "dataset_hash": "682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e",
+    "dataset_manifest_sha256": "04900c1a3afc0f2f5e73ce0e34042e91a10c469a9c0b255e3157e7985e9b660e",
+    "input_ply_sha256": "e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378",
+    "secondary_accelerator_artifacts": false,
+    "training_config_sha256": "a634c71a9934f2308562583e450d20a86d7c983e031d99330d0d3d5fbc7ba643",
+    "training_formal": true,
+    "training_git_commit": "14053af9bcd4b15258815c0fd67bd6e248d6d812",
+    "training_gpu_uid": "0x153f7d55778ab659",
+    "training_host": "radeon-c",
+    "training_host_role": "radeon_c_gpu0_gfx1100_formal",
+    "training_job_role": "gaussian_train",
+    "training_metrics_sha256": "5ae68080a52a3f0aadf3e7967e3ed0f74f6856c0c71953c082410e79583896ec",
+    "training_run_id": "20260804T204531Z_gaussian_train_14053af_20260804",
+    "training_run_manifest_sha256": "45a96959f3f25658804ba2d2be335b785881d89e0767bb7f56bb4f60cbcb9c1d",
+    "vksplat_commit": "e26c254938c81ff85998cd357a9e005e255d9b03"
+  }
+}
+Device Requirement: subgroup>=32, maxGroups>=[786432 256 1], maxThreads>=[1024 16 1], maxShared>=21712, I16|I64|F32Atomic 
+[0] AMD Radeon Graphics (RADV NAVI31) - [32mVIABLE[m
+  subgroup=[0m64[m, maxGroups=[[0m4294967295[m [0m65535[m [0m65535[m], maxThreads=[[0m1024[m [0m1024[m [0m1024[m], maxShared=[0m65536[m, [0mI16[m|[0mI64[m|[0mF32Atomic[m
+[1] llvmpipe (LLVM 20.1.2, 256 bits) - [91mNOT VIABLE[m
+  subgroup=[91m8[m, maxGroups=[[93m65535[m [0m65535[m [0m65535[m], maxThreads=[[0m1024[m [0m1024[m [0m1024[m], maxShared=[0m32768[m, [0mI16[m|[0mI64[m|[0mF32Atomic[m
+Using device [[0m0[m]
+
+/root/radeon-oneloop-runs/jobs/20260804T205059Z_gaussian_render_e149f01_20260804/render

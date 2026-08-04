@@ -45,3 +45,13 @@ ONELOOP_OBJECT_CAMERAS=/root/radeon-oneloop-data/object_assets/graffiti_mickey_a
   682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e \
   -- ./ops/run_formal_object_geometry_frozen_render.sh
 ```
+
+The command completed successfully as job
+`20260804T205059Z_gaussian_render_e149f01_20260804`. Its public manifest and
+metrics SHA-256 values are respectively
+`4f9493f6e8fbbb0393d75522fed4a7c6b73d603fbb0b371d33c2e5c3ade720fa`
+and `d1ee2de51cca6c04fc83a092976b1e1a08f67802b44d9cf92ec282fd32f16ff4`.
+All formal gates passed; the canonical PLY SHA-256 is
+`7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706`.
+This closes the registered training-and-anchor-render execution step without
+expanding the claim to held-out or novel-view quality.

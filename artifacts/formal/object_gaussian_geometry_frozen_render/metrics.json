@@ -1,0 +1,65 @@
+{
+  "accepted": true,
+  "bitwise_checkpoint_determinism_claim": false,
+  "canonical_ply_sha256": "7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706",
+  "canonical_provenance_sha256": "c2c95e0f7b5e51ffb5e9aeda7ecdc45229d75b4adf8683b09e6319c638795528",
+  "checks": {
+    "fixed_30000_gaussians": true,
+    "formal_host_role_exact": true,
+    "formal_parent_training_bound": true,
+    "formal_provenance_true": true,
+    "formal_render_true": true,
+    "four_nonempty_renders": true,
+    "heldout_metrics_excluded": true,
+    "metric_extent_plausible": true,
+    "observed_only_training": true,
+    "parent_geometry_frozen_checkpoint_exact": true,
+    "secondary_accelerator_artifacts_excluded": true
+  },
+  "elapsed_render_s": 1.17589826,
+  "formal": true,
+  "generated_fill_enabled": false,
+  "heldout_quality_claim": false,
+  "peak_vram_bytes": 34884748,
+  "renders": [
+    {
+      "height": 1024,
+      "mean_transmittance": 0.47954869270324707,
+      "path": "anchor_front.png",
+      "sha256": "96993089e2fee308d0ed5376cc6fa62df70caec964fdaf7dfc1a2488f13c51c5",
+      "view_id": "anchor_front",
+      "width": 1024
+    },
+    {
+      "height": 1024,
+      "mean_transmittance": 0.5553843975067139,
+      "path": "anchor_right.png",
+      "sha256": "05c507e892dc69a56a04b6cb03049196fd7f530c877541b05f17ca4e89f1923f",
+      "view_id": "anchor_right",
+      "width": 1024
+    },
+    {
+      "height": 1024,
+      "mean_transmittance": 0.4694712460041046,
+      "path": "anchor_rear.png",
+      "sha256": "2dbe30cdefd9d5e73d379b0ea6ae3fdfaa118cc2e36b493886a8791daa0a41f3",
+      "view_id": "anchor_rear",
+      "width": 1024
+    },
+    {
+      "height": 1024,
+      "mean_transmittance": 0.6028085947036743,
+      "path": "anchor_left.png",
+      "sha256": "7a2b2571fe3540add12f2179f25b729e7ca15b653cac548825b2d2ce6e7e5942",
+      "view_id": "anchor_left",
+      "width": 1024
+    }
+  ],
+  "robust_extent_m_p0001_p9999": [
+    0.08854717016257346,
+    0.07456604391336441,
+    0.09022012353017926
+  ],
+  "schema_version": "radeon_oneloop.formal_object_geometry_frozen_render.v1",
+  "vram_bytes": 34884748
+}
