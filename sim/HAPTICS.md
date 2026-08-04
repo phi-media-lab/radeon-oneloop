@@ -234,6 +234,38 @@ ONELOOP_NO_CROSS_JOINT_INSTABILITY_CONFIRMED=1 \
   SINGLE_ARM_PHYSICAL_RUN_DIR useful_comfortable
 ```
 
+An accepted single-arm receipt authorizes only a 40-second dual-arm monitor
+exercise. Both leaders remain torque-free. The evidence window starts at the
+Genesis `READY` marker, both sets of six channels must be exercised, the fixed
+left/right side-by-side layout is checked explicitly, and all control,
+clamping, watchdog, feedback, and zero-output gates remain in force:
+
+```bash
+./ops/run_amd_haptic_dual_monitor_stage.sh \
+  LEFT_PORT RIGHT_PORT LEFT_ID RIGHT_ID SINGLE_ARM_RECEIPT_RUN_DIR
+```
+
+The operator then confirms that both real leaders drove their same-side,
+parallel virtual followers in the same direction. That receipt can authorize
+only a ten-motor read-only preflight:
+
+```bash
+ONELOOP_BOTH_LEADERS_MOVE_FREELY_CONFIRMED=1 \
+./ops/seal_haptic_dual_monitor_receipt.sh \
+  DUAL_MONITOR_RUN_DIR both_correct_parallel_same_direction
+
+./ops/run_amd_haptic_dual_arm_readonly_preflight.sh \
+  LEFT_PORT RIGHT_PORT LEFT_ID RIGHT_ID DUAL_MONITOR_RECEIPT_RUN_DIR
+```
+
+The dual preflight reads seven registers from each of ten non-gripper motors,
+writes nothing, and evaluates a provisional upper bound of 15/1000 torque and
+0.4 configured degree. It is not an authorization to apply those values. The
+dual physical adapter and runner remain deliberately unimplemented until the
+single-arm physical receipt proves a useful/comfortable scale without
+cross-joint instability; the measured single-arm result must determine the
+dual-arm parameters.
+
 Do not execute the physical bench command, or any future physical-arm command,
 from automation without a fresh operator attestation that the power cut is
 reachable and the selected workspace is clear to resist motion. The monitor

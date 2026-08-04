@@ -23,6 +23,9 @@ MONITOR_RECEIPT_SCHEMA_VERSION = "radeon_oneloop.haptic_monitor_receipt.v1"
 ARM_PHYSICAL_RECEIPT_SCHEMA_VERSION = (
     "radeon_oneloop.haptic_arm_physical_receipt.v1"
 )
+DUAL_MONITOR_RECEIPT_SCHEMA_VERSION = (
+    "radeon_oneloop.haptic_dual_monitor_receipt.v1"
+)
 PERCEPTION_CHOICES = (
     "useful_comfortable",
     "too_weak",
@@ -33,6 +36,11 @@ MONITOR_MAPPING_CHOICES = (
     "correct_same_side_same_direction",
     "wrong_side_or_direction",
     "unstable_or_unusable",
+)
+DUAL_MAPPING_CHOICES = (
+    "both_correct_parallel_same_direction",
+    "left_right_swapped_or_direction_wrong",
+    "unstable_or_cross_coupled",
 )
 RUN_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
 
@@ -283,11 +291,88 @@ def build_single_arm_physical_receipt(
     }
 
 
+def build_dual_arm_monitor_receipt(
+    *,
+    source_run_id: str,
+    gate_path: Path,
+    source_hash_index_path: Path,
+    source_done_path: Path,
+    mapping_verdict: str,
+    both_leaders_move_freely_after_monitor: bool,
+) -> dict[str, Any]:
+    """Bind the operator's two-arm visual mapping judgment."""
+
+    if RUN_ID_PATTERN.fullmatch(source_run_id) is None:
+        raise ValueError("source_run_id contains unsafe characters")
+    if mapping_verdict not in DUAL_MAPPING_CHOICES:
+        raise ValueError(f"unsupported dual mapping verdict: {mapping_verdict!r}")
+    for path in (gate_path, source_hash_index_path, source_done_path):
+        if not path.is_file():
+            raise FileNotFoundError(path)
+    gate = json.loads(gate_path.read_text(encoding="utf-8"))
+    gate_sha256 = sha256_file(gate_path)
+    hashes = _hash_index_by_basename(source_hash_index_path)
+    done = json.loads(source_done_path.read_text(encoding="utf-8"))
+    checks = {
+        "machine_gate_schema": (
+            gate.get("schema_version")
+            == "radeon_oneloop.haptic_dual_monitor_gate.v1"
+        ),
+        "machine_gate_accepted": gate.get("accepted") is True,
+        "machine_gate_stage": gate.get("stage") == "dual_arm_monitor_only",
+        "machine_gate_nonphysical": (
+            gate.get("physical_output_commands") is False
+        ),
+        "machine_gate_waited_for_operator": (
+            gate.get("next_stage_requires_operator_receipt") is True
+        ),
+        "gate_bound_by_source_hash_index": hashes.get(gate_path.name)
+        == gate_sha256,
+        "source_done_marker_accepted": (
+            done.get("status") == "done_dual_arm_monitor_machine_accepted"
+        ),
+        "operator_confirms_both_parallel_same_direction": (
+            mapping_verdict == "both_correct_parallel_same_direction"
+        ),
+        "operator_reports_both_leaders_free": (
+            both_leaders_move_freely_after_monitor is True
+        ),
+    }
+    accepted = all(checks.values())
+    return {
+        "schema_version": DUAL_MONITOR_RECEIPT_SCHEMA_VERSION,
+        "formal": False,
+        "stage": "dual_arm_monitor_only",
+        "accepted": accepted,
+        "checks": checks,
+        "source": {
+            "run_id": source_run_id,
+            "gate_sha256": gate_sha256,
+            "hash_index_sha256": sha256_file(source_hash_index_path),
+            "done_marker_sha256": sha256_file(source_done_path),
+        },
+        "operator_attestation": {
+            "mapping_verdict": mapping_verdict,
+            "both_leaders_move_freely_after_monitor": (
+                both_leaders_move_freely_after_monitor
+            ),
+            "recorded_at_utc": datetime.now(timezone.utc).isoformat(),
+            "operator_identity_recorded": False,
+        },
+        "next_authorized_stage": (
+            "dual_arm_readonly_preflight" if accepted else None
+        ),
+        "physical_output_commands": False,
+        "receipt_writes_to_source_run": False,
+    }
+
+
 def authorize_transition(receipt: dict[str, Any], *, target_stage: str) -> None:
     if receipt.get("schema_version") not in (
         SCHEMA_VERSION,
         MONITOR_RECEIPT_SCHEMA_VERSION,
         ARM_PHYSICAL_RECEIPT_SCHEMA_VERSION,
+        DUAL_MONITOR_RECEIPT_SCHEMA_VERSION,
     ):
         raise ValueError("unsupported haptic stage receipt schema")
     if receipt.get("accepted") is not True:
@@ -326,6 +411,9 @@ def authorize_receipt_bundle(
         MONITOR_RECEIPT_SCHEMA_VERSION: "done_single_arm_monitor_stage_accepted",
         ARM_PHYSICAL_RECEIPT_SCHEMA_VERSION: (
             "done_single_arm_physical_stage_accepted"
+        ),
+        DUAL_MONITOR_RECEIPT_SCHEMA_VERSION: (
+            "done_dual_arm_monitor_stage_accepted"
         ),
     }[receipt["schema_version"]]
     if done.get("status") != expected_done_status:

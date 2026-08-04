@@ -7,6 +7,7 @@ import unittest
 from sim.genesis_so101.haptic_stage_receipt import (
     authorize_receipt_bundle,
     authorize_transition,
+    build_dual_arm_monitor_receipt,
     build_single_arm_physical_receipt,
     build_single_arm_monitor_receipt,
     build_single_joint_receipt,
@@ -312,6 +313,80 @@ class HapticStageReceiptTests(unittest.TestCase):
                 perception="useful_comfortable",
                 no_cross_joint_instability=False,
                 leader_moves_freely_after_test=True,
+            )
+            self.assertFalse(receipt["accepted"])
+            self.assertIsNone(receipt["next_authorized_stage"])
+
+    def test_dual_monitor_receipt_unlocks_only_dual_readonly_preflight(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            gate = root / "gate.json"
+            gate.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "radeon_oneloop.haptic_dual_monitor_gate.v1",
+                        "stage": "dual_arm_monitor_only",
+                        "accepted": True,
+                        "physical_output_commands": False,
+                        "next_stage_requires_operator_receipt": True,
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            hashes = root / "hashes.sha256"
+            hashes.write_text(f"{_sha(gate)}  {gate}\n", encoding="utf-8")
+            done = root / "DONE"
+            done.write_text(
+                '{"status":"done_dual_arm_monitor_machine_accepted"}\n',
+                encoding="utf-8",
+            )
+            receipt = build_dual_arm_monitor_receipt(
+                source_run_id="20260804T000000Z_dual_monitor",
+                gate_path=gate,
+                source_hash_index_path=hashes,
+                source_done_path=done,
+                mapping_verdict="both_correct_parallel_same_direction",
+                both_leaders_move_freely_after_monitor=True,
+            )
+            self.assertTrue(receipt["accepted"])
+            authorize_transition(
+                receipt, target_stage="dual_arm_readonly_preflight"
+            )
+            with self.assertRaisesRegex(ValueError, "does not authorize"):
+                authorize_transition(receipt, target_stage="dual_arm_physical")
+
+    def test_dual_mapping_swap_is_negative_evidence(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            gate = root / "gate.json"
+            gate.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "radeon_oneloop.haptic_dual_monitor_gate.v1",
+                        "stage": "dual_arm_monitor_only",
+                        "accepted": True,
+                        "physical_output_commands": False,
+                        "next_stage_requires_operator_receipt": True,
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            hashes = root / "hashes.sha256"
+            hashes.write_text(f"{_sha(gate)}  {gate}\n", encoding="utf-8")
+            done = root / "DONE"
+            done.write_text(
+                '{"status":"done_dual_arm_monitor_machine_accepted"}\n',
+                encoding="utf-8",
+            )
+            receipt = build_dual_arm_monitor_receipt(
+                source_run_id="20260804T000000Z_dual_monitor",
+                gate_path=gate,
+                source_hash_index_path=hashes,
+                source_done_path=done,
+                mapping_verdict="left_right_swapped_or_direction_wrong",
+                both_leaders_move_freely_after_monitor=True,
             )
             self.assertFalse(receipt["accepted"])
             self.assertIsNone(receipt["next_authorized_stage"])

@@ -109,6 +109,12 @@ unexecuted. They use reliable per-motor writes and readback for arm/release/
 restore, batched bounded writes only in the 30 Hz loop, and allow the operator
 receipt to unlock only dual-arm monitor mode. No multi-motor physical claim is
 made until that staged real-hardware run is completed.
+The dual-arm zero-output continuation is also implemented and software-tested:
+a READY-bounded monitor run requires motion coverage on all twelve leader
+channels and the fixed same-side parallel layout, a separate operator receipt
+binds the visual mapping judgment, and a ten-motor read-only preflight checks
+both buses. The dual physical adapter is intentionally not implemented before
+the single-arm empirical receipt determines a safe and useful scale.
 
 ### Physics and debug object
 
@@ -325,7 +331,7 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Verification status
 
-The fresh full scaffold collects 173 tests and passes all available tests, with
+The fresh full scaffold collects 182 tests and passes all available tests, with
 5 OpenCV-dependent tests skipped in the local environment;
 shell syntax, YAML/JSON parsing, and `git diff --check` also pass. These
 source-tree checks are not a substitute for the physical haptic gate or the
