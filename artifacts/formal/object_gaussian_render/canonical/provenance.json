@@ -1,0 +1,82 @@
+{
+  "dataparser_transform_original_to_normalized": [
+    [
+      3.3310041427612305,
+      -0.10996610671281815,
+      -0.05856683850288391,
+      0.006202198565006256
+    ],
+    [
+      -0.05590669810771942,
+      0.0810447484254837,
+      -3.331878900527954,
+      -0.0029373043216764927
+    ],
+    [
+      0.11134209483861923,
+      3.330533027648926,
+      0.07914376258850098,
+      0.006754445843398571
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "eligible_for_formal_metrics": true,
+  "eligible_for_heldout_real_metrics": false,
+  "formal": true,
+  "gaussian_count": 30000,
+  "host_role": "radeon_c_gpu0_gfx1100_formal",
+  "input_ply_sha256": "d95edcb66edd5fd3f6fe3fda4686dfe718ce867507a9c4db0fa6dde88a2cfcc5",
+  "inverse_similarity_normalized_to_canonical": {
+    "rotation_3x3": [
+      [
+        0.9993012293229985,
+        -0.016772009393078394,
+        0.03340262594013882
+      ],
+      [
+        -0.03298983415723708,
+        0.02431342418240106,
+        0.9991599104879271
+      ],
+      [
+        -0.017570051824821513,
+        -0.9995636927898658,
+        0.023743129753409458
+      ]
+    ],
+    "scale": 0.30000000113228553,
+    "translation_m": [
+      -0.0019418236195678593,
+      -0.0019418238302160377,
+      -0.000896226449926549
+    ]
+  },
+  "observed_only_training": true,
+  "output_ply_sha256": "0e26b6c4f993a7052fb471ad84a1a98180b262c868a4b179ce19b294b288bd1a",
+  "provenance_class": "observed_core_candidate",
+  "schema_version": "radeon_oneloop.observed_core_canonicalization.v1",
+  "train_json_sha256": "fcd62e9214d75e7a7398579e460fd56feb0dff529761744bacbed095a3c08c7a",
+  "training_lineage": {
+    "dataset_formal_input_eligible": true,
+    "dataset_hash": "682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e",
+    "dataset_manifest_sha256": "04900c1a3afc0f2f5e73ce0e34042e91a10c469a9c0b255e3157e7985e9b660e",
+    "input_ply_sha256": "d95edcb66edd5fd3f6fe3fda4686dfe718ce867507a9c4db0fa6dde88a2cfcc5",
+    "secondary_accelerator_artifacts": false,
+    "training_config_sha256": "fbd34be2d3a8159a7401673927ff3808393bfb7fa16a6ead692184b633b75ffe",
+    "training_formal": true,
+    "training_git_commit": "84d468bb5ca6f08bcbf071e9880c712fa24619a6",
+    "training_gpu_uid": "0x153f7d55778ab659",
+    "training_host": "radeon-c",
+    "training_host_role": "radeon_c_gpu0_gfx1100_formal",
+    "training_job_role": "gaussian_train",
+    "training_metrics_sha256": "6c8cd274c80acbd67b00d721ae4d202b57847585cab0ee50ef6c891ad3fa36fd",
+    "training_run_id": "20260804T095251Z_gaussian_train_84d468b_20260804",
+    "training_run_manifest_sha256": "d27440b792f96f5f522a58e34ce091d97239595b1ffe86a1b5605130bd9ffb00",
+    "vksplat_commit": "e26c254938c81ff85998cd357a9e005e255d9b03"
+  }
+}

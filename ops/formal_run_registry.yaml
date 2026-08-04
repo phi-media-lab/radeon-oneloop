@@ -189,3 +189,44 @@ runs:
     excluded_claims:
       - task_success
       - generalization
+  - id: 20260804T095251Z_gaussian_train_84d468b_20260804
+    role: gaussian_train
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: 84d468bb5ca6f08bcbf071e9880c712fa24619a6
+    config_sha256: fbd34be2d3a8159a7401673927ff3808393bfb7fa16a6ead692184b633b75ffe
+    dataset_sha256: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    seed: 20260804
+    checkpoint_sha256: d95edcb66edd5fd3f6fe3fda4686dfe718ce867507a9c4db0fa6dde88a2cfcc5
+    evidence: artifacts/formal/object_gaussian_train
+    accepted_claims:
+      - four_observed_views_and_CPU_visual_hull_initialized_without_secondary_accelerator_artifacts
+      - Radeon_GPU0_VkSplat_training_2000_steps_to_30000_splats
+      - formal_training_wall_time_and_Vulkan_VRAM
+    excluded_claims:
+      - heldout_view_quality
+      - bitwise_checkpoint_determinism
+      - generated_fill
+      - collision_geometry
+  - id: 20260804T095859Z_gaussian_render_c8bd111_20260804
+    role: gaussian_render
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: c8bd1113d1305e3251b9d9bd9f9de5e0abcc21fe
+    config_sha256: a109d1cb5a3a645f96ac1181d35a26818a3407db444138e9411aa01135d5ad3a
+    dataset_sha256: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    seed: 20260804
+    parent_checkpoint_sha256: d95edcb66edd5fd3f6fe3fda4686dfe718ce867507a9c4db0fa6dde88a2cfcc5
+    checkpoint_sha256: 0e26b6c4f993a7052fb471ad84a1a98180b262c868a4b179ce19b294b288bd1a
+    evidence: artifacts/formal/object_gaussian_render
+    accepted_claims:
+      - formal_metric_canonicalization_bound_to_parent_training_lineage
+      - four_1024x1024_VkSplat_RADV_renders
+      - formal_render_wall_time_and_Vulkan_VRAM
+    excluded_claims:
+      - heldout_view_quality
+      - bitwise_checkpoint_determinism
+      - generated_fill
+      - collision_geometry

@@ -1,0 +1,62 @@
+{
+  "accepted": true,
+  "bitwise_checkpoint_determinism_claim": false,
+  "canonical_ply_sha256": "0e26b6c4f993a7052fb471ad84a1a98180b262c868a4b179ce19b294b288bd1a",
+  "canonical_provenance_sha256": "80efa4f5a98070395844205afa663ee8ca2975eda21e720c3cf785dcfd52bd02",
+  "checks": {
+    "fixed_30000_gaussians": true,
+    "formal_host_role_exact": true,
+    "formal_parent_training_bound": true,
+    "formal_provenance_true": true,
+    "formal_render_true": true,
+    "four_nonempty_renders": true,
+    "heldout_metrics_excluded": true,
+    "metric_extent_plausible": true,
+    "secondary_accelerator_artifacts_excluded": true
+  },
+  "elapsed_render_s": 1.201083963,
+  "formal": true,
+  "heldout_quality_claim": false,
+  "peak_vram_bytes": 35649308,
+  "renders": [
+    {
+      "height": 1024,
+      "mean_transmittance": 0.41575950384140015,
+      "path": "anchor_front.png",
+      "sha256": "645e6c6e3475d9813ae6b3f06487b837a973363cc6d7f89b21b1508c96c0b4cb",
+      "view_id": "anchor_front",
+      "width": 1024
+    },
+    {
+      "height": 1024,
+      "mean_transmittance": 0.4691333472728729,
+      "path": "anchor_right.png",
+      "sha256": "1f6217138e289c4b9fc62110659378339b85130506cde0282cbd199c2ff80e28",
+      "view_id": "anchor_right",
+      "width": 1024
+    },
+    {
+      "height": 1024,
+      "mean_transmittance": 0.4070308804512024,
+      "path": "anchor_rear.png",
+      "sha256": "500614e5b4b80e5ab05ff08a9634f9f930b786b4bb087f7ca18da458c09a2251",
+      "view_id": "anchor_rear",
+      "width": 1024
+    },
+    {
+      "height": 1024,
+      "mean_transmittance": 0.5309593677520752,
+      "path": "anchor_left.png",
+      "sha256": "f9850969042503d9cd595c99f5d473d1e7d8ececf8020997dc8e8aee16641ef7",
+      "view_id": "anchor_left",
+      "width": 1024
+    }
+  ],
+  "robust_extent_m_p005_p995": [
+    0.08838158426806333,
+    0.07644639816135168,
+    0.08892897021025423
+  ],
+  "schema_version": "radeon_oneloop.formal_object_vksplat_render.v1",
+  "vram_bytes": 35649308
+}
