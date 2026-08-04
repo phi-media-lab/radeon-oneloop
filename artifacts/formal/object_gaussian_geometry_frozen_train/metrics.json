@@ -1,0 +1,129 @@
+{
+  "artifacts": {
+    "config.json": "30098b8ff8e44dd67aae79a827975858248343355b3ffa9436742fb079f7d123",
+    "splat.ply": "e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378",
+    "train.json": "fd8990de578f1727afee63a6149c53cf1f6ac32f3cb75aecf717fde92389b03f"
+  },
+  "backend": "vksplat_vulkan",
+  "dataset": {
+    "dataset_hash": "682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e",
+    "files": [
+      {
+        "path": "images/000_eval_probe_anchor_front.png",
+        "sha256": "1e0676cfe7a8219eb081b4c92202c3c1caac380def06873b281f958ec9b8b1fb"
+      },
+      {
+        "path": "images/anchor_front.png",
+        "sha256": "1e0676cfe7a8219eb081b4c92202c3c1caac380def06873b281f958ec9b8b1fb"
+      },
+      {
+        "path": "images/anchor_left.png",
+        "sha256": "f5121707ad53a43858dd3bc4381057dcbe5b04decaf190c19d96af24342137cb"
+      },
+      {
+        "path": "images/anchor_rear.png",
+        "sha256": "d032b0fdf47bac33335b38d7438ed58b30c170be96630593b3cac9dca6f501c5"
+      },
+      {
+        "path": "images/anchor_right.png",
+        "sha256": "dc0e9dda76b1a469d7c68dcb4cdf6b129c7500f0f3bda470cdd73552562eb2f7"
+      },
+      {
+        "path": "masks/000_eval_probe_anchor_front.png",
+        "sha256": "d9db09a3049df2eb4c01b79d7053c03a865e87fb4b02dfa0f6c4adc8d5bea59e"
+      },
+      {
+        "path": "masks/anchor_front.png",
+        "sha256": "d9db09a3049df2eb4c01b79d7053c03a865e87fb4b02dfa0f6c4adc8d5bea59e"
+      },
+      {
+        "path": "masks/anchor_left.png",
+        "sha256": "4bf4616346a0ae981a07b82ec44d303e3a930a4379260831b1ebd70b01701a6c"
+      },
+      {
+        "path": "masks/anchor_rear.png",
+        "sha256": "d8f5507b1b865b73fd43ebfc43e016f87ba2d2ac1b1d3124a617af06979b4e75"
+      },
+      {
+        "path": "masks/anchor_right.png",
+        "sha256": "704acf278ee1f64fa4db98025d02e437abe39fa20d1f52b39f2410f189cc92d6"
+      },
+      {
+        "path": "sparse/0/cameras.txt",
+        "sha256": "a99aba18e9fc91ffda3507e925e72d8f484d0a17582301cdbd5456155c60e666"
+      },
+      {
+        "path": "sparse/0/images.txt",
+        "sha256": "ffb6e2ba56a19352ec8403c327455530f8515ec66c52cbf101422314fe8df175"
+      },
+      {
+        "path": "sparse/0/points3D.txt",
+        "sha256": "1138a85221bf16a8ecd33304cf71ad12ef61a3e0d59c37d8b5092482ccd1ba2f"
+      }
+    ],
+    "images": 5,
+    "masks": 5,
+    "model_format": "txt"
+  },
+  "elapsed_seconds": 10.388847385998815,
+  "evaluation": null,
+  "formal": true,
+  "formal_acceptance": {
+    "accepted": true,
+    "bitwise_checkpoint_determinism_claim": false,
+    "checks": {
+      "center_rates_negligible": true,
+      "dataset_hash_exact": true,
+      "fixed_30000_splats": true,
+      "formal_flag_true": true,
+      "formal_host_role_exact": true,
+      "four_unique_observed_train_views": true,
+      "front_duplicate_only_validation_view": true,
+      "geometry_frozen": true,
+      "no_heldout_quality_claim": true,
+      "seed_exact": true,
+      "shape_rates_zero": true,
+      "steps_exact": true
+    },
+    "generated_fill_enabled": false,
+    "secondary_accelerator_artifacts": false,
+    "train_images": [
+      "anchor_front.png",
+      "anchor_left.png",
+      "anchor_rear.png",
+      "anchor_right.png"
+    ],
+    "validation_images": [
+      "000_eval_probe_anchor_front.png"
+    ]
+  },
+  "host_role": "radeon_c_gpu0_gfx1100_formal",
+  "num_splats": 30000,
+  "optimization_profile": {
+    "disable_refinement": true,
+    "features_rest_lr": 0.0,
+    "freeze_geometry": true,
+    "freeze_higher_sh": true,
+    "init_scale": 1.0,
+    "means_lr": 1e-12,
+    "means_lr_final": 1e-12,
+    "opacity_reg": 0.0,
+    "original_geometry_learning_rates": {
+      "means_lr": 0.00016,
+      "means_lr_final": 1.6e-06,
+      "quats_lr": 0.001,
+      "scales_lr": 0.005
+    },
+    "quats_lr": 0.0,
+    "refine_start_iter": 2001,
+    "refine_stop_iter": 0,
+    "scale_reg": 0.0,
+    "scales_lr": 0.0
+  },
+  "peak_vram_bytes": 122502412,
+  "schema_version": "radeon_oneloop.gaussian_train.v1",
+  "seed": 20260804,
+  "steps": 2000,
+  "strategy": "default",
+  "vram_bytes": 122502412
+}

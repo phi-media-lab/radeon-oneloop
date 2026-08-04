@@ -1,0 +1,177 @@
+/root/radeon-oneloop-data/object_assets/graffiti_mickey_asset_v1/formal_inputs/manual_ring_visual_hull_r160_v1/dataset_manifest.json: OK
+Device Requirement: subgroup>=32, maxGroups>=[786432 256 1], maxThreads>=[1024 16 1], maxShared>=21712, I16|I64|F32Atomic 
+[0] AMD Radeon Graphics (RADV NAVI31) - [32mVIABLE[m
+  subgroup=[0m64[m, maxGroups=[[0m4294967295[m [0m65535[m [0m65535[m], maxThreads=[[0m1024[m [0m1024[m [0m1024[m], maxShared=[0m65536[m, [0mI16[m|[0mI64[m|[0mF32Atomic[m
+[1] llvmpipe (LLVM 20.1.2, 256 bits) - [91mNOT VIABLE[m
+  subgroup=[91m8[m, maxGroups=[[93m65535[m [0m65535[m [0m65535[m], maxThreads=[[0m1024[m [0m1024[m [0m1024[m], maxShared=[0m32768[m, [0mI16[m|[0mI64[m|[0mF32Atomic[m
+Using device [[0m0[m]
+
+Reading COLMAP cameras from cameras.txt
+Reading COLMAP images from images.txt
+Reading COLMAP points from points3D.txt
+Loading image 1/5Loading image 2/5Loading image 3/5Loading image 4/5Loading image 5/5
+Scene scale: 1.320000
+4 train (4 with mask), 1 val (1 with mask), 30000 initial points
+
+Time elapsed: 10.4 seconds
+VRAM usage: 0.11 GiB
+Num splats: 30000
+
+Timing breakdown:
+CopyTrainImageToDevice - 2000, 4.015 secs
+RasterizeBackward - 2000, 2.890 secs
+_RasterizeBackwardScheduling_Tensor_0_8_8 - 1639, 2.263 secs
+ComputeSSIMGradient - 2000, 1.070 secs
+RasterizeForward - 2000, 0.780 secs
+_RasterizeBackwardScheduling_PerSplat - 361, 0.627 secs
+SortRTS - 2000, 0.331 secs
+CalculateIndexBufferOffset - 2000, 0.127 secs
+FusedProjectionBackwardOptimizerStep - 2000, 0.084 secs
+GenerateKeys - 2000, 0.075 secs
+ComputeTileRanges - 2000, 0.045 secs
+_Cumsum - 2000, 0.042 secs
+ProjectionForward - 2000, 0.026 secs
+DefaultPostBackward - 2000, 0.001 secs
+Total - 9.445 / 10.389 secs
+
+VRAM breakdown:
+_temp_gauss_attr - 48.0 MiB
+pixel_state - 16.0 MiB
+v_pixel_state - 16.0 MiB
+g_sh_coeffs_1 - 5.5 MiB
+g_sh_coeffs_2 - 5.5 MiB
+sh_coeffs - 5.5 MiB
+n_contributors - 4.0 MiB
+ref_image - 4.0 MiB
+sorting_gauss_idx_1 - 1.4 MiB
+sorting_gauss_idx_2 - 1.4 MiB
+sorting_keys_1 - 1.4 MiB
+sorting_keys_2 - 1.4 MiB
+g_rotations - 937.5 KiB
+g_scales_opacs - 937.5 KiB
+g_xyz_ws - 703.1 KiB
+inv_cov_vs_opacity - 468.8 KiB
+rotations - 468.8 KiB
+scales_opacs - 468.8 KiB
+v_inv_cov_vs_opacity - 468.8 KiB
+rgb - 351.6 KiB
+v_rgb - 351.6 KiB
+xyz_ws - 351.6 KiB
+rect_tile_space - 234.4 KiB
+v_xy_vs - 234.4 KiB
+xy_vs - 234.4 KiB
+depths - 117.2 KiB
+index_buffer_offset - 117.2 KiB
+radii - 117.2 KiB
+tiles_touched - 117.2 KiB
+_sorting_histogram_cumsum - 92.0 KiB
+tile_ranges - 16.0 KiB
+_sorting_histogram - 16.0 KiB
+_cumsum_blockSums - 0.1 KiB
+Total - 116.8 MiB
+Total (queried) - 116.8 MiB
+Peak (queried) - 116.8 MiB
+
+Writing PLY
+
+
+{
+  "schema_version": "radeon_oneloop.gaussian_train.v1",
+  "formal": true,
+  "host_role": "radeon_c_gpu0_gfx1100_formal",
+  "backend": "vksplat_vulkan",
+  "strategy": "default",
+  "optimization_profile": {
+    "freeze_higher_sh": true,
+    "features_rest_lr": 0.0,
+    "freeze_geometry": true,
+    "original_geometry_learning_rates": {
+      "means_lr": 0.00016,
+      "means_lr_final": 1.6e-06,
+      "scales_lr": 0.005,
+      "quats_lr": 0.001
+    },
+    "means_lr": 1e-12,
+    "means_lr_final": 1e-12,
+    "scales_lr": 0.0,
+    "quats_lr": 0.0,
+    "disable_refinement": true,
+    "refine_start_iter": 2001,
+    "refine_stop_iter": 0,
+    "init_scale": 1.0,
+    "scale_reg": 0.0,
+    "opacity_reg": 0.0
+  },
+  "steps": 2000,
+  "seed": 20260804,
+  "dataset": {
+    "dataset_hash": "682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e",
+    "images": 5,
+    "masks": 5,
+    "model_format": "txt",
+    "files": [
+      {
+        "path": "images/000_eval_probe_anchor_front.png",
+        "sha256": "1e0676cfe7a8219eb081b4c92202c3c1caac380def06873b281f958ec9b8b1fb"
+      },
+      {
+        "path": "images/anchor_front.png",
+        "sha256": "1e0676cfe7a8219eb081b4c92202c3c1caac380def06873b281f958ec9b8b1fb"
+      },
+      {
+        "path": "images/anchor_left.png",
+        "sha256": "f5121707ad53a43858dd3bc4381057dcbe5b04decaf190c19d96af24342137cb"
+      },
+      {
+        "path": "images/anchor_rear.png",
+        "sha256": "d032b0fdf47bac33335b38d7438ed58b30c170be96630593b3cac9dca6f501c5"
+      },
+      {
+        "path": "images/anchor_right.png",
+        "sha256": "dc0e9dda76b1a469d7c68dcb4cdf6b129c7500f0f3bda470cdd73552562eb2f7"
+      },
+      {
+        "path": "masks/000_eval_probe_anchor_front.png",
+        "sha256": "d9db09a3049df2eb4c01b79d7053c03a865e87fb4b02dfa0f6c4adc8d5bea59e"
+      },
+      {
+        "path": "masks/anchor_front.png",
+        "sha256": "d9db09a3049df2eb4c01b79d7053c03a865e87fb4b02dfa0f6c4adc8d5bea59e"
+      },
+      {
+        "path": "masks/anchor_left.png",
+        "sha256": "4bf4616346a0ae981a07b82ec44d303e3a930a4379260831b1ebd70b01701a6c"
+      },
+      {
+        "path": "masks/anchor_rear.png",
+        "sha256": "d8f5507b1b865b73fd43ebfc43e016f87ba2d2ac1b1d3124a617af06979b4e75"
+      },
+      {
+        "path": "masks/anchor_right.png",
+        "sha256": "704acf278ee1f64fa4db98025d02e437abe39fa20d1f52b39f2410f189cc92d6"
+      },
+      {
+        "path": "sparse/0/cameras.txt",
+        "sha256": "a99aba18e9fc91ffda3507e925e72d8f484d0a17582301cdbd5456155c60e666"
+      },
+      {
+        "path": "sparse/0/images.txt",
+        "sha256": "ffb6e2ba56a19352ec8403c327455530f8515ec66c52cbf101422314fe8df175"
+      },
+      {
+        "path": "sparse/0/points3D.txt",
+        "sha256": "1138a85221bf16a8ecd33304cf71ad12ef61a3e0d59c37d8b5092482ccd1ba2f"
+      }
+    ]
+  },
+  "num_splats": 30000,
+  "elapsed_seconds": 10.388847385998815,
+  "vram_bytes": 122502412,
+  "peak_vram_bytes": 122502412,
+  "artifacts": {
+    "config.json": "30098b8ff8e44dd67aae79a827975858248343355b3ffa9436742fb079f7d123",
+    "train.json": "fd8990de578f1727afee63a6149c53cf1f6ac32f3cb75aecf717fde92389b03f",
+    "splat.ply": "e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378"
+  },
+  "evaluation": null
+}

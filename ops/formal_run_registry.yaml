@@ -230,3 +230,23 @@ runs:
       - bitwise_checkpoint_determinism
       - generated_fill
       - collision_geometry
+  - id: 20260804T204531Z_gaussian_train_14053af_20260804
+    role: gaussian_train
+    status: done
+    host: radeon-c
+    gpu_uid: "0x153f7d55778ab659"
+    git_commit: 14053af9bcd4b15258815c0fd67bd6e248d6d812
+    config_sha256: a634c71a9934f2308562583e450d20a86d7c983e031d99330d0d3d5fbc7ba643
+    dataset_sha256: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+    seed: 20260804
+    checkpoint_sha256: e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378
+    evidence: artifacts/formal/object_gaussian_geometry_frozen_train
+    accepted_claims:
+      - four_observed_views_and_CPU_visual_hull_initialized_without_secondary_accelerator_artifacts
+      - Radeon_GPU0_geometry_frozen_VkSplat_training_2000_steps_to_30000_splats
+      - formal_training_wall_time_and_Vulkan_VRAM
+    excluded_claims:
+      - heldout_view_quality
+      - bitwise_checkpoint_determinism
+      - generated_fill
+      - collision_geometry

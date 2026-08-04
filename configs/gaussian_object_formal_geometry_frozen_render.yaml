@@ -1,0 +1,27 @@
+schema_version: 1
+profile: observed_object_vksplat_formal_geometry_frozen_render
+formal_host: radeon-c
+formal_gpu: GPU0
+formal_gpu_uid: "0x153f7d55778ab659"
+gfx_target: gfx1100
+seed: 20260804
+parent:
+  run_id: 20260804T204531Z_gaussian_train_14053af_20260804
+  checkpoint_sha256: e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378
+  geometry_frozen: true
+dataset:
+  dataset_hash: 682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e
+  manifest_sha256: 04900c1a3afc0f2f5e73ce0e34042e91a10c469a9c0b255e3157e7985e9b660e
+cameras:
+  count: 4
+  sha256: 050891df1cfc5ef33070f7ab6becdd168267e5951143523519601f38963cbc26
+renderer:
+  name: VkSplat
+  backend: Vulkan_RADV
+  source_commit: e26c254938c81ff85998cd357a9e005e255d9b03
+claims:
+  generated_fill_enabled: false
+  heldout_quality_claim: false
+  observed_only_training: true
+  collision_geometry: false
+status: ready_for_registered_formal_execution

@@ -85,6 +85,16 @@ class GaussianContractTests(unittest.TestCase):
         self.assertIn("--formal", runner)
         self.assertIn('"generated_fill_enabled": False', runner)
 
+    def test_formal_geometry_frozen_render_binds_exact_parent(self):
+        runner = Path("ops/run_formal_object_geometry_frozen_render.sh").read_text()
+        self.assertIn(
+            "e9be3a2df4c1ca7fcfddc86deee4c366a2f941f66a881e41d13367c329aff378",
+            runner,
+        )
+        self.assertIn("ONELOOP_PARENT_CHECKPOINT", runner)
+        self.assertIn("--formal", runner)
+        self.assertIn('"generated_fill_enabled": False', runner)
+
     def test_geometry_freeze_zeroes_only_center_and_shape_rates(self):
         class Config:
             means_lr = 1.6e-4

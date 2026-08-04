@@ -1,0 +1,18 @@
+{
+  "job_id": "20260804T204531Z_gaussian_train_14053af_20260804",
+  "host": "radeon-c",
+  "formal": true,
+  "role": "gaussian_train",
+  "git_commit": "14053af9bcd4b15258815c0fd67bd6e248d6d812",
+  "config_hash": "a634c71a9934f2308562583e450d20a86d7c983e031d99330d0d3d5fbc7ba643",
+  "dataset_hash": "682b65e97653ffe08e469496bb0554f349aeff103ddf8e57f1e4857f8c04534e",
+  "parent_checkpoint": null,
+  "seed": 20260804,
+  "gpu_uid": "0x153f7d55778ab659",
+  "gfx_target": "gfx1100",
+  "status": "done",
+  "started_at": "2026-08-04T20:45:33Z",
+  "finished_at": "2026-08-04T20:45:45Z",
+  "artifact_dir": "/root/radeon-oneloop-runs/jobs/20260804T204531Z_gaussian_train_14053af_20260804",
+  "notes": null
+}
