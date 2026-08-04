@@ -6,6 +6,9 @@ class SevaInstallContractTests(unittest.TestCase):
     def test_installer_uses_interactive_credential_without_token_argument(self):
         value = Path("ops/install_phi_seva_model.sh").read_text()
         self.assertIn("HfApi().whoami()", value)
+        self.assertIn("expected_hf_user=fbsh96", value)
+        self.assertIn('actual_hf_user != expected_hf_user', value)
+        self.assertIn('"huggingface_user": hf_user', value)
         self.assertIn("e538e251c1009e9a41cf8b7fee5f21332a1960de", value)
         self.assertIn("modelv1.1.safetensors", value)
         self.assertIn('"credential_material_recorded": False', value)
