@@ -53,7 +53,8 @@ cleanup() {
   fi
   if [[ $status -ne 0 && ! -e "$run_dir/DONE" ]]; then
     files=("$run_dir/manifest.yaml")
-    for path in publisher.log sender.log publisher_metrics.json sender_metrics.json gate.json; do
+    for path in preflight_stdout.log preflight_stderr.log preflight_metrics.json \
+      publisher.log sender.log publisher_metrics.json sender_metrics.json gate.json; do
       if [[ -f "$run_dir/$path" ]]; then
         files+=("$run_dir/$path")
       fi
@@ -82,7 +83,26 @@ printf '%s\n' \
   "synthetic_reaction_effort: $haptic_bench_reaction_effort" \
   'max_output_duration_s: 10' \
   'watchdog_ms: 100' \
+  'same_run_readonly_preflight_required: true' \
   >"$run_dir/manifest.yaml"
+
+# This process contains no write path. A failed electrical, command-envelope,
+# or bidirectional joint-margin check exits before the physical publisher is
+# started.
+timeout --signal=TERM --kill-after=3 20 \
+  "$python_bin" -m sim.genesis_so101.haptic_readonly_preflight \
+  --left-port "$left_port" \
+  --right-port "$right_port" \
+  --left-id "$left_id" \
+  --right-id "$right_id" \
+  --side "$side" \
+  --motor "$motor" \
+  --simulated-effort-full-scale "$haptic_simulated_effort_full_scale" \
+  --reaction-effort "$haptic_bench_reaction_effort" \
+  --max-torque-limit-raw 30 \
+  --max-position-offset-deg 1.0 \
+  --output "$run_dir/preflight_metrics.json" \
+  >"$run_dir/preflight_stdout.log" 2>"$run_dir/preflight_stderr.log"
 
 timeout --signal=TERM --kill-after=3 25 \
   "$python_bin" -m sim.genesis_so101.leader_publisher \
@@ -132,6 +152,7 @@ sender_pid=
 "$python_bin" -m sim.genesis_so101.haptic_bench_gate \
   --publisher "$run_dir/publisher_metrics.json" \
   --sender "$run_dir/sender_metrics.json" \
+  --preflight "$run_dir/preflight_metrics.json" \
   --output "$run_dir/gate.json" \
   --side "$side" \
   --motor "$motor" \
@@ -140,6 +161,9 @@ sender_pid=
 
 sha256sum \
   "$run_dir/manifest.yaml" \
+  "$run_dir/preflight_stdout.log" \
+  "$run_dir/preflight_stderr.log" \
+  "$run_dir/preflight_metrics.json" \
   "$run_dir/publisher.log" \
   "$run_dir/sender.log" \
   "$run_dir/publisher_metrics.json" \

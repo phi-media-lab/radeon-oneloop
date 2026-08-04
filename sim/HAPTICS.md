@@ -148,6 +148,13 @@ ONELOOP_HAPTIC_BENCH_REACTION_EFFORT=0.1345489427447319 \
   left elbow_flex
 ```
 
+The bench wrapper cannot jump directly to motor output: it first runs the
+read-only electrical, command-envelope, and bidirectional joint-margin gate in
+the same evidence directory. The physical publisher is not started unless
+that preflight exits successfully, and `haptic_bench_gate.py` independently
+requires the exact preflight selection and calibration in the final `DONE`
+decision.
+
 Do not execute this command from automation without a fresh operator
 attestation that the power cut is reachable and the selected elbow joint is
 clear to resist motion.

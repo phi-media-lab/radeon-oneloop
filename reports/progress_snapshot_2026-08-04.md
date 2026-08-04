@@ -88,6 +88,9 @@ command. Failed-run metrics SHA-256:
 `1a55238d339b7d5f039c064e7f6cac9c7f91698025a66eaf8a8f41aa859eee9a`.
 The operator must manually move the elbow to 84° or lower, rerun the read-only
 gate, and then provide a fresh estop/clear-workspace attestation.
+The physical bench runner now enforces this sequence itself: it executes the
+same read-only gate first and does not start the motor-capable publisher on any
+preflight failure. Final bench acceptance also binds that same-run preflight.
 
 ### Physics and debug object
 
@@ -304,7 +307,7 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Verification status
 
-The fresh full scaffold collects 145 tests and passes all available tests, with
+The fresh full scaffold collects 146 tests and passes all available tests, with
 5 OpenCV-dependent tests skipped in the local environment;
 shell syntax, YAML/JSON parsing, and `git diff --check` also pass. These
 source-tree checks are not a substitute for the physical haptic gate or the

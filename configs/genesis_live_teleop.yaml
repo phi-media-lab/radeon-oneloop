@@ -44,6 +44,7 @@ haptic_feedback:
       electrical_health_status: passed
       selected_position_deg: 93.53846153846153
       accepted_position_range_deg: [-94.0, 84.0]
+      same_run_required_before_physical_publisher: true
       serial_register_writes: 0
       torque_enable_commands: 0
       physical_output_commands: false
