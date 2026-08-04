@@ -498,8 +498,8 @@ artifacts:
     formal: false
 
 validation:
-  scaffold_tests_collected: 146
-  scaffold_tests_passed: 141
+  scaffold_tests_collected: 149
+  scaffold_tests_passed: 144
   scaffold_tests_skipped_no_local_opencv: 5
   git_diff_check: passed
   formal_result_claim: observed_object_training_and_anchor_render_only

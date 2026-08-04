@@ -155,6 +155,20 @@ that preflight exits successfully, and `haptic_bench_gate.py` independently
 requires the exact preflight selection and calibration in the final `DONE`
 decision.
 
+After a machine-accepted physical run, progression still remains locked until
+the operator reports both useful/comfortable resistance and free leader motion
+after shutdown. `ops/seal_haptic_stage_receipt.sh` creates a separate immutable
+receipt that binds the source `gate.json`, source hash index, and `DONE` marker;
+it never mutates the physical run. A weak, strong, or uncomfortable verdict is
+preserved as negative evidence and authorizes no next stage. Only an accepted
+single-joint receipt authorizes `single_arm_monitor_only`; it does not authorize
+single-arm physical output.
+
+```bash
+ONELOOP_LEADER_MOVES_FREELY_CONFIRMED=1 \
+./ops/seal_haptic_stage_receipt.sh SOURCE_RUN_DIR useful_comfortable
+```
+
 Do not execute this command from automation without a fresh operator
 attestation that the power cut is reachable and the selected elbow joint is
 clear to resist motion.

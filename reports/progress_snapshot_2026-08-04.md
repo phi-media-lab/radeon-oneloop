@@ -91,6 +91,10 @@ gate, and then provide a fresh estop/clear-workspace attestation.
 The physical bench runner now enforces this sequence itself: it executes the
 same read-only gate first and does not start the motor-capable publisher on any
 preflight failure. Final bench acceptance also binds that same-run preflight.
+Post-run operator perception is also fail-closed: a separate content-addressed
+receipt must bind the accepted gate, source hash index, `DONE` marker, a
+useful/comfortable verdict, and free leader motion after shutdown. That receipt
+can unlock only single-arm monitor mode, never physical single-arm output.
 
 ### Physics and debug object
 
@@ -307,7 +311,7 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Verification status
 
-The fresh full scaffold collects 146 tests and passes all available tests, with
+The fresh full scaffold collects 149 tests and passes all available tests, with
 5 OpenCV-dependent tests skipped in the local environment;
 shell syntax, YAML/JSON parsing, and `git diff --check` also pass. These
 source-tree checks are not a substitute for the physical haptic gate or the

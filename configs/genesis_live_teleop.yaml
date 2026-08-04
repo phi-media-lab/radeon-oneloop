@@ -48,6 +48,17 @@ haptic_feedback:
       serial_register_writes: 0
       torque_enable_commands: 0
       physical_output_commands: false
+  progression:
+    stages:
+      - single_joint_physical
+      - single_arm_monitor_only
+      - single_arm_physical
+      - dual_arm_monitor_only
+      - dual_arm_physical
+      - final_demo
+    single_joint_operator_receipt_required: true
+    operator_identity_recorded: false
+    current_authorized_stage: left_elbow_flex_readonly_preflight
 simulation:
   rate_hz: 120
   interpolation_steps: 4
