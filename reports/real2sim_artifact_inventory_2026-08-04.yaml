@@ -16,7 +16,7 @@ release_decision:
   surface_carrier_installed_in_genesis: false
   candidate_requires_explicit_nonformal_switch: true
   physical_force_feedback_priority: deferred_not_submission_blocking
-  next_gate: project_owner_visual_confirmation_then_readonly_dual_leader_live_gate
+  next_gate: sealed_project_owner_visual_receipt_then_readonly_dual_leader_live_gate
 
 artifacts:
   - id: m1_reviewed_orbitfix
@@ -1257,15 +1257,39 @@ artifacts:
     status: accepted_nonformal_hardware_free_full_split_process_gate
     formal: false
 
+  - id: seva_49view_full_geometry_project_owner_visual_packet
+    kind: content_addressed_visual_acceptance_packet_pending_human_decision
+    host_role: local_review_collection
+    parent_id: seva_49view_variable_geometry_gaussian_39k
+    packet_id: 20260805T034851Z_pending
+    packet_schema: radeon_oneloop.full_geometry_visual_review_packet.v1
+    review_packet_sha256: c572321c774aa695cb693f9a3a237c9b19c6cf818f6e0f226fee96544d3b7ed2
+    hashes_manifest_sha256: 44f1e0b4d544ebfb106f4a4caaab61d785caeb5afa393bfa538fa5c65e209984
+    done_sha256: a857e9aef03ac972d6849015b0980eed5bda576e814a0846fd70018c5cea1726
+    evidence_files_bound: 13
+    canonical_ply_sha256: ad538d0f1d4da96293aed7de5f9f33030435870c1c4339187f48c9dfa25bb4f2
+    source_anchor_comparison_sha256: b54ed92f384c349b42aa132225ba50b99e3aa053b2f0cb4ac60c73213bc47107
+    generated_49view_video_sha256: f0500ff4c2e76e40e7ff8bc147aaf1120fd9d46a70636c1e2497f7ee41db5ec2
+    full_geometry_orbit_video_sha256: 4d5556a09efb63cd374655ce408a4642bbd5bf736ff165dc17b572826108b20d
+    hardware_isolated_live_video_sha256: fe4bd0e68005a359205ee21caf1c36d9b932cc21809771dc390400a133ccf826
+    required_human_checks: 4
+    human_checks_recorded: 0
+    accepted_receipt_created: false
+    next_authorized_stage_if_accepted: dual_leader_monitor_only
+    haptic_output_authorized: false
+    physical_output_authorized: false
+    status: done_packet_pending_project_owner_visual_review
+    formal: false
+
 validation:
-  scaffold_tests_collected: 278
-  scaffold_tests_passed: 265
+  scaffold_tests_collected: 281
+  scaffold_tests_passed: 268
   scaffold_tests_skipped_dependency_specific: 13
   git_diff_check: passed
   formal_result_claim: observed_object_training_and_anchor_render_only
 
 open_gates:
-  - project_owner_visual_confirmation_of_seva_49view_live_candidate
+  - sealed_project_owner_visual_receipt_for_seva_49view_live_candidate
   - readonly_dual_leader_live_gate_with_seva_49view_candidate
   - capture_reserved_real_interanchor_heldout_views
   - recorded_approach_grasp_handover_release_demo

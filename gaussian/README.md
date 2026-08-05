@@ -45,18 +45,37 @@ watchdog events, packet rejects, renderer failures, fallbacks, serial/USB
 access, or physical output.
 
 Only after the project owner reviews the new live video should the real
-leaders be opened:
+leaders be opened. Build the content-addressed review packet first; a separate
+`seal` action is performed only after the owner accepts all four visual checks:
 
 ```bash
-ONELOOP_PROJECT_OWNER_VISUAL_CONFIRMATION=accepted \
+python -m gaussian.full_geometry_visual_review build \
+  --source-review-root /path/to/accepted_seva_review \
+  --orbit-run-root /path/to/full_geometry_orbit_run \
+  --live-run-root /path/to/hardware_isolated_live_run \
+  --asset-root /path/to/full_geometry_asset \
+  --output /path/to/full_geometry_visual_review_packet
+
+python -m gaussian.full_geometry_visual_review seal \
+  --packet-dir /path/to/full_geometry_visual_review_packet \
+  --output /path/to/full_geometry_visual_review_receipt \
+  --decision accepted \
+  --correct-identity-orientation \
+  --complete-orbit-acceptable \
+  --legacy-obj-not-visible \
+  --live-registration-acceptable
+
+ONELOOP_PROJECT_OWNER_VISUAL_RECEIPT_DIR=/path/to/full_geometry_visual_review_receipt \
 ONELOOP_OBSERVED_CORE_ROOT=/path/to/full_geometry_asset \
 ./ops/run_amd_seva_full_geometry_dual_leader.sh \
   LEFT_PORT RIGHT_PORT LEFT_CALIBRATION_ID RIGHT_CALIBRATION_ID
 ```
 
-This wrapper pins the exact PLY hash, disables the legacy completed-appearance
-mode and authoritative debug viewer, records video, and leaves haptic output in
-monitor-only mode.
+The receipt binds the source photos/pseudo-view comparison, 49-view generation,
+72-angle Gaussian orbit, hardware-isolated live video, and exact PLY/camera/
+provenance hashes. It authorizes only `dual_leader_monitor_only`. The wrapper
+pins the exact PLY hash, disables the legacy completed-appearance mode and
+authoritative debug viewer, records video, and leaves haptic output disabled.
 
 The implementation is pinned to VkSplat commit
 `e26c254938c81ff85998cd357a9e005e255d9b03`. Bootstrap the Vulkan extension,

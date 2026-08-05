@@ -7,11 +7,8 @@ if [[ $# -ne 4 ]]; then
 fi
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-if [[ ${ONELOOP_PROJECT_OWNER_VISUAL_CONFIRMATION:-} != accepted ]]; then
-  printf '%s\n' 'set ONELOOP_PROJECT_OWNER_VISUAL_CONFIRMATION=accepted only after reviewing the new live asset' >&2
-  exit 65
-fi
 : "${ONELOOP_OBSERVED_CORE_ROOT:?set ONELOOP_OBSERVED_CORE_ROOT to the reviewed full-geometry asset}"
+: "${ONELOOP_PROJECT_OWNER_VISUAL_RECEIPT_DIR:?set ONELOOP_PROJECT_OWNER_VISUAL_RECEIPT_DIR to the sealed accepted receipt bundle}"
 
 expected_ply_sha256=ad538d0f1d4da96293aed7de5f9f33030435870c1c4339187f48c9dfa25bb4f2
 actual_ply_sha256=$(sha256sum "$ONELOOP_OBSERVED_CORE_ROOT/appearance_full_geometry_canonical.ply" | awk '{print $1}')
@@ -19,6 +16,13 @@ if [[ "$actual_ply_sha256" != "$expected_ply_sha256" ]]; then
   printf 'unexpected full-geometry PLY hash: %s\n' "$actual_ply_sha256" >&2
   exit 66
 fi
+python_bin=${ONELOOP_CONTROL_PYTHON:-python3}
+PYTHONPATH="$repo_root/src:$repo_root${PYTHONPATH:+:$PYTHONPATH}" \
+  "$python_bin" -m gaussian.full_geometry_visual_review authorize \
+  --receipt-dir "$ONELOOP_PROJECT_OWNER_VISUAL_RECEIPT_DIR" \
+  --expected-asset-ply-sha256 "$expected_ply_sha256" \
+  --target-stage dual_leader_monitor_only \
+  >/dev/null
 
 export ONELOOP_FULL_GEOMETRY_CANDIDATE=1
 export ONELOOP_COMPLETED_APPEARANCE=0

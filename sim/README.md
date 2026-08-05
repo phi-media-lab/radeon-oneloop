@@ -149,16 +149,20 @@ object-appearance view. After reviewing the hardware-free full-chain output,
 launch the exact-hash SEVA candidate with:
 
 ```bash
-ONELOOP_PROJECT_OWNER_VISUAL_CONFIRMATION=accepted \
+ONELOOP_PROJECT_OWNER_VISUAL_RECEIPT_DIR=/path/to/sealed_visual_receipt \
 ONELOOP_OBSERVED_CORE_ROOT=/path/to/full_geometry_asset \
 ops/run_amd_seva_full_geometry_dual_leader.sh \
   /dev/serial/by-id/LEFT /dev/serial/by-id/RIGHT \
   CALIBRATION_ID_LEFT CALIBRATION_ID_RIGHT
 ```
 
-The receipt variable is intentionally required. The wrapper disables the
-legacy debug viewer and completed-appearance path, opens only the Gaussian
-presenter, reads the two leaders in monitor mode, and never commands a motor.
+The sealed receipt variable is intentionally required; a plain environment
+confirmation is not sufficient. Build and seal it with
+`gaussian.full_geometry_visual_review` as documented in `gaussian/README.md`.
+It binds the exact visual evidence and authorizes only dual-leader monitor
+mode. The wrapper disables the legacy debug viewer and completed-appearance
+path, opens only the Gaussian presenter, reads the two leaders, and never
+commands a motor.
 
 ## Haptic return path
 

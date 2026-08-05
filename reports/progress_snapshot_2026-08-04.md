@@ -58,7 +58,12 @@ viewer by default. That viewer never owned photorealistic appearance and was a
 second source of confusion because it displayed the procedural debug object.
 The reviewed Gaussian presenter is now the only object-appearance window; a
 new exact-hash dual-leader wrapper remains fail-closed until the project owner
-explicitly records visual confirmation.
+seals a content-addressed visual receipt. A plain environment-variable verdict
+cannot unlock it. The pending review packet binds the real/generated anchor
+comparison, the generated 49-view orbit, the 72-angle variable-geometry orbit,
+the hardware-isolated live video, and the exact PLY/camera/provenance hashes.
+An accepted receipt can authorize only `dual_leader_monitor_only`; it cannot
+authorize haptics or any physical output.
 
 This correction proves that the legacy visual OBJ is no longer in the render
 chain and that the new field remains pose-synchronous through a dynamic yaw
