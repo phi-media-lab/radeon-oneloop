@@ -154,6 +154,14 @@ def main() -> None:
     parser.add_argument("--init-scale", type=float)
     parser.add_argument("--scale-reg", type=float)
     parser.add_argument("--opacity-reg", type=float)
+    parser.add_argument("--scales-lr", type=float)
+    parser.add_argument("--quats-lr", type=float)
+    parser.add_argument("--grow-grad2d", type=float)
+    parser.add_argument("--grow-scale3d", type=float)
+    parser.add_argument("--grow-scale2d", type=float)
+    parser.add_argument("--prune-scale3d", type=float)
+    parser.add_argument("--prune-scale2d", type=float)
+    parser.add_argument("--refine-stop-iter", type=int)
     parser.add_argument("--eval-interval", type=int, default=8)
     parser.add_argument("--seed", type=int, default=20260804)
     parser.add_argument("--evaluate", action="store_true")
@@ -210,6 +218,27 @@ def main() -> None:
         if args.opacity_reg < 0:
             raise ValueError("opacity-reg cannot be negative")
         config.opacity_reg = args.opacity_reg
+    positive_overrides = {
+        "scales_lr": args.scales_lr,
+        "quats_lr": args.quats_lr,
+        "grow_grad2d": args.grow_grad2d,
+        "grow_scale3d": args.grow_scale3d,
+        "grow_scale2d": args.grow_scale2d,
+        "prune_scale3d": args.prune_scale3d,
+        "prune_scale2d": args.prune_scale2d,
+    }
+    for name, value in positive_overrides.items():
+        if value is None:
+            continue
+        if value <= 0:
+            raise ValueError(f"{name.replace('_', '-')} must be positive")
+        setattr(config, name, value)
+    if args.refine_stop_iter is not None:
+        if args.refine_stop_iter <= config.refine_start_iter:
+            raise ValueError("refine-stop-iter must exceed refine-start-iter")
+        if args.refine_stop_iter >= args.steps:
+            raise ValueError("refine-stop-iter must be smaller than training steps")
+        config.refine_stop_iter = args.refine_stop_iter
     config.enable_viewer = False
     config.output_dir = str(output)
     config.output_ply = str(output / "splat.ply")
@@ -258,6 +287,11 @@ def main() -> None:
             "init_scale": config.init_scale,
             "scale_reg": config.scale_reg,
             "opacity_reg": config.opacity_reg,
+            "grow_grad2d": config.grow_grad2d,
+            "grow_scale3d": config.grow_scale3d,
+            "grow_scale2d": config.grow_scale2d,
+            "prune_scale3d": config.prune_scale3d,
+            "prune_scale2d": config.prune_scale2d,
         },
         "steps": args.steps,
         "seed": args.seed,

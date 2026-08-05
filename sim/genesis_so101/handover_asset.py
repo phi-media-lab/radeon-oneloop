@@ -532,6 +532,7 @@ def add_rigid_proxy(
     *,
     mesh_path: Path = DEFAULT_MESH,
     pos: tuple[float, float, float],
+    visualization: bool = True,
 ) -> Any:
     if not mesh_path.is_file():
         raise FileNotFoundError(f"generated handover mesh is missing: {mesh_path}")
@@ -541,6 +542,7 @@ def add_rigid_proxy(
             pos=pos,
             convexify=True,
             decompose_nonconvex=False,
+            visualization=visualization,
         ),
         material=gs.materials.Rigid(
             rho=spec.rigid_density_kg_m3,

@@ -16,6 +16,7 @@ from radeon_oneloop.contracts import CAMERA_KEYS
 from .gaussian_appearance import (
     SafeAppearanceBinding,
     VkSplatAppearanceRenderer,
+    full_geometry_candidate_asset,
     layered_preview_asset,
     observed_core_asset,
     transform_from_pos_quat_wxyz,
@@ -122,15 +123,19 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=20260803)
     parser.add_argument("--layered-preview", action="store_true")
+    parser.add_argument("--full-geometry-candidate", action="store_true")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     import imageio.v3 as iio
 
-    asset = (
-        layered_preview_asset(args.observed_core_root)
-        if args.layered_preview
-        else observed_core_asset(args.observed_core_root)
-    )
+    if args.layered_preview and args.full_geometry_candidate:
+        raise ValueError("appearance asset modes are mutually exclusive")
+    if args.full_geometry_candidate:
+        asset = full_geometry_candidate_asset(args.observed_core_root)
+    elif args.layered_preview:
+        asset = layered_preview_asset(args.observed_core_root)
+    else:
+        asset = observed_core_asset(args.observed_core_root)
     asset_audit = asset.validate()
     gaussians = read_3dgs_ply(asset.ply_path)
     center_full_extents, center_robust_extents = gaussian_center_extents(gaussians["xyz"])
@@ -151,6 +156,7 @@ def main() -> None:
         args.so101_asset_root.resolve(),
         seed=args.seed,
         show_viewer=False,
+        object_visualization=False,
     )
     binding = SafeAppearanceBinding.create(
         lambda: VkSplatAppearanceRenderer(asset, args.vksplat_root)
@@ -194,6 +200,9 @@ def main() -> None:
 
     accepted = bool(
         height_error_m <= height_tolerance_m
+        and diagnostics["object_visualization"] is False
+        and diagnostics["object_mesh_path"].endswith("_collision.obj")
+        and diagnostics["compositor"] == "gaussian_self_depth"
         and diagnostics["binding"]["latched_error"] is None
         and diagnostics["binding"]["successes"] == len(poses) * len(CAMERA_KEYS)
         and diagnostics["fallback_frames"] == 0
@@ -233,7 +242,10 @@ def main() -> None:
         "vksplat_memory": memory,
         "physical_output": False,
         "layered_preview": args.layered_preview,
-        "gate_scope": "static pose, transform, renderer and conservative proxy-depth matte",
+        "full_geometry_candidate": args.full_geometry_candidate,
+        "gate_scope": (
+            "static pose, transform, renderer and Gaussian self-depth compositing"
+        ),
         "not_proven": [
             "dynamic pose stability",
             "gripper/tabletop occlusion under contact",

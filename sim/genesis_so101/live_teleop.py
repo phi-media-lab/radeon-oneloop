@@ -132,6 +132,14 @@ def main() -> None:
     parser.add_argument("--render-hz", type=float, default=10.0)
     parser.add_argument("--seed", type=int, default=20260803)
     parser.add_argument("--show-viewer", action="store_true")
+    parser.add_argument(
+        "--hide-object-visualization",
+        action="store_true",
+        help=(
+            "Keep the collision entity invisible. Use this in the authoritative "
+            "process when a separate Gaussian renderer owns object appearance."
+        ),
+    )
     parser.add_argument("--record-video", action="store_true")
     parser.add_argument(
         "--appearance-mode", choices=("debug-mesh", "vksplat"), default="debug-mesh"
@@ -229,7 +237,13 @@ def main() -> None:
         # Bind before the relatively expensive Genesis build so the kernel can
         # retain incoming leader packets in the UDP receive buffer.
         task, handles = build(
-            args.asset_root.resolve(), seed=args.seed, show_viewer=args.show_viewer
+            args.asset_root.resolve(),
+            seed=args.seed,
+            show_viewer=args.show_viewer,
+            object_visualization=(
+                args.appearance_mode != "vksplat"
+                and not args.hide_object_visualization
+            ),
         )
         if args.appearance_mode == "vksplat":
             asset = observed_core_asset(args.observed_core_root)

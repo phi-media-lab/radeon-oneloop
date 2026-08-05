@@ -80,8 +80,13 @@ def export(dataset: Path, output: Path, mode: str = "cardinal_real") -> dict:
     root = dataset.resolve()
     manifest_path = root / "dataset_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if manifest.get("schema_version") != "radeon_oneloop.hybrid_pseudoview_colmap_dataset.v1":
-        raise ValueError("cardinal camera export requires the hybrid pseudo-view dataset")
+    supported_schemas = {
+        "radeon_oneloop.hybrid_pseudoview_colmap_dataset.v1",
+        "radeon_oneloop.seva_pseudoview_colmap_dataset.v1",
+        "radeon_oneloop.seva_full_geometry_colmap_dataset.v1",
+    }
+    if manifest.get("schema_version") not in supported_schemas:
+        raise ValueError("camera export requires a reviewed pseudo-view dataset")
     cameras, images = parse_colmap_text(root)
     if mode == "cardinal_real":
         selected = [(label, f"real_{label}_w00.png") for label in VIEW_ORDER]
@@ -89,6 +94,22 @@ def export(dataset: Path, output: Path, mode: str = "cardinal_real") -> dict:
     elif mode == "generated_orbit":
         selected = [(f"orbit_{index:05d}", f"gen_{index:05d}.png") for index in range(49)]
         pose_status = "exact_fixed_pinhole_generated_orbit_camera"
+    elif mode == "completed_training_views":
+        # Put the real front anchor first because orbit/runtime consumers use
+        # the first record only to recover a canonical pinhole intrinsic.
+        names = [
+            name
+            for name in images
+            if name != "000_eval_probe_generated.png"
+        ]
+        names.sort(key=lambda name: (name != "real_front_w00.png", name))
+        selected = [(f"training_{index:03d}", name) for index, name in enumerate(names)]
+        pose_status = "reviewed_real_weighted_SEVA_completion_camera"
+    elif mode == "full_geometry_training_views":
+        names = [name for name in images if name != "000_eval_probe_generated.png"]
+        names.sort(key=lambda name: (name != "real_front_w00.png", name))
+        selected = [(f"training_{index:03d}", name) for index, name in enumerate(names)]
+        pose_status = "generated_geometry_hypothesis_exact_SEVA_camera"
     else:
         raise ValueError(f"unsupported camera export mode: {mode}")
     records = []
@@ -125,7 +146,14 @@ def main() -> None:
     parser.add_argument("--dataset", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
-        "--mode", choices=("cardinal_real", "generated_orbit"), default="cardinal_real"
+        "--mode",
+        choices=(
+            "cardinal_real",
+            "generated_orbit",
+            "completed_training_views",
+            "full_geometry_training_views",
+        ),
+        default="cardinal_real",
     )
     args = parser.parse_args()
     print(json.dumps(export(args.dataset, args.output, args.mode), indent=2, sort_keys=True))

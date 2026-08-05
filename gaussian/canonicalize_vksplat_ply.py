@@ -44,6 +44,8 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
         "observed_core_candidate",
         "generated_fill_candidate",
         "confidence_fused_candidate",
+        "completed_appearance_candidate",
+        "generated_full_geometry_candidate",
     }:
         raise ValueError(f"unsupported provenance class: {provenance_class}")
     transform = np.asarray(train["dataparser_transform"], dtype=np.float64)
@@ -69,6 +71,7 @@ def canonicalize(args: argparse.Namespace) -> dict[str, object]:
         if dataset_manifest.get("schema_version") in {
             "radeon_oneloop.hybrid_pseudoview_colmap_dataset.v1",
             "radeon_oneloop.seva_pseudoview_colmap_dataset.v1",
+            "radeon_oneloop.seva_full_geometry_colmap_dataset.v1",
         }:
             secondary_accelerator_artifacts = True
         else:
@@ -204,6 +207,8 @@ def main() -> int:
             "observed_core_candidate",
             "generated_fill_candidate",
             "confidence_fused_candidate",
+            "completed_appearance_candidate",
+            "generated_full_geometry_candidate",
         ),
         default="observed_core_candidate",
     )

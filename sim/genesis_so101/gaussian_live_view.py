@@ -20,6 +20,8 @@ from radeon_oneloop.contracts import CAMERA_KEYS
 from .gaussian_appearance import (
     SafeAppearanceBinding,
     VkSplatAppearanceRenderer,
+    completed_appearance_asset,
+    full_geometry_candidate_asset,
     layered_preview_asset,
     nonformal_candidate_asset,
     observed_core_asset,
@@ -115,6 +117,16 @@ def main() -> None:
         help="Use an explicit formal=false observed-core plus generated-fill preview.",
     )
     parser.add_argument(
+        "--completed-appearance",
+        action="store_true",
+        help="Use a unified formal=false full-orbit SEVA-distilled appearance.",
+    )
+    parser.add_argument(
+        "--full-geometry-candidate",
+        action="store_true",
+        help="Use the generated SEVA 49-view variable-geometry visual candidate.",
+    )
+    parser.add_argument(
         "--fault-exit-after-frames",
         type=int,
         default=0,
@@ -133,8 +145,15 @@ def main() -> None:
         raise ValueError("present-http-port must be between 0 and 65535")
     if not 50 <= args.present_jpeg_quality <= 100:
         raise ValueError("present-jpeg-quality must be between 50 and 100")
-    if args.candidate_nonformal and args.layered_preview:
-        raise ValueError("candidate-nonformal and layered-preview are mutually exclusive")
+    if sum(
+        (
+            args.candidate_nonformal,
+            args.layered_preview,
+            args.completed_appearance,
+            args.full_geometry_candidate,
+        )
+    ) > 1:
+        raise ValueError("appearance asset modes are mutually exclusive")
     args.output.mkdir(parents=True, exist_ok=True)
     import imageio.v3 as iio
 
@@ -165,8 +184,13 @@ def main() -> None:
             args.so101_asset_root.resolve(),
             seed=args.seed,
             show_viewer=False,
+            object_visualization=False,
         )
-        if args.layered_preview:
+        if args.full_geometry_candidate:
+            asset = full_geometry_candidate_asset(args.observed_core_root)
+        elif args.completed_appearance:
+            asset = completed_appearance_asset(args.observed_core_root)
+        elif args.layered_preview:
             asset = layered_preview_asset(args.observed_core_root)
         elif args.candidate_nonformal:
             asset = nonformal_candidate_asset(args.observed_core_root)
@@ -191,6 +215,8 @@ def main() -> None:
                     "asset": asset_audit,
                     "candidate_nonformal": args.candidate_nonformal,
                     "layered_preview": args.layered_preview,
+                    "completed_appearance": args.completed_appearance,
+                    "full_geometry_candidate": args.full_geometry_candidate,
                     "binding": binding.metrics(),
                     "presenter": presenter.metrics() if presenter is not None else None,
                     "physical_output": False,
@@ -282,6 +308,9 @@ def main() -> None:
             frame_count >= minimum_frames
             and receiver.accepted >= max(int(elapsed_s * 20.0), 1)
             and receiver.rejected == 0
+            and diagnostics["object_visualization"] is False
+            and diagnostics["object_mesh_path"].endswith("_collision.obj")
+            and diagnostics["compositor"] == "gaussian_self_depth"
             and diagnostics["fallback_frames"] == 0
             and diagnostics["binding"]["latched_error"] is None
         )
@@ -291,6 +320,8 @@ def main() -> None:
             "asset": asset_audit,
             "candidate_nonformal": args.candidate_nonformal,
             "layered_preview": args.layered_preview,
+            "completed_appearance": args.completed_appearance,
+            "full_geometry_candidate": args.full_geometry_candidate,
             "accepted": accepted,
             "duration_s": args.duration_s,
             "elapsed_s": elapsed_s,
@@ -326,6 +357,8 @@ def main() -> None:
                 "state_input": "read_only_udp_snapshot",
                 "intermediate_snapshots_may_drop": True,
                 "renderer_failure_can_stop_control": False,
+                "legacy_visual_obj_loaded": False,
+                "collision_proxy_visible": False,
             },
             "physical_output": False,
             "generated_fill_enabled": False,

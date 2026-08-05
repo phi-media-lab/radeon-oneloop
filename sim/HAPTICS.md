@@ -6,6 +6,12 @@
 > the continuous-view asset and live Genesis bridge. The guarded branch below
 > remains available for later work and none of its safety gates are weakened.
 
+> 2026-08-05 correction: the current continuous-view candidate is the
+> nonformal 49-view variable-geometry Gaussian. The old visual OBJ is not
+> loaded by either live process; only an invisible dedicated collision OBJ
+> remains. This change does not alter haptic authority: the project-owner-gated
+> dual-leader wrapper is still monitor-only and sends zero motor commands.
+
 The rejected Vista4D surface-carrier experiments do not change this safety
 boundary. The carrier is also an invalid complete-geometry prior; its generated
 videos and portable GLB candidates failed identity or visual-fidelity gates,
@@ -136,14 +142,17 @@ The dependency order is intentional:
 5. Only then enable one bounded motor for ten seconds, followed by one arm and
    finally both arms.
 
-Steps 1–4 were completed for the original formal canonical PLY. The current
-default is its registered geometry-frozen successor, canonical PLY SHA-256
+Steps 1–4 were completed for the original formal canonical PLY. The formal
+anchor-view default is its registered geometry-frozen successor, canonical PLY SHA-256
 `7f01c1e6d8253d7f15162e2cb51e18845676fa1015983266b7d356d9b21aa706`.
 Its exact continuous-orbit gate
 `20260804T205804Z_217937_amd_gaussian_orbit_audit` and read-only live gate
 `20260804T205940Z_218151_amd_decoupled_gaussian_live_gate` now also pass with
-zero physical-output commands. The live gate used stationary leader inputs and
-therefore does not replace the operator-driven task recording.
+zero physical-output commands. That asset is no longer the nonformal live
+appearance after the visual-geometry correction. The current 49-view
+variable-geometry field separately passes the hardware-free full split-process
+gate `20260805T033013Z_260737_amd_gaussian_authoritative_synthetic`, also with
+zero physical output. Neither run replaces the operator-driven task recording.
 The final task wrapper remains on this same monitor-only boundary: it enables
 no haptic motor mode and adds motion, gripper, contact-sequence, transfer,
 target, and no-drop checks. Contact phases use only gripper/finger-to-object

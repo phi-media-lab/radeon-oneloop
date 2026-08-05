@@ -18,6 +18,7 @@ tmp/
 data/raw/
 data/derived/
 runs/
+output/
 artifacts/*
 !artifacts/formal/
 !artifacts/formal/**
@@ -29,6 +30,22 @@ checkpoints/
 *.spz
 *.rad
 *.mp4
+
+# Host-local payloads for the already-indexed formal artifact manifests.  The
+# manifests and hash summaries stay in Git; large renders, model payloads,
+# logs, and commands containing machine-specific paths do not.
+artifacts/formal/object_gaussian_train/.sampler_stop
+artifacts/formal/object_gaussian_train/command.sh
+artifacts/formal/object_gaussian_train/environment.txt
+artifacts/formal/object_gaussian_train/stdout.log
+artifacts/formal/object_gaussian_train/stderr.log
+artifacts/formal/object_gaussian_train/train/
+artifacts/formal/object_gaussian_render/.sampler_stop
+artifacts/formal/object_gaussian_render/command.sh
+artifacts/formal/object_gaussian_render/environment.txt
+artifacts/formal/object_gaussian_render/stdout.log
+artifacts/formal/object_gaussian_render/stderr.log
+artifacts/formal/object_gaussian_render/render/*.png
 
 # Secrets and host-local configuration.
 *.pem

@@ -142,6 +142,24 @@ Set `ONELOOP_SHOW_VIEWER=1` from the active desktop session to open the live
 Genesis viewer. The wrapper then preserves that session's runtime directory;
 headless runs continue to use an isolated one.
 
+For the photorealistic object demo, do not use the authoritative Genesis debug
+viewer as the appearance window. The object is deliberately invisible there;
+that process owns physics only. The loopback Gaussian presenter is the single
+object-appearance view. After reviewing the hardware-free full-chain output,
+launch the exact-hash SEVA candidate with:
+
+```bash
+ONELOOP_PROJECT_OWNER_VISUAL_CONFIRMATION=accepted \
+ONELOOP_OBSERVED_CORE_ROOT=/path/to/full_geometry_asset \
+ops/run_amd_seva_full_geometry_dual_leader.sh \
+  /dev/serial/by-id/LEFT /dev/serial/by-id/RIGHT \
+  CALIBRATION_ID_LEFT CALIBRATION_ID_RIGHT
+```
+
+The receipt variable is intentionally required. The wrapper disables the
+legacy debug viewer and completed-appearance path, opens only the Gaussian
+presenter, reads the two leaders in monitor mode, and never commands a motor.
+
 ## Haptic return path
 
 The consumer can return contact-gated simulated joint reaction efforts to the

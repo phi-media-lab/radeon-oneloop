@@ -1,6 +1,6 @@
 {
   "schema_version": "radeon_oneloop.real2sim_quarantine.v1",
-  "updated_utc": "2026-08-05T00:00:00Z",
+  "updated_utc": "2026-08-05T02:32:15Z",
   "policy": {
     "action": "reject_before_dataset_build_or_training",
     "allowed_role": "preserved_negative_control_only",
@@ -206,6 +206,35 @@
         "pseudoview_training",
         "depth_lifting",
         "mesh_or_gaussian_truth",
+        "collision_geometry",
+        "heldout_evidence",
+        "formal_lineage"
+      ]
+    },
+    {
+      "id": "seva_frozen_visual_hull_live_asset_rejected_v1",
+      "decision": "rejected",
+      "reason_codes": [
+        "geometry_frozen_to_four_real_mask_visual_hull",
+        "generated_views_optimized_appearance_only",
+        "live_compositor_clipped_gaussians_to_invalid_procedural_obj_silhouette",
+        "numeric_orbit_audit_did_not_validate_geometry"
+      ],
+      "run_ids": [
+        "20260805T021824Z_235070_amd_seva_completed_appearance",
+        "20260805T021904Z_235328_amd_gaussian_orbit_audit",
+        "20260805T022137Z_238939_amd_decoupled_gaussian_live_gate"
+      ],
+      "sha256": [
+        "3682f8ab5ffa2f6b96c2fc8f140eb518d580cdaf022227eb12e2f08283466a73",
+        "eb650fd6fd82802f9c0b132b2c2085c26290220959e429c100bb315b7fe577bd",
+        "3564aba7d6c2e44ad4f01843e5d97eb5e1686b71dd88d33ab24997a0dd5de6e4"
+      ],
+      "prohibited_roles": [
+        "candidate_asset",
+        "completed_appearance_asset",
+        "live_visual_asset",
+        "geometry_initialization",
         "collision_geometry",
         "heldout_evidence",
         "formal_lineage"

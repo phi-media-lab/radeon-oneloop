@@ -22,6 +22,11 @@ from typing import Any, Callable, Protocol, Sequence
 
 import numpy as np
 
+from gaussian.provenance_quarantine import (
+    QuarantinedLineageError,
+    assert_not_quarantined,
+)
+
 
 VKSPLAT_COMMIT = "e26c254938c81ff85998cd357a9e005e255d9b03"
 OBSERVED_CORE_PLY_SHA256 = (
@@ -279,6 +284,7 @@ class AppearanceFrame:
     alpha: np.ndarray
     render_ms: float
     backend: str
+    depth_m: np.ndarray | None = None
 
     def __post_init__(self) -> None:
         rgb = np.asarray(self.premultiplied_rgb, dtype=np.float32)
@@ -291,8 +297,87 @@ class AppearanceFrame:
             raise ValueError("alpha must have shape HxW or HxWx1")
         if not np.isfinite(rgb).all() or not np.isfinite(alpha).all():
             raise ValueError("appearance output must be finite")
+        depth = self.depth_m
+        if depth is not None:
+            depth = np.asarray(depth, dtype=np.float32)
+            if depth.shape != rgb.shape[:2]:
+                raise ValueError("depth_m must have shape HxW")
+            if np.any(np.isnan(depth)) or np.any(depth <= 0.0):
+                finite = np.isfinite(depth)
+                if np.any(depth[finite] <= 0.0) or np.any(np.isnan(depth)):
+                    raise ValueError("finite appearance depth values must be positive")
+            object.__setattr__(self, "depth_m", depth)
         object.__setattr__(self, "premultiplied_rgb", np.clip(rgb, 0.0, 1.0))
         object.__setattr__(self, "alpha", np.clip(alpha, 0.0, 1.0))
+
+
+def approximate_gaussian_depth(
+    projected_xy: Any,
+    center_depth_m: Any,
+    radii_px: Any,
+    alpha: Any,
+    *,
+    fill_radius_px: int = 3,
+    alpha_threshold: float = 1.0e-3,
+) -> np.ndarray:
+    """Approximate the front Gaussian surface from projected center depths.
+
+    VkSplat exposes its projected Gaussian centers and camera-space depths but
+    not an accumulated per-pixel depth buffer.  The trained surface is dense,
+    so a conservative small-radius nearest-depth fill gives an object z-buffer
+    without consulting the procedural collision proxy.
+    """
+
+    xy = np.asarray(projected_xy, dtype=np.float32)
+    depth = np.asarray(center_depth_m, dtype=np.float32).reshape(-1)
+    radii = np.asarray(radii_px).reshape(-1)
+    raw_alpha = np.asarray(alpha, dtype=np.float32)
+    if raw_alpha.ndim == 3 and raw_alpha.shape[-1] == 1:
+        raw_alpha = raw_alpha[..., 0]
+    if xy.ndim != 2 or xy.shape[1] != 2:
+        raise ValueError("projected_xy must have shape Nx2")
+    if len(xy) != len(depth) or len(xy) != len(radii):
+        raise ValueError("projected centers, depths, and radii must have equal lengths")
+    if raw_alpha.ndim != 2:
+        raise ValueError("alpha must have shape HxW or HxWx1")
+    if fill_radius_px < 0 or fill_radius_px > 8:
+        raise ValueError("fill_radius_px must be between zero and eight")
+    if not 0.0 < alpha_threshold < 1.0:
+        raise ValueError("alpha_threshold must be in (0, 1)")
+
+    height, width = raw_alpha.shape
+    px = np.rint(xy[:, 0]).astype(np.int64)
+    py = np.rint(xy[:, 1]).astype(np.int64)
+    valid = (
+        np.all(np.isfinite(xy), axis=1)
+        & np.isfinite(depth)
+        & (depth > 0.0)
+        & (radii > 0)
+        & (px >= 0)
+        & (px < width)
+        & (py >= 0)
+        & (py < height)
+    )
+    inverse_depth = np.zeros((height, width), dtype=np.float32)
+    good = np.flatnonzero(valid)
+    if len(good):
+        np.maximum.at(inverse_depth, (py[good], px[good]), 1.0 / depth[good])
+    if fill_radius_px:
+        padded = np.pad(inverse_depth, fill_radius_px, mode="constant")
+        filled = np.zeros_like(inverse_depth)
+        for dy in range(2 * fill_radius_px + 1):
+            for dx in range(2 * fill_radius_px + 1):
+                np.maximum(
+                    filled,
+                    padded[dy : dy + height, dx : dx + width],
+                    out=filled,
+                )
+        inverse_depth = filled
+    support = raw_alpha > alpha_threshold
+    result = np.full((height, width), np.inf, dtype=np.float32)
+    resolved = support & (inverse_depth > 0.0)
+    result[resolved] = 1.0 / inverse_depth[resolved]
+    return result
 
 
 class AppearanceRenderer(Protocol):
@@ -379,18 +464,26 @@ class VkSplatAppearanceRenderer:
             )
             self._module.forward()
             pixel_state = np.asarray(self._module.pixel_state, dtype=np.float32).copy()
-        render_ms = (time.perf_counter() - started) * 1000.0
+            projected_xy = np.asarray(self._module.xy_vs, dtype=np.float32).copy()
+            center_depth_m = np.asarray(self._module.depths, dtype=np.float32).copy()
+            radii_px = np.asarray(self._module.radii).copy()
         expected_shape = (camera.height, camera.width, 4)
         if pixel_state.shape != expected_shape:
             raise GaussianAppearanceError(
                 f"unexpected VkSplat output {pixel_state.shape}; expected {expected_shape}"
             )
         transmittance = np.clip(pixel_state[..., 3:4], 0.0, 1.0)
+        alpha = 1.0 - transmittance
+        depth_m = approximate_gaussian_depth(
+            projected_xy, center_depth_m, radii_px, alpha
+        )
+        render_ms = (time.perf_counter() - started) * 1000.0
         return AppearanceFrame(
             premultiplied_rgb=pixel_state[..., :3],
-            alpha=1.0 - transmittance,
+            alpha=alpha,
             render_ms=render_ms,
             backend=self.backend,
+            depth_m=depth_m,
         )
 
     def memory_usage(self) -> dict[str, int]:
@@ -500,6 +593,7 @@ class CompositeResult:
     effective_alpha: np.ndarray
     visible_proxy_fraction: float
     gaussian_alpha_clipped_fraction: float
+    compositor: str = "proxy_matte"
 
 
 def composite_with_proxy_depth(
@@ -548,6 +642,66 @@ def composite_with_proxy_depth(
         gaussian_alpha_clipped_fraction=(
             float(np.count_nonzero(clipped) / support_count) if support_count else 0.0
         ),
+        compositor="proxy_matte",
+    )
+
+
+def composite_with_gaussian_depth(
+    genesis_rgb: Any,
+    genesis_depth_m: Any,
+    appearance: AppearanceFrame,
+    *,
+    depth_tolerance_m: float = 0.004,
+) -> CompositeResult:
+    """Composite a self-matted Gaussian against the object-free Genesis depth."""
+
+    raw_rgb = np.asarray(genesis_rgb)
+    if raw_rgb.ndim != 3 or raw_rgb.shape[-1] != 3:
+        raise ValueError("genesis_rgb must have shape HxWx3")
+    if np.issubdtype(raw_rgb.dtype, np.integer):
+        base = raw_rgb.astype(np.float32) / np.iinfo(raw_rgb.dtype).max
+    else:
+        base = raw_rgb.astype(np.float32)
+        if float(np.nanmax(base, initial=0.0)) > 1.0 + 1.0e-6:
+            base /= 255.0
+    scene_depth = np.asarray(genesis_depth_m, dtype=np.float32)
+    shape = raw_rgb.shape[:2]
+    if scene_depth.shape != shape:
+        raise ValueError("Genesis depth must match the RGB height/width")
+    if appearance.premultiplied_rgb.shape[:2] != shape:
+        raise ValueError("appearance and Genesis frame dimensions differ")
+    if appearance.depth_m is None:
+        raise ValueError("Gaussian self-depth is required for proxy-free compositing")
+    gaussian_depth = np.asarray(appearance.depth_m, dtype=np.float32)
+    if gaussian_depth.shape != shape:
+        raise ValueError("Gaussian depth must match the RGB height/width")
+    if not np.isfinite(depth_tolerance_m) or depth_tolerance_m < 0.0:
+        raise ValueError("depth tolerance must be finite and non-negative")
+
+    support = appearance.alpha[..., 0] > 1.0e-3
+    gaussian_valid = np.isfinite(gaussian_depth) & (gaussian_depth > 0.0)
+    scene_valid = np.isfinite(scene_depth) & (scene_depth > 0.0)
+    visible = (
+        support
+        & gaussian_valid
+        & (~scene_valid | (gaussian_depth <= scene_depth + depth_tolerance_m))
+    )
+    matte = visible[..., None].astype(np.float32)
+    effective_alpha = appearance.alpha * matte
+    premultiplied = appearance.premultiplied_rgb * matte
+    composite = premultiplied + base * (1.0 - effective_alpha)
+    support_count = int(np.count_nonzero(support))
+    clipped = support & ~visible
+    return CompositeResult(
+        rgb_u8=np.round(np.clip(composite, 0.0, 1.0) * 255.0).astype(np.uint8),
+        effective_alpha=effective_alpha,
+        visible_proxy_fraction=(
+            float(np.count_nonzero(visible) / support_count) if support_count else 0.0
+        ),
+        gaussian_alpha_clipped_fraction=(
+            float(np.count_nonzero(clipped) / support_count) if support_count else 0.0
+        ),
+        compositor="gaussian_self_depth",
     )
 
 
@@ -668,5 +822,121 @@ def layered_preview_asset(root: Path) -> ObservedCoreAsset:
         expected_formal=False,
         expected_provenance_schema="radeon_oneloop.layered_gaussian_provenance.v1",
         expected_provenance_class="confidence_fused_candidate",
+        required_observed_only_training=False,
+    )
+
+
+def completed_appearance_asset(root: Path) -> ObservedCoreAsset:
+    """Load one unified, full-orbit appearance distilled from reviewed views.
+
+    This is deliberately a separate asset class from both the observed-only
+    formal baseline and the optional generated-fill layer.  It is one rigid
+    Gaussian field at runtime, while its provenance remains explicit that
+    generated SEVA pseudo-views contributed appearance supervision.
+    """
+
+    resolved = root.resolve()
+    ply = resolved / "appearance_completed_canonical.ply"
+    cameras = resolved / "cameras_completed.json"
+    provenance_path = resolved / "provenance.json"
+    missing = [str(path) for path in (ply, cameras, provenance_path) if not path.is_file()]
+    if missing:
+        raise GaussianAppearanceError(f"completed-appearance files are missing: {missing}")
+    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    try:
+        assert_not_quarantined(
+            [
+                (
+                    "completed_appearance_runtime_asset",
+                    {
+                        "ply_sha256": sha256_file(ply),
+                        "cameras_sha256": sha256_file(cameras),
+                        "provenance_sha256": sha256_file(provenance_path),
+                        "provenance": provenance,
+                    },
+                )
+            ]
+        )
+    except QuarantinedLineageError as error:
+        raise GaussianAppearanceError(
+            "completed appearance is quarantined and cannot be a live asset: "
+            f"{error}"
+        ) from error
+    if provenance.get("formal") is not False:
+        raise GaussianAppearanceError("completed appearance requires formal=false provenance")
+    if provenance.get("eligible_for_heldout_real_metrics") is not False:
+        raise GaussianAppearanceError("completed appearance cannot be held-out-real evidence")
+    gaussian_count = provenance.get("gaussian_count")
+    if not isinstance(gaussian_count, int) or gaussian_count <= 0:
+        raise GaussianAppearanceError("completed-appearance Gaussian count must be positive")
+    return ObservedCoreAsset(
+        ply_path=ply,
+        cameras_path=cameras,
+        provenance_path=provenance_path,
+        expected_ply_sha256=sha256_file(ply),
+        expected_cameras_sha256=sha256_file(cameras),
+        expected_provenance_sha256=sha256_file(provenance_path),
+        expected_gaussians=gaussian_count,
+        expected_formal=False,
+        expected_provenance_schema="radeon_oneloop.gaussian_canonicalization.v2",
+        expected_provenance_class="completed_appearance_candidate",
+        required_observed_only_training=False,
+    )
+
+
+def full_geometry_candidate_asset(root: Path) -> ObservedCoreAsset:
+    """Load a generated full-geometry visual candidate pending human audit."""
+
+    resolved = root.resolve()
+    ply = resolved / "appearance_full_geometry_canonical.ply"
+    cameras = resolved / "cameras_full_geometry.json"
+    provenance_path = resolved / "provenance.json"
+    missing = [str(path) for path in (ply, cameras, provenance_path) if not path.is_file()]
+    if missing:
+        raise GaussianAppearanceError(f"full-geometry candidate files are missing: {missing}")
+    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    try:
+        assert_not_quarantined(
+            [
+                (
+                    "full_geometry_runtime_asset",
+                    {
+                        "ply_sha256": sha256_file(ply),
+                        "cameras_sha256": sha256_file(cameras),
+                        "provenance_sha256": sha256_file(provenance_path),
+                        "provenance": provenance,
+                    },
+                )
+            ]
+        )
+    except QuarantinedLineageError as error:
+        raise GaussianAppearanceError(
+            "full-geometry candidate contains quarantined lineage: " f"{error}"
+        ) from error
+    if provenance.get("formal") is not False:
+        raise GaussianAppearanceError("full-geometry candidate requires formal=false")
+    if provenance.get("eligible_for_heldout_real_metrics") is not False:
+        raise GaussianAppearanceError("full-geometry candidate cannot be held-out evidence")
+    lineage = provenance.get("training_lineage", {})
+    if lineage.get("secondary_accelerator_artifacts") is not True:
+        raise GaussianAppearanceError("generated geometry lineage must remain explicit")
+    if lineage.get("training_job_role") != (
+        "SEVA_49_view_generated_geometry_hypothesis_variable_3DGS"
+    ):
+        raise GaussianAppearanceError("unexpected full-geometry training role")
+    gaussian_count = provenance.get("gaussian_count")
+    if not isinstance(gaussian_count, int) or gaussian_count <= 0:
+        raise GaussianAppearanceError("full-geometry Gaussian count must be positive")
+    return ObservedCoreAsset(
+        ply_path=ply,
+        cameras_path=cameras,
+        provenance_path=provenance_path,
+        expected_ply_sha256=sha256_file(ply),
+        expected_cameras_sha256=sha256_file(cameras),
+        expected_provenance_sha256=sha256_file(provenance_path),
+        expected_gaussians=gaussian_count,
+        expected_formal=False,
+        expected_provenance_schema="radeon_oneloop.gaussian_canonicalization.v2",
+        expected_provenance_class="generated_full_geometry_candidate",
         required_observed_only_training=False,
     )

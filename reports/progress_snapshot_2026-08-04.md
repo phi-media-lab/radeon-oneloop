@@ -6,6 +6,66 @@ Radeon object-asset evidence and explicitly nonformal integration evidence;
 each claim is labelled at its own boundary. The machine-readable companion is
 [`real2sim_artifact_inventory_2026-08-04.yaml`](real2sim_artifact_inventory_2026-08-04.yaml).
 
+## 2026-08-05 live-asset correction
+
+The earlier SEVA `completed_appearance` live preview was not a valid
+full-geometry result. Its 3D Gaussian centers were still frozen to the
+four-real-mask visual hull, and the live compositor clipped those Gaussians to
+the visibly distorted procedural `sim_visual.obj`. The generated views had
+changed appearance only. That explains why the simulator still looked like
+the old OBJ even after the SEVA images themselves looked convincing.
+
+That branch is now rejected and content-addressed in
+`gaussian/real2sim_quarantine.json`. The runtime loader also rejects it before
+renderer construction, so the old `--completed-appearance` path cannot be
+accidentally reused as a live asset.
+
+The current replacement is explicitly nonformal and uses all 49 reviewed SEVA
+views to create a new support-voted geometry hypothesis, followed by an
+8,000-step variable-geometry VkSplat fit on the `amd` APU. It contains 39,072
+Gaussians; its canonical PLY SHA-256 is
+`ad538d0f1d4da96293aed7de5f9f33030435870c1c4339187f48c9dfa25bb4f2`.
+No vertex or surface point from `sim_visual.obj` enters that visual asset.
+
+The Genesis Gaussian path no longer loads `sim_visual.obj`; it loads the
+separate `_collision.obj` only as an invisible approximate rigid collision
+proxy and composites the Gaussian with its own projected-center depth against
+the object-free Genesis scene depth.
+Static registration, gripper/table occlusion, a 72-angle orbit, and a
+hardware-isolated six-second synthetic live sweep pass. The live sweep renders
+44 paired-camera frames (88 Gaussian renders), with zero renderer failures,
+zero fallbacks, zero rejected state packets, `object_visualization=false`, and
+`compositor=gaussian_self_depth`. It opens no serial device and produces no
+physical output. The simulator is stopped after the gate and ports 58081–58084
+and 58183 are free.
+
+A stricter successor now exercises the complete split-process path with no
+hardware: bounded synthetic dual-leader packets drive the authoritative 120 Hz
+Genesis process, which emits read-only visual snapshots to the independent
+Gaussian renderer. The accepted run
+`20260805T033013Z_260737_amd_gaussian_authoritative_synthetic` sustains
+119.999 Hz control, accepts 513 leader packets with zero rejects and zero
+watchdog events, sends 177 accepted visual snapshots, and completes 88
+Gaussian camera renders with zero failures or fallbacks. Both the authoritative
+process and renderer record `_collision.obj` as loaded,
+`object_visualization=false`, and no serial/USB access or physical output. The
+preceding cold-start run is preserved as a negative result because a too-short
+synthetic publisher ended at the control-window boundary and correctly
+triggered one watchdog event.
+
+The operational wrapper also no longer opens the authoritative Genesis debug
+viewer by default. That viewer never owned photorealistic appearance and was a
+second source of confusion because it displayed the procedural debug object.
+The reviewed Gaussian presenter is now the only object-appearance window; a
+new exact-hash dual-leader wrapper remains fail-closed until the project owner
+explicitly records visual confirmation.
+
+This correction proves that the legacy visual OBJ is no longer in the render
+chain and that the new field remains pose-synchronous through a dynamic yaw
+sweep. It does not prove collision fidelity, held-out real-view accuracy, or a
+completed handover. Project-owner visual confirmation of the new live frames
+is the remaining gate before restarting the two USB leaders.
+
 ## Current outcome
 
 The project now has a measured end-to-end Real2Sim demo path. The Gaussian
@@ -36,10 +96,10 @@ but it is deferred and is no longer on the submission critical path:
    deliberate hard renderer-crash gate all pass against its exact hashes.
    Genesis Nyx is absent from the installed 1.3.1 package; pinned VkSplat/RADV
    is therefore the accepted nonformal renderer with a debug-mesh fallback.
-7. A second single-Radeon run freezes the deterministic 95 mm visual-hull
-   geometry and fits only observed-photo color/opacity. Its explicit nonformal
-   candidate passes a 72-frame continuous 360-degree audit and a 12-second
-   read-only dual-leader live gate with no Gaussian fallback.
+7. A second single-Radeon run froze the deterministic 95 mm visual-hull
+   geometry and fit only observed-photo color/opacity. Although its numeric
+   orbit and read-only runtime gates passed, later visual review rejects it as
+   the final live asset; it cannot establish full geometry from four masks.
 8. The Vista4D-specific ablation includes a procedural 95 mm carrier,
    real-photo projection, measured mask alignment, and two fixed-seed MI300X
    runs. The carrier is now explicitly rejected as a complete-geometry prior:
@@ -50,17 +110,21 @@ but it is deferred and is no longer on the submission critical path:
    It passes the no-harm gate only as a default-off nonformal toggle; it does
    not replace the SEVA primary branch, whose 49-frame orbit is now generated
    audited, explicitly accepted by the project owner, and packaged as a
-   73-image frozen-appearance training dataset.
+   73-image frozen-appearance training dataset. A successor uses the complete
+   49-frame SEVA orbit for a variable-geometry 39,072-Gaussian hypothesis and
+   removes the procedural OBJ from the visual compositor; it is the current
+   nonformal live candidate pending project-owner visual confirmation.
 10. The final read-only handover recorder now evaluates task semantics rather
     than runtime health alone. A preserved stationary-input trial proves that
     it rejects missing arm/gripper motion and a missing left-grasp → dual-contact
     → right-hold sequence even when control and rendering remain healthy.
 
 The next release milestone is a reproducible package of the real-photo input,
-geometry-frozen single-Radeon build, continuous-orbit review, and dual-leader
-live recording. Additional real held-out photographs are still required before
-novel-view quality metrics or formal promotion. The force-feedback branch is
-preserved but stays disabled and does not block this package.
+reviewed SEVA view generation, variable-geometry single-Radeon build,
+continuous-orbit review, and dual-leader live recording. Additional real
+held-out photographs are still required before novel-view quality metrics or
+formal promotion. The force-feedback branch is preserved but stays disabled
+and does not block this package.
 
 ## What is accepted now
 

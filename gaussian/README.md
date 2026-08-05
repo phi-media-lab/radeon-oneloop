@@ -2,16 +2,61 @@
 
 > Competition status: the **static workspace reconstruction remains deferred /
 > non-formal** because no calibrated workspace capture passed its input gate.
-> The separate object-centric observed Gaussian is accepted for the demo and
-> now has passing continuous-orbit and Genesis runtime bindings. The pinned
-> formal asset remains the anchor-view baseline; the geometry-frozen live-demo
-> candidate requires an explicit nonformal switch. Do not promote MI300X
-> generator outputs or workspace experiments into formal result tables.
+> The pinned formal asset remains an anchor-view baseline only. The current
+> live candidate is the explicit nonformal 39,072-Gaussian variable-geometry
+> field derived from the reviewed 49-view SEVA orbit. The earlier
+> frozen-visual-hull `completed_appearance` branch is rejected and
+> hash-quarantined. Do not promote generated geometry, MI300X outputs, or
+> workspace experiments into formal result tables.
 
 Build a static, calibrated Gaussian representation of the real handover
 workspace using VkSplat/Vulkan RADV. The competition deliverable is a visual
 twin and synchronized trajectory replay, not a policy observation, collision
 model, dynamic 4DGS system, or online correction pipeline.
+
+## Current object Real2Sim live candidate — 2026-08-05
+
+The visual asset and physics asset are now intentionally different:
+
+- `appearance_full_geometry_canonical.ply` is the generated full-angle visual
+  hypothesis. Its accepted runtime-candidate hash is
+  `ad538d0f1d4da96293aed7de5f9f33030435870c1c4339187f48c9dfa25bb4f2`.
+- `*_collision.obj` is an invisible approximate rigid collision proxy.
+- `*_sim_visual.obj` is a preserved debug/negative-control asset and is not
+  loaded by either process in the Gaussian demo.
+
+Gaussian compositing uses self alpha plus projected-center depth against the
+object-free Genesis scene depth. The authoritative 120 Hz process and the
+non-authoritative renderer both record the exact loaded collision path and
+`object_visualization=false`. Reproducible hardware-free gates are:
+
+```bash
+ONELOOP_OBSERVED_CORE_ROOT=/path/to/full_geometry_asset \
+./ops/run_amd_gaussian_self_depth_occlusion_gate.sh
+
+ONELOOP_OBSERVED_CORE_ROOT=/path/to/full_geometry_asset \
+./ops/run_amd_gaussian_authoritative_synthetic_gate.sh
+```
+
+The second command exercises the complete synthetic-leader → authoritative
+Genesis → visual-state mirror → Gaussian renderer chain. Accepted run
+`20260805T033013Z_260737_amd_gaussian_authoritative_synthetic` has zero
+watchdog events, packet rejects, renderer failures, fallbacks, serial/USB
+access, or physical output.
+
+Only after the project owner reviews the new live video should the real
+leaders be opened:
+
+```bash
+ONELOOP_PROJECT_OWNER_VISUAL_CONFIRMATION=accepted \
+ONELOOP_OBSERVED_CORE_ROOT=/path/to/full_geometry_asset \
+./ops/run_amd_seva_full_geometry_dual_leader.sh \
+  LEFT_PORT RIGHT_PORT LEFT_CALIBRATION_ID RIGHT_CALIBRATION_ID
+```
+
+This wrapper pins the exact PLY hash, disables the legacy completed-appearance
+mode and authoritative debug viewer, records video, and leaves haptic output in
+monitor-only mode.
 
 The implementation is pinned to VkSplat commit
 `e26c254938c81ff85998cd357a9e005e255d9b03`. Bootstrap the Vulkan extension,
@@ -289,12 +334,11 @@ asset passes its declared four-anchor checks but produces doubled surfaces and
 tearing between anchors. It remains the default evidence asset, not the final
 continuous-view appearance.
 
-The previously audited live-demo candidate starts from the same deterministic 30,000-point
-95 mm visual hull and four real Mercari views of the same doll, then freezes
-the Gaussian centers, scales, and quaternions while fitting DC color and
-opacity. Higher SH and refinement stay disabled. Run this nonformal preflight
-on the single declared Radeon host with external data paths supplied through
-the environment:
+The historical geometry-frozen candidate starts from the same deterministic
+30,000-point 95 mm visual hull and four real Mercari views of the same doll,
+then freezes the Gaussian centers, scales, and quaternions while fitting DC
+color and opacity. Higher SH and refinement stay disabled. Its reproducible
+nonformal preflight remains:
 
 ```bash
 ONELOOP_OBJECT_DATASET=/path/to/observed_only_dataset \
@@ -312,18 +356,13 @@ ONELOOP_ORBIT_CANDIDATE_NONFORMAL=1 \
 ```
 
 Numeric acceptance requires a closed cycle, non-empty support, and no border
-contact. The generated MP4 and 12-angle contact sheet still require human
-review. The current result passes and is materially more coherent, but sparse
-four-view side-angle blur remains and no held-out-real quality metric is
-claimed. The exact registered successor now has its own 72-angle development
-audit, `20260804T205804Z_217937_amd_gaussian_orbit_audit`: zero cycle-closure
-error, zero border contacts, 25.108 ms mean render time, and a human-accepted
-shell with the same side-angle blur/stretch limitation. It is therefore the
-current continuous live-demo binding. Read-only runtime gate
-`20260804T205940Z_218151_amd_decoupled_gaussian_live_gate` also passes with
-zero renderer fallbacks, zero watchdog events, and zero physical-output
-commands. Its leader inputs were stationary, so final task execution remains
-unrecorded.
+contact, but those checks did not validate its geometry. Later visual review
+rejects this branch as the final continuous-view asset because it inherits the
+four-mask visual hull. The registered formal successor and its passing runtime
+gates remain valid only for their declared anchor-view and integration claims.
+They are not the current live appearance. The 49-view variable-geometry
+candidate described above supersedes them for the nonformal demo; no
+held-out-real quality metric is claimed for either branch.
 
 ## Accepted nonformal runtime binding
 
@@ -424,8 +463,10 @@ run-to-review, and accepted-review-only dataset wrappers. See
 [`FOUR_VIEW_GENERATIVE_REAL2SIM.md`](FOUR_VIEW_GENERATIVE_REAL2SIM.md) for the
 commands and the explicit human-review boundary. The authorized checkpoint and
 49-frame orbit are present on `phi-amd-work`; numeric audit and explicit project-
-owner review pass. The resulting pseudo-view dataset is ready for the guarded
-`radeon-f` frozen-appearance fit and remains ineligible for formal metrics.
+owner review pass. The complete 49-view source has now produced the nonformal
+variable-geometry candidate and full split-process runtime gate documented at
+the top of this file. It remains ineligible for formal or held-out-real
+metrics.
 
 The dated hand-off state, exact run IDs, hashes, acceptance decisions, HIL
 status, and remaining dynamic-integration gates are frozen in

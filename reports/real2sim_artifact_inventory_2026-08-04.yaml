@@ -9,14 +9,14 @@ privacy:
 
 release_decision:
   default_appearance_id: formal_geometry_frozen_observed_canonical_30k
-  continuous_live_demo_appearance_id: formal_geometry_frozen_observed_canonical_30k
+  continuous_live_demo_appearance_id: seva_49view_variable_geometry_gaussian_39k
   default_physics_id: graffiti_mickey_rigid_proxy
   generated_fill_enabled_by_default: false
   vista4d_depth_lift_enabled: false
   surface_carrier_installed_in_genesis: false
   candidate_requires_explicit_nonformal_switch: true
   physical_force_feedback_priority: deferred_not_submission_blocking
-  next_gate: run_radeon_f_seva_frozen_appearance_fit_then_orbit_and_no_harm_audit
+  next_gate: project_owner_visual_confirmation_then_readonly_dual_leader_live_gate
 
 artifacts:
   - id: m1_reviewed_orbitfix
@@ -1119,16 +1119,154 @@ artifacts:
     status: accepted_nonformal_training_input
     formal: false
 
+  - id: seva_frozen_visual_hull_completed_appearance_rejected_v1
+    kind: generated_view_appearance_fit_on_invalid_frozen_visual_geometry
+    host_role: amd
+    training_run_id: 20260805T021824Z_235070_amd_seva_completed_appearance
+    orbit_run_id: 20260805T021904Z_235328_amd_gaussian_orbit_audit
+    live_run_id: 20260805T022137Z_238939_amd_decoupled_gaussian_live_gate
+    rejected_sha256:
+      - 3682f8ab5ffa2f6b96c2fc8f140eb518d580cdaf022227eb12e2f08283466a73
+      - eb650fd6fd82802f9c0b132b2c2085c26290220959e429c100bb315b7fe577bd
+      - 3564aba7d6c2e44ad4f01843e5d97eb5e1686b71dd88d33ab24997a0dd5de6e4
+    failure: generated_views_changed_appearance_but_geometry_and_live_obj_matte_remained_invalid
+    runtime_loader_fail_closed: true
+    allowed_role: preserved_negative_control_only
+    status: rejected_hash_quarantined
+    formal: false
+
+  - id: seva_49view_variable_geometry_gaussian_39k
+    kind: generated_full_geometry_hypothesis_variable_3dgs
+    host_role: amd
+    run_id: 20260805T025017Z_245983_amd_seva_full_geometry
+    source_views: 49
+    source_geometry: support_voted_49_mask_volume_without_legacy_obj_surface
+    dataset_sha256: 8208d3a93aa9802c1ab4f072049ca84a1c6b72dfe872b4e2a7d6d164cb151054
+    dataset_manifest_sha256: a4eaf826fe242e771f8e8dd0f63c70caec976c71fd94c2f86fa4e432b8b3d4a8
+    training_steps: 8000
+    gaussian_count: 39072
+    canonical_ply_sha256: ad538d0f1d4da96293aed7de5f9f33030435870c1c4339187f48c9dfa25bb4f2
+    cameras_sha256: 25eb95250dd2d7a083451c597f01258bf0b957645a2a403b6341a94059839a7e
+    provenance_sha256: 25c168e50821d556c66364710bb0167b64f666f500070143d94c20f37168f5fe
+    generated_geometry: true
+    secondary_accelerator_artifacts: true
+    eligible_for_heldout_real_metrics: false
+    project_owner_live_visual_confirmation: pending
+    status: accepted_nonformal_runtime_candidate_pending_owner_visual_gate
+    formal: false
+
+  - id: amd_seva_49view_full_geometry_orbit
+    kind: full_geometry_candidate_continuous_360_degree_development_audit
+    host_role: amd
+    run_id: 20260805T025115Z_246259_amd_gaussian_orbit_audit
+    parent_id: seva_49view_variable_geometry_gaussian_39k
+    frames_without_duplicate_endpoint: 72
+    border_contact_frames: 0
+    cycle_closure_rgb_mae: 0.0
+    adjacent_rgb_mae_mean: 0.008222298496169463
+    mean_render_ms: 20.38922811035475
+    metrics_sha256: 4eadede5d2ce5526ac18be10bacf6511d8569f295a8e2fbed054b41b2e9d309a
+    hashes_manifest_sha256: ce696d72f90f9b5b4548d28d790a65cee52bc8559337cfbd8700b0e8116baab0
+    visual_review_required: true
+    status: accepted_numeric_pending_project_owner_visual_confirmation
+    formal: false
+
+  - id: amd_seva_49view_gaussian_self_depth_static_and_occlusion
+    kind: genesis_registration_and_object_free_depth_compositing_gate
+    host_role: amd
+    parent_id: seva_49view_variable_geometry_gaussian_39k
+    static_run_id: 20260805T030700Z_collision_proxy
+    static_metrics_sha256: 9371455f6a35bad4af8e3a6422e47f509f6ac641a5c49cd25d4423c6a9f3d6e5
+    occlusion_run_id: 20260805T032043Z_255346_amd_gaussian_self_depth_occlusion
+    occlusion_metrics_sha256: 551100b96d30c7fadefa173f99c0fa593f6ec876888dd9b3df65313c27ac421f
+    occlusion_hashes_manifest_sha256: 8cd87fa3b185af5975f06cb75e629a7b97a029efa4a58d6650674f35e259ec54
+    old_obj_visualization: false
+    legacy_visual_mesh_loaded: false
+    compositor: gaussian_self_depth
+    dedicated_invisible_collision_proxy_retained: true
+    gaussian_binding_failures: 0
+    physical_output: false
+    status: accepted_nonformal_static_and_occlusion_gate
+    formal: false
+
+  - id: amd_seva_49view_hardware_isolated_synthetic_live
+    kind: loopback_visual_state_dynamic_two_camera_gaussian_gate
+    host_role: amd
+    run_id: 20260805T031018Z_253365_amd_gaussian_synthetic_live
+    parent_id: seva_49view_variable_geometry_gaussian_39k
+    duration_s: 6.0
+    trajectory: full_yaw_plus_small_xyz_and_joint_sweep
+    rendered_frame_pairs: 44
+    gaussian_render_successes: 88
+    gaussian_render_failures: 0
+    fallback_frames: 0
+    accepted_state_packets: 178
+    rejected_state_packets: 0
+    effective_render_hz: 7.262076612782702
+    old_obj_visualization: false
+    compositor: gaussian_self_depth
+    serial_or_usb_access: false
+    physical_output: false
+    gate_sha256: 2e3b0992b55852c3a5ae236ddec951e2a84fcaefc6c904fc7d6ac76991b6428b
+    video_sha256: 9b2ea407e2754f2f4634060b4fb5e91a54d187a936591e29787cc8383c78b32d
+    hashes_manifest_sha256: 7505f4e40880db7bf34a674e1deea3537ef86e1ec5f608212ffedf6564bb8dc9
+    status: accepted_nonformal_hardware_isolated_dynamic_gate
+    formal: false
+
+  - id: amd_seva_49view_authoritative_synthetic_watchdog_negative
+    kind: cold_start_split_process_synthetic_stream_boundary_failure
+    host_role: amd
+    run_id: 20260805T032820Z_257136_amd_gaussian_authoritative_synthetic
+    parent_id: seva_49view_variable_geometry_gaussian_39k
+    control_effective_hz: 119.99883001181165
+    watchdog_events: 1
+    failure: synthetic_publisher_ended_at_control_window_boundary_after_cold_compile
+    all_asset_path_checks_passed: true
+    serial_or_usb_access: false
+    physical_output: false
+    status: failed_preserved_then_fixed_by_extending_synthetic_publish_window
+    formal: false
+
+  - id: amd_seva_49view_authoritative_synthetic_full_chain
+    kind: synthetic_leader_authoritative_genesis_decoupled_gaussian_gate
+    host_role: amd
+    run_id: 20260805T033013Z_260737_amd_gaussian_authoritative_synthetic
+    parent_id: seva_49view_variable_geometry_gaussian_39k
+    duration_s: 6.0
+    control_effective_hz: 119.99866993476597
+    control_steps: 720
+    accepted_leader_packets: 513
+    rejected_leader_packets: 0
+    watchdog_events: 0
+    accepted_visual_snapshots: 177
+    rejected_visual_snapshots: 0
+    renderer_frame_pairs: 44
+    gaussian_render_successes: 88
+    gaussian_render_failures: 0
+    gaussian_fallback_frames: 0
+    authoritative_legacy_visual_mesh_loaded: false
+    authoritative_collision_proxy_loaded: true
+    renderer_legacy_visual_mesh_loaded: false
+    renderer_collision_proxy_loaded: true
+    compositor: gaussian_self_depth
+    serial_or_usb_access: false
+    physical_output: false
+    gate_sha256: 27ea4527bd7def51116f9f7cf67a83148abd280eed85631222a3ef3f427c86dc
+    video_sha256: fe4bd0e68005a359205ee21caf1c36d9b932cc21809771dc390400a133ccf826
+    hashes_manifest_sha256: b46dddc82b61514875202a5f8b0e5e73993edb98bfbd8468331d4bcc7ce209e0
+    status: accepted_nonformal_hardware_free_full_split_process_gate
+    formal: false
+
 validation:
-  scaffold_tests_collected: 266
-  scaffold_tests_passed: 253
+  scaffold_tests_collected: 278
+  scaffold_tests_passed: 265
   scaffold_tests_skipped_dependency_specific: 13
   git_diff_check: passed
   formal_result_claim: observed_object_training_and_anchor_render_only
 
 open_gates:
-  - radeon_f_seva_frozen_appearance_training_and_orbit_audit
-  - separate_default_off_generated_fill_no_harm_gate
+  - project_owner_visual_confirmation_of_seva_49view_live_candidate
+  - readonly_dual_leader_live_gate_with_seva_49view_candidate
   - capture_reserved_real_interanchor_heldout_views
   - recorded_approach_grasp_handover_release_demo
   - heldout_real_capture_and_metrics

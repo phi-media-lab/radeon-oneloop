@@ -107,6 +107,19 @@ class GaussianContractTests(unittest.TestCase):
         self.assertIn("haptic_feedback_diagnostics", consumer)
         self.assertIn("gripper_object_contact_force_n", consumer)
 
+    def test_seva_full_geometry_dual_leader_requires_visual_receipt(self):
+        runner = Path("ops/run_amd_seva_full_geometry_dual_leader.sh").read_text()
+        gate = Path("ops/run_amd_decoupled_gaussian_live_gate.sh").read_text()
+        consumer = Path("sim/genesis_so101/live_teleop.py").read_text()
+        self.assertIn("ONELOOP_PROJECT_OWNER_VISUAL_CONFIRMATION", runner)
+        self.assertIn("ONELOOP_FULL_GEOMETRY_CANDIDATE=1", runner)
+        self.assertIn("ad538d0f1d4da96293aed7de5f9f33030435870c1c4339187f48c9dfa25bb4f2", runner)
+        self.assertIn("ONELOOP_COMPLETED_APPEARANCE=0", runner)
+        self.assertIn("ONELOOP_SHOW_GENESIS_VIEWER=0", runner)
+        self.assertIn("--hide-object-visualization", gate)
+        self.assertIn("authoritative_old_obj_visualization_disabled", gate)
+        self.assertIn("--hide-object-visualization", consumer)
+
     def test_geometry_freeze_zeroes_only_center_and_shape_rates(self):
         class Config:
             means_lr = 1.6e-4

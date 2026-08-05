@@ -33,6 +33,8 @@ show_genesis_viewer=${ONELOOP_SHOW_GENESIS_VIEWER:-0}
 record_video=${ONELOOP_RECORD_VIDEO:-0}
 candidate_nonformal=${ONELOOP_LIVE_CANDIDATE_NONFORMAL:-0}
 generated_fill_enabled=${ONELOOP_GENERATED_FILL_ENABLED:-0}
+completed_appearance=${ONELOOP_COMPLETED_APPEARANCE:-0}
+full_geometry_candidate=${ONELOOP_FULL_GEOMETRY_CANDIDATE:-0}
 final_task_recording=${ONELOOP_FINAL_TASK_RECORDING:-0}
 run_id="$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}_amd_decoupled_gaussian_live_gate"
 run_dir="$run_root/$run_id"
@@ -52,20 +54,32 @@ renderer_dir="$run_dir/renderer"
 [[ "$record_video" == 0 || "$record_video" == 1 ]]
 [[ "$candidate_nonformal" == 0 || "$candidate_nonformal" == 1 ]]
 [[ "$generated_fill_enabled" == 0 || "$generated_fill_enabled" == 1 ]]
+[[ "$completed_appearance" == 0 || "$completed_appearance" == 1 ]]
+[[ "$full_geometry_candidate" == 0 || "$full_geometry_candidate" == 1 ]]
 [[ "$final_task_recording" == 0 || "$final_task_recording" == 1 ]]
-if [[ "$generated_fill_enabled" == 1 && "$candidate_nonformal" == 1 ]]; then
-  printf '%s\n' 'layered preview and generic nonformal candidate modes are mutually exclusive' >&2
+if (( candidate_nonformal + generated_fill_enabled + completed_appearance + full_geometry_candidate > 1 )); then
+  printf '%s\n' 'appearance asset modes are mutually exclusive' >&2
   exit 64
 fi
-if [[ "$generated_fill_enabled" == 1 ]]; then
+if [[ "$full_geometry_candidate" == 1 ]]; then
+  appearance_ply="$observed_core/appearance_full_geometry_canonical.ply"
+  camera_file="$observed_core/cameras_full_geometry.json"
+  [[ -f "$observed_core/provenance.json" ]]
+elif [[ "$completed_appearance" == 1 ]]; then
+  appearance_ply="$observed_core/appearance_completed_canonical.ply"
+  camera_file="$observed_core/cameras_completed.json"
+  [[ -f "$observed_core/provenance.json" ]]
+elif [[ "$generated_fill_enabled" == 1 ]]; then
   appearance_ply="$observed_core/appearance_fused_preview.ply"
+  camera_file="$observed_core/cameras_observed.json"
   [[ -f "$observed_core/appearance_fused_preview.provenance.json" ]]
 else
   appearance_ply="$observed_core/appearance_observed_canonical.ply"
+  camera_file="$observed_core/cameras_observed.json"
   [[ -f "$observed_core/provenance.json" ]]
 fi
 [[ -f "$appearance_ply" ]]
-[[ -f "$observed_core/cameras_observed.json" ]]
+[[ -f "$camera_file" ]]
 [[ "$presenter_host" == 127.0.0.1 || "$presenter_host" == localhost || "$presenter_host" == ::1 ]]
 [[ "$presenter_port" =~ ^[0-9]+$ ]] && (( presenter_port >= 1 && presenter_port <= 65535 ))
 [[ "$presenter_jpeg_quality" =~ ^[0-9]+$ ]] && (( presenter_jpeg_quality >= 50 && presenter_jpeg_quality <= 100 ))
@@ -140,6 +154,8 @@ printf '%s\n' \
   'leader_bus_mode: read_only' \
   'physical_output: false' \
   "generated_fill_enabled: $generated_fill_enabled" \
+  "completed_appearance: $completed_appearance" \
+  "full_geometry_candidate: $full_geometry_candidate" \
   "final_task_recording: $final_task_recording" \
   "fault_exit_after_frames: $fault_exit_after_frames" \
   "ply_sha256: $(sha256sum "$appearance_ply" | awk '{print $1}')" \
@@ -171,6 +187,12 @@ if [[ "$candidate_nonformal" == 1 ]]; then
 fi
 if [[ "$generated_fill_enabled" == 1 ]]; then
   renderer_args+=(--layered-preview)
+fi
+if [[ "$completed_appearance" == 1 ]]; then
+  renderer_args+=(--completed-appearance)
+fi
+if [[ "$full_geometry_candidate" == 1 ]]; then
+  renderer_args+=(--full-geometry-candidate)
 fi
 if (( fault_exit_after_frames > 0 )); then
   renderer_args+=(--fault-exit-after-frames "$fault_exit_after_frames")
@@ -216,6 +238,7 @@ consumer_args=(
   --first-packet-timeout-s 180
   --watchdog-ms 250
   --render-hz 0
+  --hide-object-visualization
   --feedback-host 127.0.0.1
   --feedback-port "$feedback_port"
   --feedback-hz 30
@@ -274,7 +297,8 @@ fi
 "$rocm_python" - "$consumer_dir/metrics.json" "$renderer_dir/metrics.json" \
   "$run_dir/publisher.log" "$run_dir/gate.json" "$renderer_dir/FAULT_INJECTED.json" \
   "$fault_exit_after_frames" "$renderer_status" "$show_presenter" \
-  "$candidate_nonformal" "$generated_fill_enabled" "$final_task_recording" <<'PY'
+  "$candidate_nonformal" "$generated_fill_enabled" "$completed_appearance" \
+  "$full_geometry_candidate" "$final_task_recording" <<'PY'
 import json, sys
 from pathlib import Path
 
@@ -284,7 +308,9 @@ renderer_status = int(sys.argv[7])
 show_presenter = bool(int(sys.argv[8]))
 candidate_nonformal = bool(int(sys.argv[9]))
 generated_fill_enabled = bool(int(sys.argv[10]))
-final_task_recording = bool(int(sys.argv[11]))
+completed_appearance = bool(int(sys.argv[11]))
+full_geometry_candidate = bool(int(sys.argv[12]))
+final_task_recording = bool(int(sys.argv[13]))
 consumer = json.loads(consumer_path.read_text())
 publisher_text = publisher_path.read_text()
 decoder = json.JSONDecoder()
@@ -307,6 +333,14 @@ checks = {
     "control_physical_output_false": consumer["physical_output_commands"] is False,
     "visual_stream_send_errors_zero": consumer["visual_state_stream"]["send_errors"] == 0,
     "publisher_physical_output_false": publisher["physical_output_commands"] is False,
+    "authoritative_old_obj_visualization_disabled": (
+        consumer["appearance"]["diagnostics"]["object_visualization"] is False
+    ),
+    "authoritative_dedicated_collision_proxy_loaded": (
+        consumer["appearance"]["diagnostics"]["object_mesh_path"].endswith(
+            "_collision.obj"
+        )
+    ),
 }
 if final_task_recording:
     action_range = publisher.get("action_range") or {}
@@ -339,11 +373,23 @@ else:
     checks.update({
         "renderer_accepted": renderer["accepted"] is True,
         "renderer_fallback_frames_zero": renderer["appearance"]["fallback_frames"] == 0,
+        "renderer_old_obj_visualization_disabled": (
+            renderer["appearance"]["object_visualization"] is False
+        ),
+        "renderer_dedicated_collision_proxy_loaded": (
+            renderer["appearance"]["object_mesh_path"].endswith("_collision.obj")
+        ),
         "renderer_asset_mode_matches_request": (
             renderer["candidate_nonformal"] is candidate_nonformal
         ),
         "renderer_layered_mode_matches_request": (
             renderer["layered_preview"] is generated_fill_enabled
+        ),
+        "renderer_completed_mode_matches_request": (
+            renderer["completed_appearance"] is completed_appearance
+        ),
+        "renderer_full_geometry_mode_matches_request": (
+            renderer["full_geometry_candidate"] is full_geometry_candidate
         ),
     })
     if show_presenter:
@@ -370,6 +416,8 @@ report = {
     "appearance_successes": appearance_successes,
     "appearance_failures": appearance_failures,
     "generated_fill_enabled": generated_fill_enabled,
+    "completed_appearance": completed_appearance,
+    "full_geometry_candidate": full_geometry_candidate,
     "final_task_recording": final_task_recording,
     "handover_task": consumer["handover_task"] if final_task_recording else None,
     "physical_output": False,

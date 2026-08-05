@@ -23,9 +23,15 @@ from .fetch_assets import fetch
 from .gaussian_appearance import (
     SafeAppearanceBinding,
     composite_with_proxy_depth,
+    composite_with_gaussian_depth,
     entity_segmentation_index,
 )
-from .handover_asset import DEFAULT_MESH, add_rigid_proxy, load_spec
+from .handover_asset import (
+    DEFAULT_COLLISION_MESH,
+    DEFAULT_MESH,
+    add_rigid_proxy,
+    load_spec,
+)
 
 
 HOME_ARM_ACTION = (0.0, -55.0, 70.0, 70.0, 0.0, 35.0)
@@ -95,6 +101,8 @@ class SceneHandles:
     object: Any
     front_camera: Any
     hand_camera: Any
+    object_visualization: bool
+    object_mesh_path: Path
 
 
 class SO101HandoverTask:
@@ -196,17 +204,24 @@ class SO101HandoverTask:
         if binding_result.frame is None:
             self._appearance_fallback_frames += 1
             return base_rgb
-        if self._object_segmentation_index is None:
-            self._object_segmentation_index = entity_segmentation_index(
-                self.handles.scene, self.handles.object
+        if self.handles.object_visualization:
+            if self._object_segmentation_index is None:
+                self._object_segmentation_index = entity_segmentation_index(
+                    self.handles.scene, self.handles.object
+                )
+            object_mask = self._array(segmentation) == self._object_segmentation_index
+            composite = composite_with_proxy_depth(
+                base_rgb,
+                self._array(depth),
+                object_mask,
+                binding_result.frame,
             )
-        object_mask = self._array(segmentation) == self._object_segmentation_index
-        composite = composite_with_proxy_depth(
-            base_rgb,
-            self._array(depth),
-            object_mask,
-            binding_result.frame,
-        )
+        else:
+            composite = composite_with_gaussian_depth(
+                base_rgb,
+                self._array(depth),
+                binding_result.frame,
+            )
         self._appearance_render_ms.append(binding_result.frame.render_ms)
         self._appearance_clipped_fraction.append(
             composite.gaussian_alpha_clipped_fraction
@@ -223,6 +238,17 @@ class SO101HandoverTask:
         return {
             "enabled": self._appearance_binding is not None,
             "object_segmentation_index": self._object_segmentation_index,
+            "object_visualization": self.handles.object_visualization,
+            "object_mesh_path": str(self.handles.object_mesh_path),
+            "compositor": (
+                None
+                if self._appearance_binding is None
+                else (
+                    "proxy_matte"
+                    if self.handles.object_visualization
+                    else "gaussian_self_depth"
+                )
+            ),
             "composited_frames": self._appearance_composited_frames,
             "fallback_frames": self._appearance_fallback_frames,
             "render_ms": {
@@ -386,6 +412,7 @@ def build(
     workspace_texture: Path | None = None,
     front_camera_calibration: Path | None = None,
     front_camera_gui: bool = False,
+    object_visualization: bool = True,
 ) -> tuple[SO101HandoverTask, SceneHandles]:
     import genesis as gs
     import genesis.utils.geom as gu
@@ -458,12 +485,16 @@ def build(
             file=str(model), pos=RIGHT_BASE_POS, euler=SHARED_BASE_EULER_DEG
         )
     )
+    object_mesh_path = (
+        DEFAULT_MESH if object_visualization else DEFAULT_COLLISION_MESH
+    ).resolve()
     object_entity = add_rigid_proxy(
         gs,
         scene,
         load_spec(),
-        mesh_path=DEFAULT_MESH,
+        mesh_path=object_mesh_path,
         pos=OBJECT_START_POS,
+        visualization=object_visualization,
     )
     front_camera_parameters = {
         "position_m": (0.0, 0.95, 0.90),
@@ -493,7 +524,16 @@ def build(
     )
     scene.build()
     handles = SceneHandles(
-        gs, scene, left, right, table, object_entity, front_camera, hand_camera
+        gs,
+        scene,
+        left,
+        right,
+        table,
+        object_entity,
+        front_camera,
+        hand_camera,
+        object_visualization,
+        object_mesh_path,
     )
     task = SO101HandoverTask(handles)
     task.reset()

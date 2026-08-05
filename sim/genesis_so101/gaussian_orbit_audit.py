@@ -14,6 +14,8 @@ import numpy as np
 from .gaussian_appearance import (
     PinholeCamera,
     VkSplatAppearanceRenderer,
+    completed_appearance_asset,
+    full_geometry_candidate_asset,
     nonformal_candidate_asset,
     observed_core_asset,
 )
@@ -105,6 +107,16 @@ def main() -> None:
         action="store_true",
         help="Audit a self-bound formal=false candidate instead of the pinned default.",
     )
+    parser.add_argument(
+        "--completed-appearance",
+        action="store_true",
+        help="Audit a unified formal=false SEVA-distilled appearance asset.",
+    )
+    parser.add_argument(
+        "--full-geometry-candidate",
+        action="store_true",
+        help="Audit the generated SEVA 49-view variable-geometry candidate.",
+    )
     args = parser.parse_args()
     if args.frames < 12 or args.frames % 4:
         raise ValueError("frames must be a multiple of four and at least 12")
@@ -121,11 +133,22 @@ def main() -> None:
     frame_dir.mkdir()
     import imageio.v3 as iio
 
-    asset = (
-        nonformal_candidate_asset(args.asset_root)
-        if args.candidate_nonformal
-        else observed_core_asset(args.asset_root)
-    )
+    if sum(
+        (
+            args.candidate_nonformal,
+            args.completed_appearance,
+            args.full_geometry_candidate,
+        )
+    ) > 1:
+        raise ValueError("appearance asset modes are mutually exclusive")
+    if args.full_geometry_candidate:
+        asset = full_geometry_candidate_asset(args.asset_root)
+    elif args.completed_appearance:
+        asset = completed_appearance_asset(args.asset_root)
+    elif args.candidate_nonformal:
+        asset = nonformal_candidate_asset(args.asset_root)
+    else:
+        asset = observed_core_asset(args.asset_root)
     asset_audit = asset.validate()
     camera_document = json.loads(asset.cameras_path.read_text(encoding="utf-8"))
     front = camera_document["cameras"][0]

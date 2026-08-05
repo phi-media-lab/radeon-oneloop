@@ -11,16 +11,34 @@ frames=${ONELOOP_ORBIT_FRAMES:-72}
 width=${ONELOOP_ORBIT_WIDTH:-512}
 height=${ONELOOP_ORBIT_HEIGHT:-512}
 candidate_nonformal=${ONELOOP_ORBIT_CANDIDATE_NONFORMAL:-0}
+completed_appearance=${ONELOOP_COMPLETED_APPEARANCE:-0}
+full_geometry_candidate=${ONELOOP_FULL_GEOMETRY_CANDIDATE:-0}
 run_id="$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}_amd_gaussian_orbit_audit"
 run_dir="$run_root/$run_id"
 artifact_dir="$run_dir/artifacts"
 
 [[ -x "$python_bin" ]]
-[[ -f "$observed_core/appearance_observed_canonical.ply" ]]
-[[ -f "$observed_core/cameras_observed.json" ]]
+if [[ "$full_geometry_candidate" == 1 ]]; then
+  appearance_ply="$observed_core/appearance_full_geometry_canonical.ply"
+  camera_file="$observed_core/cameras_full_geometry.json"
+elif [[ "$completed_appearance" == 1 ]]; then
+  appearance_ply="$observed_core/appearance_completed_canonical.ply"
+  camera_file="$observed_core/cameras_completed.json"
+else
+  appearance_ply="$observed_core/appearance_observed_canonical.ply"
+  camera_file="$observed_core/cameras_observed.json"
+fi
+[[ -f "$appearance_ply" ]]
+[[ -f "$camera_file" ]]
 [[ -f "$observed_core/provenance.json" ]]
 [[ -d "$vksplat_root/vksplat/shader" ]]
 [[ "$candidate_nonformal" == 0 || "$candidate_nonformal" == 1 ]]
+[[ "$completed_appearance" == 0 || "$completed_appearance" == 1 ]]
+[[ "$full_geometry_candidate" == 0 || "$full_geometry_candidate" == 1 ]]
+if (( candidate_nonformal + completed_appearance + full_geometry_candidate > 1 )); then
+  printf '%s\n' 'appearance asset modes are mutually exclusive' >&2
+  exit 64
+fi
 mkdir -p "$run_dir"
 
 mark_failure() {
@@ -54,7 +72,9 @@ printf '%s\n' \
   'physical_output: false' \
   'eligible_for_heldout_real_metrics: false' \
   "candidate_nonformal: $candidate_nonformal" \
-  "ply_sha256: $(sha256sum "$observed_core/appearance_observed_canonical.ply" | awk '{print $1}')" \
+  "completed_appearance: $completed_appearance" \
+  "full_geometry_candidate: $full_geometry_candidate" \
+  "ply_sha256: $(sha256sum "$appearance_ply" | awk '{print $1}')" \
   >"$run_dir/manifest.yaml"
 
 audit_args=(
@@ -68,6 +88,12 @@ audit_args=(
 )
 if [[ "$candidate_nonformal" == 1 ]]; then
   audit_args+=(--candidate-nonformal)
+fi
+if [[ "$completed_appearance" == 1 ]]; then
+  audit_args+=(--completed-appearance)
+fi
+if [[ "$full_geometry_candidate" == 1 ]]; then
+  audit_args+=(--full-geometry-candidate)
 fi
 timeout --signal=TERM --kill-after=15 600 \
   "$python_bin" "${audit_args[@]}" \
