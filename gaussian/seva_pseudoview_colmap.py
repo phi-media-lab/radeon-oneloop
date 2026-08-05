@@ -86,8 +86,10 @@ def opengl_c2w_to_metric_opencv_w2c(c2w: np.ndarray, radius_m: float) -> np.ndar
     """Convert SEVA OpenGL c2w to OpenCV w2c and resolve its normalized radius."""
 
     value = np.asarray(c2w, dtype=np.float64)
+    if value.shape == (3, 4):
+        value = np.vstack((value, np.asarray([0.0, 0.0, 0.0, 1.0])))
     if value.shape != (4, 4) or not np.all(np.isfinite(value)):
-        raise SevaDatasetError("SEVA camera must be one finite 4 x 4 matrix")
+        raise SevaDatasetError("SEVA camera must be one finite 3 x 4 or 4 x 4 matrix")
     if not np.isfinite(radius_m) or radius_m <= 0:
         raise SevaDatasetError("metric camera radius must be positive")
     center_norm = float(np.linalg.norm(value[:3, 3]))

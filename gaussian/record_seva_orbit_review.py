@@ -18,6 +18,7 @@ REVIEW_SCHEMA = "radeon_oneloop.seva_four_view_orbit_review.v1"
 ACCEPTED = "accepted_low_confidence_pseudoviews"
 REJECTED = "rejected"
 DECISIONS = (ACCEPTED, REJECTED)
+REVIEWER_ROLES = ("project_owner_human_review", "project_agent_visual_review")
 REQUIRED_CHECKS = (
     "single_object_all_views",
     "front_face_confined_to_front_hemisphere",
@@ -151,7 +152,7 @@ def build_review(args: argparse.Namespace) -> dict[str, Any]:
         "accepted_role": "generated_low_confidence_appearance_pseudoviews"
         if args.decision == ACCEPTED
         else None,
-        "reviewer_role": "project_agent_visual_review",
+        "reviewer_role": args.reviewer_role,
         "evidence": {
             "audit_metrics_sha256": sha256_file(audit_root / "metrics.json"),
             "audit_hashes_sha256": sha256_file(audit_root / "hashes.sha256"),
@@ -192,6 +193,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--candidate-id", required=True)
     parser.add_argument("--decision", choices=DECISIONS, required=True)
+    parser.add_argument(
+        "--reviewer-role", choices=REVIEWER_ROLES, default="project_agent_visual_review"
+    )
     parser.add_argument("--check", action="append", type=parse_check, default=[], required=True)
     parser.add_argument("--known-defect", action="append", default=[])
     parser.add_argument("--private-hil-holdout-sha256", action="append", default=[])

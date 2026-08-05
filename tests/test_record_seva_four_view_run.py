@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 
 import numpy as np
 
@@ -37,6 +38,12 @@ class SevaFourViewAuditTests(unittest.TestCase):
     def test_rejects_wrong_frame_count(self):
         with self.assertRaisesRegex(ValueError, "4 inputs and 49 targets"):
             camera_error(transforms(52), transforms())
+
+    def test_cli_does_not_mutate_hashed_stdout_after_finalization(self):
+        source = Path("gaussian/record_seva_four_view_run.py").read_text()
+        main = source.split("def main() -> None:", 1)[1]
+        self.assertIn("record_run(args)", main)
+        self.assertNotIn("print(json.dumps(result", main)
 
 
 if __name__ == "__main__":

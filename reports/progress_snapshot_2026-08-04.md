@@ -49,7 +49,8 @@ but it is deferred and is no longer on the submission critical path:
    observed-core/generated-fill separation and Genesis static-binding path.
    It passes the no-harm gate only as a default-off nonformal toggle; it does
    not replace the SEVA primary branch, whose 49-frame orbit is now generated
-   and audited but still blocked on explicit human identity/temporal review.
+   audited, explicitly accepted by the project owner, and packaged as a
+   73-image frozen-appearance training dataset.
 10. The final read-only handover recorder now evaluates task semantics rather
     than runtime health alone. A preserved stationary-input trial proves that
     it rejects missing arm/gripper motion and a missing left-grasp → dual-contact
@@ -513,21 +514,40 @@ and its files are hash-checked before each run.
 
 Run `seva_primary_20260804T222216Z_1436441` completed all 300 diffusion steps
 and produced 49 frames in `4349.76 s`; its inference is preserved even though
-the old recorder rejected SEVA's valid `3x4` camera matrices. Recovery pipeline
-`seva_primary_recovered_20260804T233837Z_1438301` canonicalized those matrices
-to homogeneous `4x4`, reran no inference, and completed the numeric orbit
-audit. Real-anchor silhouette IoU is `0.981943` mean / `0.976890` minimum;
+the old recorder rejected SEVA's valid `3x4` camera matrices. The corrected
+recorder canonicalizes those matrices to homogeneous `4x4`. Clean recovery
+pipeline `seva_primary_recovered_20260805T013845Z_1441778` reran no inference,
+passes its complete generation and audit hash indexes, and binds the original
+video SHA-256 `f0500ff4...b5ec2`. Real-anchor silhouette IoU is `0.981943`
+mean / `0.976890` minimum;
 adjacent-frame foreground IoU is `0.943569` mean / `0.904279` minimum; and the
 first/last cyclic seam foreground IoU is `0.961873`. The camera round-trip
-maximum error is `5.24e-08`. Automatic promotion remains disabled: the video,
-all-frame contact sheet, four real/generated anchor comparison, and private HIL
-rear/top exemplars still require explicit human review before any pseudo-view
-dataset is built. Prior invalid-credential and recorder failures remain
-preserved negative engineering evidence. Every run declares
-`credential_material_recorded=false`; no token is recorded in the repository
-or command logs for the account-bound install and pipeline. Hunyuan seed
-`10030` remains a controlled fallback, not a replacement for the preferred
-geometry-free SEVA path.
+maximum error is `5.24e-08`.
+
+On 2026-08-05 the project owner explicitly accepted the video, all-frame
+contact sheet, four real/generated anchors, and the two private HIL rear/top
+identity exemplars for the restricted role
+`accepted_low_confidence_pseudoviews`. Review SHA-256
+`68feb6e1...c8024` records ten passed human checks, seven passed numeric gates,
+and the known limitations that generated intermediate views are not
+observations, the underside remains unverified, and minor temporal/background
+residuals remain. An initial post-review attempt correctly failed on a stale
+`stdout.log` hash; a second failed dataset build exposed the same `3x4` camera
+format in the COLMAP converter. Both failures are preserved. The recorder now
+does not mutate logs after finalization, and both recorder and dataset camera
+paths share the reviewed homogeneous conversion.
+
+Accepted dataset `seva_pseudoview_colmap_20260805T014517Z_1442446` passes its
+hash index with 73 images and masks: 48 repeated real training instances, 24
+evenly sampled non-anchor SEVA training views, and one generated duplicate
+explicitly reserved as a non-training evaluation probe. Its 30,000 initial
+points retain observed visual-hull SHA-256 `1138a852...1ba2`; generated
+geometry is false, geometry/refinement are frozen, and the output must remain
+a separate generated-fill layer. This is nonformal and ineligible for held-out
+real metrics or automatic default-on promotion. Prior invalid-credential and
+recorder failures remain preserved negative engineering evidence. No token is
+recorded in repository or pipeline logs. Hunyuan seed `10030` remains a
+controlled fallback, not a replacement for the preferred SEVA path.
 
 ### 2026-08-05 layered fallback and Genesis gate
 
@@ -587,7 +607,7 @@ collision proxy remains active; no USB bus or physical output is involved.
 | Vista4D surface-carrier videos | Rejected for depth lift | Preserved continuity/identity ablation; never promoted to Gaussian or mesh truth |
 | Surface-carrier Genesis GLBs | Rejected visual fallback | Portable conversion evidence only; procedural debug proxy remains active |
 | Four-view generator input | Accepted nonformal contract | Sole identity source for SEVA and Hunyuan branches |
-| Stable Virtual Camera v1.1 | Generated and numerically audited; human review open | 49-frame orbit prior only; no pseudo-view promotion before explicit acceptance |
+| Stable Virtual Camera v1.1 | Owner-reviewed pseudo-view dataset accepted | Nonformal frozen-appearance training input; separate default-off generated-fill layer only |
 | Hunyuan3D-2mv seed 10027 | Rejected and hash-quarantined | Preserved negative control; all descendants blocked |
 | Hunyuan3D-2mv seeds 10028/10029 | Valid but superseded candidates | Candidate diversity evidence only |
 | Hunyuan3D-2mv seed 10030 | Accepted nonformal conditioning only | Vista4D/direct appearance A/B; never observed/collision/formal truth |
@@ -613,10 +633,10 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Remaining critical path
 
-1. Review the completed SEVA v1.1 video, all-frame contact sheet, real/generated
-   anchor comparison, and private HIL rear/top exemplars. Record an explicit
-   hash-bound accepted or rejected decision. Build the observed-initialized,
-   frozen-geometry pseudo-view dataset only if that review accepts it.
+1. Run the accepted SEVA dataset through the `radeon-f` frozen-appearance-only
+   VkSplat profile, render its full orbit, audit identity/continuity and
+   observed-anchor no-harm, then keep any accepted result as a separate
+   default-off generated-fill layer. Do not change the observed core.
 2. Capture additional real views at inter-anchor angles and freeze them as a
    held-out set before the next optimization run. Use them for silhouette and
    photometric evaluation, not as hidden training views.
@@ -637,7 +657,7 @@ on `radeon-c` GPU0 may populate formal result tables.
 
 ## Verification status
 
-The fresh full scaffold runs 264 tests and passes 251, with 13 dependency-
+The fresh full scaffold runs 266 tests and passes 253, with 13 dependency-
 specific tests skipped in the local environment. Shell syntax, YAML/JSON
 parsing, and `git diff --check` also pass. These source-tree checks are not a
 substitute for held-out capture or the final recorded handover demo.

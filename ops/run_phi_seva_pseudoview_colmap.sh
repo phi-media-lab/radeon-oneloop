@@ -18,11 +18,47 @@ runner_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 repo_root=$(cd "$runner_dir/.." && pwd)
 run_id="seva_pseudoview_colmap_$(date -u +%Y%m%dT%H%M%SZ)_${BASHPID}"
 run_dir="$output_root/$run_id"
+failed_dir="$run_dir.FAILED"
 
 mkdir -p "$output_root"
 [[ ! -e "$run_dir" ]]
+[[ ! -e "$failed_dir" ]]
 [[ -d "$four_view" && -d "$seva_run" && -d "$audit" && -d "$observed_initialization" ]]
 [[ -f "$review" && -x "$python_bin" ]]
+
+mark_failure() {
+  status=$?
+  if [[ $status -ne 0 && ! -e "$run_dir/DONE" ]]; then
+    if [[ ! -d "$failed_dir" ]]; then
+      mkdir -p "$failed_dir"
+    fi
+    "$python_bin" - "$failed_dir/WRAPPER_FAILED.json" "$status" <<'PY'
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+Path(sys.argv[1]).write_text(json.dumps({
+    "schema_version": "radeon_oneloop.seva_pseudoview_colmap_wrapper_failure.v1",
+    "formal": False,
+    "status": "failed",
+    "exit_code": int(sys.argv[2]),
+    "failed_utc": datetime.now(timezone.utc)
+    .isoformat(timespec="seconds")
+    .replace("+00:00", "Z"),
+}, indent=2, sort_keys=True) + "\n")
+PY
+    (
+      cd "$failed_dir"
+      find . -type f ! -name hashes.sha256 -print0 | sort -z \
+        | xargs -0 sha256sum >hashes.sha256
+    )
+  fi
+  exit "$status"
+}
+trap mark_failure EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 cd "$repo_root"
 PYTHONPATH="$repo_root${PYTHONPATH:+:$PYTHONPATH}" \
@@ -44,4 +80,5 @@ timeout --signal=TERM --kill-after=30 900 \
 [[ -s "$run_dir/DONE" ]]
 [[ $(find "$run_dir/images" -maxdepth 1 -type f -name '*.png' | wc -l) -eq 73 ]]
 [[ $(find "$run_dir/masks" -maxdepth 1 -type f -name '*.png' | wc -l) -eq 73 ]]
+trap - EXIT INT TERM
 printf 'SEVA pseudo-view COLMAP dataset complete: %s\n' "$run_dir"

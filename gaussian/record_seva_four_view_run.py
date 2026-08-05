@@ -237,8 +237,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
-    result = record_run(args)
-    print(json.dumps(result, indent=2, sort_keys=True))
+    # The runner redirects this process into stdout.log, which is itself bound
+    # by hashes.sha256. Do not write after record_run finalizes that index.
+    record_run(args)
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ release_decision:
   surface_carrier_installed_in_genesis: false
   candidate_requires_explicit_nonformal_switch: true
   physical_force_feedback_priority: deferred_not_submission_blocking
-  next_gate: complete_explicit_human_seva_identity_review_then_build_pseudoview_dataset_if_accepted
+  next_gate: run_radeon_f_seva_frozen_appearance_fit_then_orbit_and_no_harm_audit
 
 artifacts:
   - id: m1_reviewed_orbitfix
@@ -1052,16 +1052,83 @@ artifacts:
     status: done_pending_human_review
     formal: false
 
+  - id: seva_v1_1_clean_recovery_after_log_hash_fix
+    kind: byte_identical_inference_recovery_and_numeric_audit
+    host_role: phi-amd-work
+    pipeline_run_id: seva_primary_recovered_20260805T013845Z_1441778
+    generation_run_id: seva_four_view_seva_primary_recovered_20260805T013845Z_1441778_seed10027
+    audit_run_id: seva_orbit_audit_seva_primary_recovered_20260805T013845Z_1441778
+    inference_rerun: false
+    video_sha256: f0500ff4c2e76e40e7ff8bc147aaf1120fd9d46a70636c1e2497f7ee41db5ec2
+    generation_manifest_sha256: 4efc92d7d4a252706f5eeeaae7bb5f6137b1e9524b12f53dc5108366df729325
+    generation_hashes_sha256: 2e11deccb64fcaa0f8714b512b85e2619430f4b5b162d15c9620f8fa502f240e
+    audit_metrics_sha256: 7204a4c9d70f83e3813cbacbd97a6f21b6f7014b3a096d46ec7413033f1f1fee
+    audit_hashes_sha256: deb2327dbdce8030bf4df59073d6dda7249d5f1386ecabca54c2dfaf6c60df81
+    review_required_sha256: f1308a4e87051c403535386cb74afbdcbe2f33c2c2d3ecdd7c11236d0c7d67ea
+    generated_contact_sha256: b155de53e5f75a36db796f540a1daaec8a865d2bff848689b01149223bd171d3
+    anchor_comparison_sha256: b54ed92f384c349b42aa132225ba50b99e3aa053b2f0cb4ac60c73213bc47107
+    hash_indexes_verified: true
+    status: done_reviewed
+    formal: false
+
+  - id: seva_v1_1_project_owner_acceptance
+    kind: hash_bound_human_identity_temporal_review
+    host_role: phi-amd-work
+    candidate_id: seva_primary_recovered_20260805T013845Z_1441778
+    reviewer_role: project_owner_human_review
+    decision: accepted_low_confidence_pseudoviews
+    human_checks_passed: 10
+    numeric_gates_passed: 7
+    private_hil_holdout_hashes_bound: 2
+    review_sha256: 68feb6e1ac5591886323287dc1f5af2e51119d792ee5a5e4956a2ffbbb7c8024
+    automatic_promotion: false
+    status: accepted_restricted_role
+    formal: false
+
+  - id: seva_pseudoview_native_camera_failure
+    kind: accepted_review_downstream_conversion_negative
+    host_role: phi-amd-work
+    run_id: seva_pseudoview_colmap_20260805T013947Z_1441921.FAILED
+    failure_boundary: native_seva_3x4_camera_rejected_by_old_colmap_converter
+    failed_sha256: 02f1e2a5470cbe9f5871aa21b0143d58f9b20fe59504435e03872f30ebbff941
+    hashes_sha256: 769e4a9f517c748e1bd7ee5e7646b52927219d2c1dc6cae3207dcadb5f0ae16e
+    status: expected_failure_preserved_and_fixed
+    formal: false
+
+  - id: seva_pseudoview_colmap_owner_accepted_v1
+    kind: real_authoritative_generated_appearance_pseudoview_dataset
+    host_role: phi-amd-work
+    run_id: seva_pseudoview_colmap_20260805T014517Z_1442446
+    dataset_manifest_sha256: ef45199cf08b4be772e6d801afb8e945dd5e0e767518a68a8f9c7a232827e9de
+    hashes_sha256: 80fd29303b559c6852f5fa6d9f32451ddfa78c4c2e38b8177a67829fe0825bea
+    done_sha256: c04c0bafcf99c7886769e8feddaadc3a2b94df74765c930ea45a4118e9029dbb
+    project_owner_review_sha256: 68feb6e1ac5591886323287dc1f5af2e51119d792ee5a5e4956a2ffbbb7c8024
+    image_count: 73
+    mask_count: 73
+    training_instances: 72
+    repeated_real_training_instances: 48
+    generated_training_views: 24
+    generated_eval_probe_duplicates: 1
+    initial_points: 30000
+    initial_points_sha256: 1138a85221bf16a8ecd33304cf71ad12ef61a3e0d59c37d8b5092482ccd1ba2f
+    generated_geometry_prior: false
+    freeze_geometry: true
+    disable_refinement: true
+    keep_output_as_generated_fill_layer: true
+    eligible_for_heldout_real_metrics: false
+    status: accepted_nonformal_training_input
+    formal: false
+
 validation:
-  scaffold_tests_collected: 264
-  scaffold_tests_passed: 251
+  scaffold_tests_collected: 266
+  scaffold_tests_passed: 253
   scaffold_tests_skipped_dependency_specific: 13
   git_diff_check: passed
   formal_result_claim: observed_object_training_and_anchor_render_only
 
 open_gates:
-  - explicit_human_seva_identity_temporal_review
-  - seva_pseudoview_dataset_only_if_review_accepted
+  - radeon_f_seva_frozen_appearance_training_and_orbit_audit
+  - separate_default_off_generated_fill_no_harm_gate
   - capture_reserved_real_interanchor_heldout_views
   - recorded_approach_grasp_handover_release_demo
   - heldout_real_capture_and_metrics

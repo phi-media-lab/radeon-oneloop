@@ -32,6 +32,14 @@ def test_opengl_camera_conversion_resolves_metric_radius() -> None:
     np.testing.assert_allclose(c2w_cv[:3, 2], -c2w_gl[:3, 2])
 
 
+def test_opengl_camera_conversion_accepts_native_seva_three_by_four() -> None:
+    c2w_gl = np.eye(4)
+    c2w_gl[:3, 3] = [0.0, 2.0, 0.0]
+    expected = opengl_c2w_to_metric_opencv_w2c(c2w_gl, 0.2)
+    actual = opengl_c2w_to_metric_opencv_w2c(c2w_gl[:3], 0.2)
+    np.testing.assert_allclose(actual, expected)
+
+
 def test_camera_conversion_rejects_zero_radius() -> None:
     with pytest.raises(SevaDatasetError, match="zero radius"):
         opengl_c2w_to_metric_opencv_w2c(np.eye(4), 0.2)

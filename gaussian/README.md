@@ -220,9 +220,11 @@ inter-cardinal appearance and leaves the unseen underside neutral.
 SEVA remains the preferred geometry-free multi-image novel-view front end.
 The fixed-revision v1.1 checkpoint is now installed under the authorized
 `fbsh96` account on `phi-amd-work`, and the 49-frame orbit plus numeric audit
-have completed. The branch is paused at its mandatory human identity/temporal
-review boundary; it is not yet a pseudo-view dataset or an accepted appearance
-asset. Hunyuan seed `10030` remains a controlled nonformal fallback.
+have completed. The project owner accepted all required identity/temporal
+checks, and the hash-bound 73-image pseudo-view COLMAP dataset is complete.
+It is authorized only for nonformal frozen-appearance training over the
+observed-mask visual-hull geometry; it is not yet an accepted appearance asset.
+Hunyuan seed `10030` remains a controlled nonformal fallback.
 
 The seed-`10030` fallback is now fully separated from the observed core. Its
 Vista4D reshoot is rejected: mean silhouette IoU is `0.43319`, the minimum is
@@ -421,8 +423,9 @@ The preferred SEVA completion branch now has fixed-revision authorized install,
 run-to-review, and accepted-review-only dataset wrappers. See
 [`FOUR_VIEW_GENERATIVE_REAL2SIM.md`](FOUR_VIEW_GENERATIVE_REAL2SIM.md) for the
 commands and the explicit human-review boundary. The authorized checkpoint and
-49-frame orbit are present on `phi-amd-work`; numeric audit has passed, but no
-SEVA output has been promoted because explicit human review is still open.
+49-frame orbit are present on `phi-amd-work`; numeric audit and explicit project-
+owner review pass. The resulting pseudo-view dataset is ready for the guarded
+`radeon-f` frozen-appearance fit and remains ineligible for formal metrics.
 
 The dated hand-off state, exact run IDs, hashes, acceptance decisions, HIL
 status, and remaining dynamic-integration gates are frozen in

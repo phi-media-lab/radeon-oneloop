@@ -89,9 +89,10 @@ before inference if authorization or either required model file is missing.
 The pipeline writes `REVIEW_REQUIRED.json` and stops after the 49-frame numeric
 audit; successful generation is not automatic approval.
 
-The current `phi-amd-work` execution is at that review stop. Install run
+The completed `phi-amd-work` execution passed that review stop. Install run
 `seva_model_install_20260804T215409Z_1434707` is account-bound to `fbsh96`.
-Recovery pipeline `seva_primary_recovered_20260804T233837Z_1438301` reuses the
+Clean recovery pipeline `seva_primary_recovered_20260805T013845Z_1441778`
+reuses the
 completed 49-frame inference from parent run
 `seva_primary_20260804T222216Z_1436441` without rerunning the model; the parent
 failed only because the original recorder required `4x4` matrices while SEVA
@@ -110,9 +111,10 @@ a finite `10800 s` timeout because the fixed workload is 300 diffusion steps.
 The audit reports real-anchor silhouette IoU `0.981943` mean / `0.976890`
 minimum, adjacent-frame foreground IoU `0.943569` mean / `0.904279` minimum,
 and first/last foreground IoU `0.961873`. These are consistency diagnostics,
-not a held-out-real-view quality claim. Explicit review of identity, adjacent
-motion, cyclic seam, background stability, and private HIL rear/top exemplars
-is still required.
+not a held-out-real-view quality claim. Project-owner review SHA-256
+`68feb6e1ac5591886323287dc1f5af2e51119d792ee5a5e4956a2ffbbb7c8024`
+accepts identity, adjacent motion, cyclic seam, background stability, and two
+private HIL rear/top exemplars only for low-confidence pseudo-view training.
 
 ### G2: SEVA-to-Gaussian distillation
 
@@ -137,6 +139,18 @@ This wrapper re-resolves generation and audit paths from the review request,
 requires `accepted_low_confidence_pseudoviews`, checks that the review binds the
 same audit metrics hash, and only then invokes the pseudo-view COLMAP builder.
 Rejected reviews and mismatched pipeline paths fail closed.
+
+The accepted output is
+`seva_pseudoview_colmap_20260805T014517Z_1442446`. It contains 48 repeated
+real-anchor training instances, 24 evenly sampled generated non-anchor views,
+and one generated duplicate evaluation probe, for 73 image/mask pairs and 72
+training instances. Dataset manifest SHA-256 is
+`ef45199cf08b4be772e6d801afb8e945dd5e0e767518a68a8f9c7a232827e9de`.
+Its 30,000 `points3D` entries are byte-identical to the observed visual-hull
+initializer (`1138a852...1ba2`); generated geometry remains disabled and the
+required profile freezes geometry and refinement. An earlier hash-integrity
+failure and a downstream `3x4` camera-conversion failure are preserved rather
+than rewritten.
 
 ### G3: independent Hunyuan mesh-first A/B
 

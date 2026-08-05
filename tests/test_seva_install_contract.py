@@ -48,6 +48,9 @@ class SevaInstallContractTests(unittest.TestCase):
         self.assertIn('review.get("decision") != "accepted_low_confidence_pseudoviews"', value)
         self.assertIn('request.get("automatic_promotion") is not False', value)
         self.assertIn('review.get("evidence", {}).get("audit_metrics_sha256")', value)
+        self.assertIn('review.get("evidence", {}).get("four_view_manifest_sha256")', value)
+        self.assertIn('request["generation_run_id"]', value)
+        self.assertIn("recovered SEVA review requires its explicit four-view input", value)
         self.assertIn("run_phi_seva_pseudoview_colmap.sh", value)
 
     def test_recovery_reuses_only_completed_inference_and_still_stops_for_review(self):
@@ -56,8 +59,15 @@ class SevaInstallContractTests(unittest.TestCase):
         self.assertIn('[[ ! -e "$failed_pipeline/DONE" ]]', value)
         self.assertIn('"inference_rerun": False', value)
         self.assertIn('"automatic_promotion": False', value)
+        self.assertIn('"four_view_input": str(four_view.resolve())', value)
         self.assertIn("REVIEW_REQUIRED.json", value)
         self.assertNotIn("demo.py", value)
+
+    def test_pseudoview_wrapper_preserves_early_failures(self):
+        value = Path("ops/run_phi_seva_pseudoview_colmap.sh").read_text()
+        self.assertIn("WRAPPER_FAILED.json", value)
+        self.assertIn('failed_dir="$run_dir.FAILED"', value)
+        self.assertIn("hashes.sha256", value)
 
 
 if __name__ == "__main__":
