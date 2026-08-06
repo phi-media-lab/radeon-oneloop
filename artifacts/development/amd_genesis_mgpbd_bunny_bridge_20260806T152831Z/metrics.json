@@ -1,0 +1,170 @@
+{
+  "backend": "3",
+  "binding": {
+    "Genesis_visual_vertices": 2000,
+    "maximum_rest_mapping_error_m": 0.0,
+    "method": "nearest_exact_boundary_node_after_Genesis_import"
+  },
+  "capture_pixel_differences": {
+    "rest_to_accepted_outer": {
+      "changed_pixel_fraction": 0.2968383487654321,
+      "mean_absolute_channel_difference": 28.97720807613169
+    },
+    "rest_to_squashed": {
+      "changed_pixel_fraction": 0.25864390432098766,
+      "mean_absolute_channel_difference": 30.518297325102882
+    },
+    "squashed_to_accepted_outer": {
+      "changed_pixel_fraction": 0.1920601851851852,
+      "mean_absolute_channel_difference": 18.301998456790123
+    }
+  },
+  "capture_sha256": {
+    "accepted_outer": "2cb79edc5a37670d4661337a0781226c444ef442bf191d94cae44a863235d46c",
+    "rest": "6a743a404e66881438a08c45520b456c43f6341e3f107c0f25c3af01e781826b",
+    "squashed": "b6e3c0edd12ad0de7dfe177f3f8f5a28eec97d9059d5954c2c88b8272fbe5619"
+  },
+  "captures": {
+    "accepted_outer": "bunny_accepted_outer.png",
+    "rest": "bunny_rest.png",
+    "squashed": "bunny_squashed.png"
+  },
+  "checkpoint": {
+    "completed_outer_iterations": 31,
+    "full_P0a2_passed": false,
+    "scope": "last_atomically_accepted_outer_from_failed_full_P0a2"
+  },
+  "checks": {
+    "accepted_boundary_nondegenerate": true,
+    "accepted_outer_checkpoint_present": true,
+    "accepted_state_is_visibly_different_from_squash": true,
+    "all_stage_vertices_finite": true,
+    "boundary_closed_two_manifold": true,
+    "capture_hashes_are_stage_distinct": true,
+    "checkpoint_is_intermediate_not_full_pass": true,
+    "genesis_custom_vertex_binding_exact": true,
+    "rest_boundary_nondegenerate": true,
+    "source_run_completed": true,
+    "squash_is_visibly_different_from_rest": true
+  },
+  "claim_scope": "MGPBD checkpoint-to-Genesis renderer bridge and coherent boundary; not complete P0a2 convergence, dynamics, contact, or realtime",
+  "device": "cuda:0",
+  "formal": false,
+  "ownership": {
+    "Genesis": "custom_vverts_boundary_rendering_only",
+    "Genesis_native_FEM_used": false,
+    "contact_enabled": false,
+    "gravity_enabled": false,
+    "integration_enabled": false,
+    "physical_state": "custom_MGPBD_checkpoint"
+  },
+  "passed": true,
+  "schema_version": "radeon_oneloop.genesis_mgpbd_bunny_bridge.v1",
+  "source_files": {
+    "last_safe_state.npz": "7355943b5a1b88e1f9726b91f8701d1c1c6522fb875a6640c0e5e33373b1d9a3",
+    "rest_boundary.obj": "c7876499d02e4dbe1ee847c4f0e53ef66a910545a444f789ba3231f194c15bec",
+    "squashed_boundary.obj": "6e9c5825f43a0aba3225f142b9770ec27049cda4442a4cf9b317b92f2ef7622e"
+  },
+  "source_markers": [
+    "DONE",
+    "GATE_FAILED"
+  ],
+  "source_run": "20260806T143742Z_1044273_amd_mgpbd_bunny_small_orientation_safe_soc_recovery_projection",
+  "stages": {
+    "accepted_outer": {
+      "area_ratio_to_rest": {
+        "maximum": 1.4751043083890243,
+        "median": 1.0008722877461649,
+        "minimum": 0.28756756479261936,
+        "p01": 0.6946262252386106
+      },
+      "center_m": [
+        -0.013866495374797522,
+        -0.011193492858177705,
+        0.02950276042782207
+      ],
+      "degenerate_faces": 0,
+      "extents_m": [
+        0.18893349170684814,
+        0.14235949516296387,
+        0.1318945810198784
+      ],
+      "faces": 3996,
+      "finite": true,
+      "minimum_double_area_m2": 6.792368274431473e-07,
+      "vertices": 2000
+    },
+    "rest": {
+      "area_ratio_to_rest": {
+        "maximum": 1.000000144870795,
+        "median": 0.9999999986759862,
+        "minimum": 0.99999982347561,
+        "p01": 0.9999998961467056
+      },
+      "center_m": [
+        -0.013787755527475383,
+        -0.011224632916006158,
+        0.08067337131593376
+      ],
+      "degenerate_faces": 0,
+      "extents_m": [
+        0.18000000715255737,
+        0.13960175216197968,
+        0.178316006436944
+      ],
+      "faces": 3996,
+      "finite": true,
+      "minimum_double_area_m2": 7.651067759985702e-07,
+      "vertices": 2000
+    },
+    "squashed": {
+      "area_ratio_to_rest": {
+        "maximum": 0.9999861630544115,
+        "median": 0.49681673417431393,
+        "minimum": 0.24999980827130913,
+        "p01": 0.25009769462844506
+      },
+      "center_m": [
+        -0.013787755527475383,
+        -0.011224632916006158,
+        0.029168342823162673
+      ],
+      "degenerate_faces": 0,
+      "extents_m": [
+        0.18000000715255737,
+        0.13960175216197968,
+        0.044579001143574715
+      ],
+      "faces": 3996,
+      "finite": true,
+      "minimum_double_area_m2": 5.249468487333955e-07,
+      "vertices": 2000
+    }
+  },
+  "topology": {
+    "boundary_vertices": 2000,
+    "closed_two_manifold": true,
+    "edge_connected_components": 1,
+    "edges": 5994,
+    "faces": 3996,
+    "nonmanifold_edges": 0,
+    "open_edges": 0,
+    "volume_vertices": 2992
+  },
+  "transform": {
+    "Genesis_up": "+Z",
+    "metric_maximum_extent_m": 0.18,
+    "scale_m_per_source_unit": 0.8999997854233299,
+    "source_center": [
+      0.6000000238418579,
+      0.2990644574165344,
+      0.5775565505027771
+    ],
+    "source_up": "+Y",
+    "world_translation_m": [
+      0.0,
+      0.0,
+      0.10115800114679309
+    ]
+  }
+}

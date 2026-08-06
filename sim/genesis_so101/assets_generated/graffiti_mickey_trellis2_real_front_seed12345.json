@@ -1,0 +1,90 @@
+{
+  "canonical_visual": {
+    "bounds_m": [
+      [
+        -0.04448782805533083,
+        -0.04422164464580925,
+        -0.0475
+      ],
+      [
+        0.04448782805533083,
+        0.04422164464580925,
+        0.0475
+      ]
+    ],
+    "center_offset_before_recentering_m": [
+      -0.00033894003726375396,
+      6.716379747599699e-05,
+      0.0004366550972197125
+    ],
+    "coordinate_convention": {
+      "front": "+Y",
+      "unit": "m",
+      "up": "+Z",
+      "viewer_left": "+X"
+    },
+    "extents_m": [
+      0.08897565611066166,
+      0.0884432892916185,
+      0.095
+    ],
+    "material": "graffiti_mickey_trellis2_real_front_seed12345_visual.mtl",
+    "material_sha256": "5f0c269683cea1702da14ade50e2d9b8e6af586d096f389f82c37cc4c4efab3f",
+    "mesh": "graffiti_mickey_trellis2_real_front_seed12345_visual.obj",
+    "mesh_sha256": "5d5984ddb4146aa2da8ba8e6c7dfc0c67c0844eaa97522d6795afea97bb65063",
+    "texture": "graffiti_mickey_trellis2_real_front_seed12345_texture.png",
+    "texture_sha256": "453f81a5106c47c72a6d000db7681f14ba287c56142bc738f4a15562fc1406df",
+    "uniform_scale": 0.0955520584795781,
+    "visual_only": true
+  },
+  "collision": {
+    "extents_m": [
+      0.08399999999999999,
+      0.076,
+      0.078019216
+    ],
+    "generated_visual_used_for_collision": false,
+    "mesh": "miniso_disney_fun_crash_graffiti_mickey_v1_collision.obj",
+    "sha256": "8bea640b0222b2dbbf5e20c249608c35fce8dbedbdef2fc4315979a47f8c404d"
+  },
+  "formal": false,
+  "limitations": [
+    "rear appearance remains a single-view generative hypothesis",
+    "visual mesh is non-watertight and excluded from physics",
+    "mass and inertia are nonformal priors pending measurement"
+  ],
+  "metric_anchor": {
+    "dimension": "overall_height",
+    "status": "user_confirmed_metric_anchor",
+    "value_m": 0.095
+  },
+  "schema_version": "radeon_oneloop.trellis2_genesis_asset.v1",
+  "source": {
+    "bounds": [
+      [
+        -0.46204015612602234,
+        -0.4925414025783539,
+        -0.4620986878871918
+      ],
+      [
+        0.46913450956344604,
+        0.5016810297966003,
+        0.46350449323654175
+      ]
+    ],
+    "coordinate_convention": {
+      "front": "+Z",
+      "up": "+Y",
+      "viewer_left": "-X"
+    },
+    "faces": 293972,
+    "path": "trellis2_real_front_seed12345.glb",
+    "sha256": "22dcd6b54e4492feb9b27ecbcb7e90744d74f26bcc0344c3aa609f87c0e8400e",
+    "vertices": 221670,
+    "watertight": false
+  },
+  "urdf": {
+    "path": "graffiti_mickey_trellis2_real_front_seed12345.urdf",
+    "sha256": "4d9bde2f0146250cdc822e1b0e80a826b2e6af49267a652b2d3a0d5038efc88e"
+  }
+}
