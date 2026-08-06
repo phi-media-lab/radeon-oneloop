@@ -1,8 +1,22 @@
-# Radeon OneLoop demo video
+# Radeon OneLoop frozen media ledger
 
-Final generated duration: **3:45.49**. Spoken language and all on-screen text:
-English. Private dataset video is not used; the only motion is the registered
-formal Genesis dual-camera sweep.
+The release contains two complementary videos:
+
+- `radeon-oneloop-demo.mp4` — **3:45.49**, English, the original formal
+  single-Radeon evidence walkthrough. Private dataset footage is not used.
+- `amd-hackathon.mp4` — **0:51.14**, a supplementary physical
+  handover-to-place execution in the same dual-SO-101 cell. It shows the donor
+  grasp and lift, overlap grasp, donor release, receiver ownership, and target
+  placement. It does not by itself identify the policy checkpoint, run mode,
+  HIL state, or success rate; those claims come from the repository ledger.
+
+The Real2Sim2Real narrative is therefore evidenced across media and receipts:
+the long video covers the formal Radeon environment/training/inference path,
+the short clip shows the real task endpoint, and the TRELLIS.2/MGPBD/Genesis
+branch is documented by code, manifests, and bridge captures. No video is
+presented as evidence for a stage it does not show.
+
+## Original 3:45 formal demo shot list
 
 ## Shot list and narration
 

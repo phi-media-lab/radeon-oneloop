@@ -1,0 +1,34 @@
+{
+  "schema_version": "radeon_oneloop.submission_license_policy.v1",
+  "restricted_artifacts": [
+    {
+      "id": "stable_virtual_camera_v1_1_and_descendants",
+      "model": "stabilityai/stable-virtual-camera",
+      "revision": "e538e251c1009e9a41cf8b7fee5f21332a1960de",
+      "license": "Stability AI Non-Commercial License Agreement",
+      "license_url": "https://huggingface.co/stabilityai/stable-virtual-camera/blob/main/LICENSE",
+      "upstream_output_policy": "outputs_follow_the_same_noncommercial_license",
+      "allowed_role": "internal_noncommercial_research_and_visual_review",
+      "competition_submission_clearance": false,
+      "prohibited_release_locations_without_written_clearance": [
+        "artifacts/formal",
+        "output/video",
+        "output/pdf",
+        "submission competition media"
+      ],
+      "known_descendant_sha256": [
+        "f0500ff4c2e76e40e7ff8bc147aaf1120fd9d46a70636c1e2497f7ee41db5ec2",
+        "ad538d0f1d4da96293aed7de5f9f33030435870c1c4339187f48c9dfa25bb4f2",
+        "6163f58f6a43e3f61a6cf66aa5d97b3b2b8327ef6e2507cee60523145a704f57",
+        "4d5556a09efb63cd374655ce408a4642bbd5bf736ff165dc17b572826108b20d",
+        "fe4bd0e68005a359205ee21caf1c36d9b932cc21809771dc390400a133ccf826"
+      ]
+    }
+  ],
+  "release_safe_replacement": {
+    "source": "team_owned_observed_turntable_capture",
+    "generated_views": false,
+    "required_accelerator": "radeon-c GPU0 gfx1100",
+    "status": "capture_and_formal_training_pending"
+  }
+}

@@ -293,9 +293,9 @@ def title_page(title: str, subtitle: str) -> list[object]:
         ),
         Spacer(1, 20 * mm),
         Paragraph(
-            "A reproducible bimanual handover pipeline that runs the Genesis "
-            "environment, policy training, and real-time inference on a single "
-            "Radeon while learning directly from reviewed human corrections.",
+            "A staged Real2Sim2Real system that closes physical data, HIL "
+            "learning, and deployment on one Radeon, then extends the same "
+            "object and robot interfaces into TRELLIS.2, MGPBD, and Genesis.",
             ParagraphStyle(
                 "CoverSummary",
                 fontName=FONT,
@@ -505,7 +505,7 @@ def build(source: Path, output: Path) -> None:
         rightMargin=18 * mm,
         topMargin=19 * mm,
         bottomMargin=18 * mm,
-        title="Radeon OneLoop: Single-Radeon Phase-Aware HIL Bimanual Handover",
+        title="Radeon OneLoop: A Staged Real2Sim2Real Loop for Bimanual Handover",
         author="Phi Media Lab",
         subject="AMD Radeon Hackathon 2026 Track 3 Technical Report",
     )

@@ -1,6 +1,6 @@
 # Radeon OneLoop
 
-## Single-Radeon Phase-Aware HIL Bimanual Handover
+## A Staged Real2Sim2Real Loop for Bimanual Handover
 
 **AMD Radeon Hackathon 2026 — Track 3: Physical AI**
 
@@ -13,14 +13,15 @@ immutable single-Radeon run record.
 
 ## Abstract
 
-Radeon OneLoop is an auditable learning-and-deployment pipeline for a difficult
-SO-101 bimanual handover. The left arm must grasp and present a soft object,
-the right arm must receive it, and the system must place it in a target zone.
-Our main technical idea is phase-aware learning from human intervention: keep
-the architecture, optimizer and data fixed, but allocate more loss mass to the
-frames where a human corrected the policy and almost none to a failed
-autonomous prefix. The experiment compares this method against a uniform ACT
-baseline, initialized from scratch under an identical 10,000-step budget.
+Radeon OneLoop is a staged Real2Sim2Real system for a difficult SO-101
+bimanual handover. It joins two auditable evidence chains around the same
+physical cell and team-owned plush object. The first is real -> learn -> real:
+84 demonstrations and 40 reviewed policy/HIL episodes feed a fair,
+single-Radeon comparison between uniform and correction-aware ACT, followed by
+ROCm inference and physical deployment. The second is real -> sim: real object
+photographs become a metrically canonicalized TRELLIS.2 appearance asset,
+while a Torch/ROCm MGPBD implementation drives an exact custom-vertex bridge
+into the Genesis AMD renderer.
 
 The competition boundary is intentionally strict. A single Radeon `gfx1100`
 executes the Genesis environment, both model-training jobs and policy
@@ -41,6 +42,39 @@ train-frame diagnostic is consistent with reallocating capacity toward
 corrections, but it is neither validation nor task-success evidence. Full
 100-action chunk median latency was 18.11 ms for baseline and 18.55 ms for
 phase-aware ACT on the same Radeon.
+
+The Real2Sim branch is reported with a separate development boundary.
+TRELLIS.2 generation used the official hosted endpoint; the Radeon receipt
+covers metric preparation and Genesis execution, not TRELLIS.2 inference.
+MGPBD run `T152831` validates coherent closed-boundary checkpoint replay into
+Genesis on AMD using the clean `bunny_small` volume. It does not establish full
+P0a2 convergence, realtime dynamics, gripper contact, or a deformable doll.
+Those are the next controlled sim-to-real experiment rather than hidden
+claims in this report.
+
+## Real2Sim2Real framing
+
+```text
+physical demonstrations + HIL corrections
+          -> 124-episode immutable dataset
+          -> baseline / phase-aware ACT on one Radeon
+          -> ROCm inference + CPU safety edge
+          -> physical handover-to-place
+
+reviewed real photographs of the team-owned object
+          -> TRELLIS.2 textured appearance
+          -> measured 95 mm canonical frame
+          -> ROCm MGPBD state
+          -> Genesis AMD state bridge
+          -> simulated intervention curriculum (next evaluation)
+          -> same policy and safety interfaces
+```
+
+The first path is the formal competition result. The second validates the
+appearance, metric, solver, and renderer interfaces needed to close the future
+sim-to-real loop. Keeping these statuses separate makes the combined system
+stronger: a reviewer can reproduce what passed and identify exactly what is
+still experimental.
 
 ## 1. Problem and motivation
 

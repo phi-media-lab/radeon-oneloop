@@ -18,6 +18,65 @@ DEFAULT_ASSET_DIR = Path(__file__).resolve().parent / "assets_generated"
 ASSET_STEM = "miniso_disney_fun_crash_graffiti_mickey_v1"
 DEFAULT_MESH = DEFAULT_ASSET_DIR / f"{ASSET_STEM}_sim_visual.obj"
 DEFAULT_COLLISION_MESH = DEFAULT_ASSET_DIR / f"{ASSET_STEM}_collision.obj"
+DEFAULT_TRELLIS2_URDF = (
+    DEFAULT_ASSET_DIR / "graffiti_mickey_trellis2_real_front_seed12345.urdf"
+)
+DEFAULT_TRELLIS2_VISUAL = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_visual.obj"
+)
+DEFAULT_TRELLIS2_REALTIME_VISUAL = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_visual_realtime.obj"
+)
+DEFAULT_TRELLIS2_PLUSH_COLLISION = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_plush_collision.obj"
+)
+DEFAULT_TRELLIS2_PLUSH_COLLISION_MANIFEST = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_plush_collision.json"
+)
+DEFAULT_TRELLIS2_GRANULAR_SHELL = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_granular_shell.obj"
+)
+DEFAULT_TRELLIS2_GRANULAR_SHELL_MANIFEST = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_granular_shell.json"
+)
+DEFAULT_TRELLIS2_FEM_PROXY = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_fem_proxy.obj"
+)
+DEFAULT_TRELLIS2_FEM_PROXY_MANIFEST = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_fem_proxy.json"
+)
+DEFAULT_TRELLIS2_MGPBD_DENSE_SURFACE = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_mgpbd_dense_surface.obj"
+)
+DEFAULT_TRELLIS2_MGPBD_DENSE_VOLUME = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_mgpbd_dense_volume.npz"
+)
+DEFAULT_TRELLIS2_MGPBD_DENSE_VOLUME_MANIFEST = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_mgpbd_dense_volume.json"
+)
+DEFAULT_TRELLIS2_FEM_LIVE_SURFACE = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_fem_live_surface.obj"
+)
+DEFAULT_TRELLIS2_FEM_LIVE_VOLUME_MANIFEST = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_fem_live_volume.json"
+)
+DEFAULT_TRELLIS2_RIGID_CONTACT_URDF = (
+    DEFAULT_ASSET_DIR
+    / "graffiti_mickey_trellis2_real_front_seed12345_rigid_contact.urdf"
+)
 DEFAULT_SOFT_MESH = DEFAULT_COLLISION_MESH
 DEFAULT_DISPLAY_MESH = DEFAULT_ASSET_DIR / f"{ASSET_STEM}_display.obj"
 DEFAULT_MATERIALS = DEFAULT_ASSET_DIR / f"{ASSET_STEM}.mtl"
@@ -548,6 +607,47 @@ def add_rigid_proxy(
             rho=spec.rigid_density_kg_m3,
             friction=spec.static_friction,
             coup_restitution=spec.restitution,
+        ),
+    )
+
+
+def add_rigid_visual_collision_urdf(
+    gs: Any,
+    scene: Any,
+    spec: HandoverObjectSpec,
+    *,
+    urdf_path: Path,
+    pos: tuple[float, float, float],
+) -> Any:
+    """Load one rigid link with separate URDF visual and collision meshes."""
+
+    urdf_path = urdf_path.resolve()
+    if not urdf_path.is_file():
+        raise FileNotFoundError(f"handover URDF is missing: {urdf_path}")
+    return scene.add_entity(
+        gs.morphs.URDF(
+            file=str(urdf_path),
+            pos=pos,
+            fixed=False,
+            visualization=True,
+            collision=True,
+            decimate=False,
+            convexify=True,
+            decompose_nonconvex=False,
+            recompute_inertia=False,
+            file_meshes_are_zup=True,
+            prioritize_urdf_material=True,
+        ),
+        material=gs.materials.Rigid(
+            rho=spec.rigid_density_kg_m3,
+            # Plush fabric has a broad, lossy contact patch.  These rigid-core
+            # coefficients are intentionally qualitative: they stop the toy
+            # from behaving like polished plastic while the convex shell keeps
+            # collision identity stable for the live bridge.
+            friction=max(spec.static_friction, 1.20),
+            friction_torsional=0.015,
+            friction_rolling=0.012,
+            coup_restitution=0.0,
         ),
     )
 

@@ -1,0 +1,1 @@
+/home/amd/.venvs/rocm-probe-312/bin/python -m sim.genesis_so101.mgpbd_bunny_genesis_smoke --source-run /home/amd/radeon-oneloop-live/runs/20260806T143742Z_1044273_amd_mgpbd_bunny_small_orientation_safe_soc_recovery_projection --output /home/amd/radeon-oneloop-live/runs/20260806T152831Z_1048007_amd_genesis_mgpbd_bunny_bridge/artifacts --seed 20260806

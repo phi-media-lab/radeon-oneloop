@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -49,11 +50,53 @@ def ffprobe(path: Path) -> dict[str, object]:
     return json.loads(value)
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for block in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def validate_restricted_artifacts(root: Path) -> int:
+    policy_path = require_file(root / "submission/license_policy.json")
+    policy = json.loads(policy_path.read_text(encoding="utf-8"))
+    if policy.get("schema_version") != "radeon_oneloop.submission_license_policy.v1":
+        raise ValueError("unexpected submission license policy schema")
+    restricted = policy.get("restricted_artifacts")
+    if not isinstance(restricted, list) or not restricted:
+        raise ValueError("submission license policy has no restricted artifacts")
+    forbidden_hashes: set[str] = set()
+    for record in restricted:
+        if record.get("competition_submission_clearance") is not False:
+            raise ValueError("restricted model unexpectedly has submission clearance")
+        hashes = record.get("known_descendant_sha256")
+        if not isinstance(hashes, list) or not hashes:
+            raise ValueError("restricted model lacks descendant hashes")
+        forbidden_hashes.update(hashes)
+    release_roots = [
+        root / "artifacts/formal",
+        root / "output/video",
+        root / "output/pdf",
+    ]
+    checked = 0
+    for release_root in release_roots:
+        if not release_root.exists():
+            continue
+        for path in release_root.rglob("*"):
+            if path.is_file():
+                checked += 1
+                if sha256_file(path) in forbidden_hashes:
+                    raise ValueError(f"restricted noncommercial artifact entered release: {path}")
+    return checked
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=Path(__file__).parents[1])
     args = parser.parse_args()
     root = args.root.resolve()
+    license_files_checked = validate_restricted_artifacts(root)
 
     sources = [
         root / "README.md",
@@ -113,6 +156,7 @@ def main() -> None:
                 "report_pages": int(page_match.group(1)),
                 "video_seconds": seconds,
                 "formal_evidence_directories": len(evidence_labels),
+                "release_files_checked_against_license_policy": license_files_checked,
             },
             indent=2,
         )

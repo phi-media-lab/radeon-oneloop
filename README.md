@@ -1,24 +1,53 @@
 # Radeon OneLoop
 
-**Single-Radeon Phase-Aware HIL Bimanual Handover**
+**A staged Real2Sim2Real loop for bimanual handover on AMD Radeon**
 
 Radeon OneLoop is a Track 3 embodied-intelligence entry for the AMD Radeon
-Hackathon 2026. It turns an existing real SO-101 bimanual handover pipeline
-into an auditable, single-Radeon learning and deployment path: one arm picks
-and transfers an object, the other receives it, and the object is placed in a
-target zone.
+Hackathon 2026. It connects a proven real-robot learning loop to a new
+Real2Sim path for the same dual-SO-101 handover cell and plush object.
 
-The project contribution is not a new robot foundation model. It is a compact
-way to learn from interventions without hiding the hardware or data lineage:
+The submission has two auditable evidence chains:
 
-- a reproducible dual-SO-101 Genesis environment running through the AMD GPU
-  backend;
-- a fair ACT baseline versus phase-aware ACT experiment, both initialized
-  from scratch and trained on the same Radeon;
-- deterministic frame weights that amplify human corrections and suppress
-  failed autonomous prefixes; and
-- a CPU-edge safety contract with ACT chunk generation and dispatch measured
-  on the same Radeon.
+1. **Real -> learn -> real.** We combine 84 team demonstrations with 40
+   reviewed policy/HIL episodes, train a baseline and a correction-aware ACT
+   policy from scratch on one `gfx1100` Radeon, run inference through ROCm,
+   and preserve a reviewed 37/45 physical handover result from the inherited
+   closed loop.
+2. **Real -> sim.** Reviewed real photographs of the team-owned object produce a TRELLIS.2 textured
+   asset, which is canonicalized to the measured 95 mm object frame and
+   ingested by Genesis. In parallel, our Torch/ROCm MGPBD implementation and
+   exact Genesis state bridge are validated on a clean tetrahedral bunny.
+
+This is a staged Real2Sim2Real system, not a claim that every experimental
+component has already passed the same formal gate. The competition result is
+the single-Radeon learning/deployment loop. The Real2Sim extension establishes
+the appearance, metric, solver, and renderer interfaces needed to generate the
+next simulated intervention curriculum; deformable doll contact and subsequent
+sim-to-real retraining remain the next controlled experiment.
+
+## OneLoop architecture
+
+```text
+team-owned physical cell
+        |
+        +-- demonstrations + reviewed interventions
+        |          -> immutable 124-episode dataset
+        |          -> baseline / phase-aware ACT on one Radeon
+        |          -> ROCm inference + CPU safety edge
+        |          -> physical dual-arm handover-to-place
+        |
+        `-- reviewed real object photographs
+                   -> TRELLIS.2 appearance asset
+                   -> 95 mm canonicalization
+                   -> ROCm MGPBD state + Genesis AMD bridge
+                   -> simulated interventions (next evaluation)
+                   -> same policy and safety interfaces
+```
+
+The TRELLIS.2 generation receipt used its official hosted inference endpoint;
+we do **not** claim that TRELLIS.2 inference itself ran on Radeon. The Radeon
+evidence covers asset preparation and Genesis execution, plus the MGPBD solver
+and MGPBD-to-Genesis bridge.
 
 ## Single-Radeon boundary
 
@@ -133,6 +162,32 @@ The full digests, raw logs and metrics live under
 [`artifacts/formal`](artifacts/formal). The English technical report is
 [`output/pdf/radeon-oneloop-technical-report.pdf`](output/pdf/radeon-oneloop-technical-report.pdf),
 and the public demo is attached to release `v1.0.0`.
+
+## Real2Sim2Real evidence ledger
+
+The two branches are joined by the same measured object, workspace, 12-DoF
+robot state, dual-camera observations, and CPU safety protocol.
+
+| Stage | Frozen evidence | What it establishes |
+|---|---|---|
+| Real data | 84 demonstrations + 40 reviewed HIL episodes; 124 episodes, 178,465 frames | Team-owned physical data and explicit correction lineage |
+| Learn on Radeon | Two 10,000-step, from-scratch ACT runs on one `gfx1100` | Reproducible baseline/phase-aware comparison on ROCm |
+| HIL learning signal | Correction-frame chunk L1 `0.11957 -> 0.11712` | 2.05% targeted diagnostic improvement, not task success |
+| Real execution | Reviewed historical ledger: 37/45 (82.22%); [51.14 s physical handover-to-place video](https://github.com/phi-media-lab/radeon-oneloop/releases/download/v1.0.0/amd-hackathon.mp4) | The inherited policy/HIL/deployment loop operated on the real cell; the video is one execution, not a success-rate estimate |
+| Real appearance -> sim asset | TRELLIS.2 output: 221,670 vertices / 293,972 faces; canonical height 95 mm | A textured, metrically aligned visual asset; rear geometry remains generative and the mesh is visual-only |
+| MGPBD -> Genesis on AMD | `T152831`: 2,992 volume vertices / 12,298 tets, 2,000 boundary vertices / 3,996 faces, zero open/non-manifold edges, exact rest mapping | A coherent closed-boundary state bridge from the ROCm MGPBD checkpoint into Genesis |
+
+The 37/45 result predates the new formal checkpoints, so it is not presented
+as their success rate. The full MGPBD P0a2 solve stopped safely after 31
+accepted outer updates when outer 32 missed its stationarity gate; `T152831`
+replays that safe checkpoint and proves the bridge, not realtime doll contact.
+These boundaries are documented in
+[`reports/historical_real_robot_evidence.md`](reports/historical_real_robot_evidence.md)
+and
+[`reports/mgpbd_forensic_audit_and_recovery_plan_2026-08-06.md`](reports/mgpbd_forensic_audit_and_recovery_plan_2026-08-06.md).
+The compact `T152831` manifest, metrics, hashes, boundary mesh, and three
+stage-distinct captures are preserved under
+[`artifacts/development/amd_genesis_mgpbd_bunny_bridge_20260806T152831Z`](artifacts/development/amd_genesis_mgpbd_bunny_bridge_20260806T152831Z).
 
 ## Reproduce
 
